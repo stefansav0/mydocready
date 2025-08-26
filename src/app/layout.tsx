@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Script from "next/script"; // ✅ Import Script from Next.js
 
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -40,21 +41,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Google Analytics Tag */}
-        <script
+        {/* ✅ Google Analytics with next/script */}
+        <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-T2SK91EF1Y"
-        ></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-T2SK91EF1Y');
-            `,
-          }}
         />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T2SK91EF1Y');
+          `}
+        </Script>
       </head>
       <body className={inter.className}>
         <SupabaseProvider>
