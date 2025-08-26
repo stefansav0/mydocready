@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://mydocready.com
+
+# Sitemaps
+Sitemap: https://mydocready.com/sitemap.xml
