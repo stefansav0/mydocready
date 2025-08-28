@@ -3,13 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  /* Custom fonts if you want to define, or remove if unused */
+  /* --font-sans: 'Geist Sans', Arial, Helvetica, sans-serif; */
+  /* --font-mono: 'Geist Mono', monospace; */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +17,7 @@
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif; /* Replace with var(--font-sans) if using custom font */
 }

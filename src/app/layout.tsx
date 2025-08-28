@@ -41,12 +41,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* ✅ Google Analytics with next/script */}
+        {/* ✅ Google Analytics */}
         <Script
-          async
+          strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-T2SK91EF1Y"
         />
-        <Script id="google-analytics">
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -55,13 +55,14 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* ✅ Google AdSense Script (with correct crossOrigin attribute) */}
-        <script
-    async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
-    crossOrigin="anonymous"
-  ></script>
-</head>
+        {/* ✅ Google AdSense */}
+        <Script
+          strategy="afterInteractive"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={inter.className}>
         <SupabaseProvider>
           <div className="min-h-screen flex flex-col">
