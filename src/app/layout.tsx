@@ -40,7 +40,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <body className={inter.className}>
         {/* ✅ Google Analytics */}
         <Script
           strategy="afterInteractive"
@@ -58,12 +58,10 @@ export default function RootLayout({
         {/* ✅ Google AdSense */}
         <Script
           strategy="afterInteractive"
-          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
           crossOrigin="anonymous"
         />
-      </head>
-      <body className={inter.className}>
+
         <SupabaseProvider>
           <div className="min-h-screen flex flex-col">
             <NavBar />
