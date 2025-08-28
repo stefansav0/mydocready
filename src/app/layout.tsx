@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Script from "next/script"; // ✅ Import Script from Next.js
+import Script from "next/script";
 
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -55,13 +55,12 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* ✅ Google AdSense Script */}
+        {/* ✅ Google AdSense Script (with correct crossOrigin attribute) */}
         <Script
-  async
-  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
-  crossOrigin="anonymous"
-  strategy="afterInteractive"
-/>
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={inter.className}>
         <SupabaseProvider>
