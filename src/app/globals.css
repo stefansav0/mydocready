@@ -19,5 +19,5 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif; /* Replace with var(--font-sans) if using custom font */
+  font-family: Arial, Helvetica, sans-serif; /* Or var(--font-sans) if you customize */
 }
