@@ -49,7 +49,7 @@ const blogs = [
     title: "How to Take a Perfect Selfie for Documents",
     description:
       "Tips for capturing a selfie that works for Aadhaar, PAN, and other IDs.",
-    slug: "take-perfect-selfie-documents",
+    slug: "take-perfect-selfie-for-documents",
   },
   {
     id: 8,
