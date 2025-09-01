@@ -1,16 +1,18 @@
+// File: app/blog/[slug]/page.tsx
+
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import type { Metadata } from "next";
-import { blogContent } from "@/lib/blogData";
+import { blogContent } from "@/lib/blogData"; // Make sure this is the correct path
 
-// ✅ generateStaticParams must be async
+// ✅ Generate static paths for all slugs
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return Object.keys(blogContent).map((slug) => ({ slug }));
 }
 
-// ✅ Cast `params` to fix metadata error in Node.js 22
+// ✅ Generate dynamic metadata based on slug
 export async function generateMetadata(props: unknown): Promise<Metadata> {
   const { params } = props as { params: { slug: string } };
   const blog = blogContent[params.slug];
@@ -23,7 +25,7 @@ export async function generateMetadata(props: unknown): Promise<Metadata> {
   };
 }
 
-// ✅ Cast props to avoid PageProps bug
+// ✅ Render the blog detail page
 export default function BlogDetailPage(props: unknown) {
   const { params } = props as { params: { slug: string } };
   const blog = blogContent[params.slug];
@@ -39,9 +41,11 @@ export default function BlogDetailPage(props: unknown) {
           >
             &larr; Back to All Articles
           </Link>
+
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
             {blog.title}
           </h1>
+
           <ReactMarkdown
             components={{
               h3: ({ ...props }) => (
@@ -53,9 +57,15 @@ export default function BlogDetailPage(props: unknown) {
               li: ({ ...props }) => (
                 <li className="text-gray-700 dark:text-gray-300" {...props} />
               ),
+              a: ({ ...props }) => (
+                <a className="text-blue-500 underline" target="_blank" {...props} />
+              ),
+              strong: ({ ...props }) => (
+                <strong className="font-semibold" {...props} />
+              ),
             }}
           >
-            {blog.content}
+            {blog.content || "No content available."}
           </ReactMarkdown>
         </article>
       </div>

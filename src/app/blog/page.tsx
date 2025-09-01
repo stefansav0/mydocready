@@ -119,7 +119,7 @@ const blogs = [
     title: "How to Reduce Photo Size for Job Portals",
     description:
       "Compress your resume photo for job applications without losing quality.",
-    slug: "reduce-photo-size-job-portals",
+    slug: "reduce-photo-size-for-job-portals",
   },
   {
     id: 20,

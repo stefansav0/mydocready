@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "Instantly resize photos to exact KB, create passport-size photos with white/blue background, and get document-ready outputs for Aadhaar, PAN, Passport, RRB, SSC, NEET.",
   manifest: "/manifest.json",
-  themeColor: "#ffffff",
+  metadataBase: new URL("https://mydocready.com"),
   icons: {
     icon: [
       { url: "/logo.png", type: "image/png", sizes: "32x32" },
@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     images: [{ url: "/logo.png" }],
     type: "website",
   },
+};
+
+export const viewport = {
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({
@@ -56,12 +60,11 @@ export default function RootLayout({
         </Script>
 
         {/* ✅ Google AdSense */}
-        <script
-  async
-  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
-  crossOrigin="anonymous"
-/>
-
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
+          crossOrigin="anonymous"
+        />
 
         <SupabaseProvider>
           <div className="min-h-screen flex flex-col">
