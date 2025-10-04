@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="container mx-auto max-w-7xl px-4 py-10">
         <div className="grid gap-8 md:grid-cols-4">
-          
+
           {/* Brand Section */}
           <div>
             <div className="text-lg font-bold">DocReady Photo</div>
@@ -72,13 +72,24 @@ export default function Footer() {
                   Terms & Conditions
                 </Link>
               </li>
+              <li>
+                <Link href="/about" className="text-muted-foreground hover:text-foreground transition">
+                  About Us
+                </Link>
+
+              </li>
+              <li>
+                <Link href="/contact" className="text-muted-foreground hover:text-foreground transition">
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="mt-8 border-t border-border pt-6 text-xs text-muted-foreground text-center">
-          © {new Date().getFullYear()} DocReady Photo. All rights reserved.
+          © {new Date().getFullYear()} MyDocReady. All rights reserved.
         </div>
       </div>
     </footer>

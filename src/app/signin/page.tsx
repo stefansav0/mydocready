@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import supabase from "@/lib/supabaseClient";
 
-import styles from "./SignInPage.module.css"; // Import CSS Module
+import styles from "./SignInPage.module.css";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -19,23 +19,37 @@ export default function SignInPage() {
     setError(null);
     setIsLoading(true);
 
+    if (!email || !password) {
+      setError("Please fill in all required fields.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // Defensive check in case supabase is undefined
+      if (!supabase || typeof supabase.auth.signInWithPassword !== "function") {
+        throw new Error("Supabase client not properly initialized.");
+      }
+
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) {
-        throw error;
+      if (signInError) {
+        throw signInError;
       }
-      
+
+      if (!data?.session) {
+        throw new Error("Login failed: no session returned.");
+      }
+
       router.push("/");
       router.refresh();
-      
-    } catch (error) {
-      // ✅ FIX: More specific, type-safe error handling
-      if (error instanceof Error) {
-        setError(error.message);
+
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError("An unexpected error occurred.");
       }
@@ -49,10 +63,10 @@ export default function SignInPage() {
       <div className={styles.formWrapper}>
         <h1 className={styles.title}>Sign In</h1>
         <p className={styles.subtitle}>Welcome back! Please enter your details.</p>
-        
+
         <form onSubmit={handleSignIn} className={styles.form}>
           {error && <p className={styles.error}>{error}</p>}
-          
+
           <div className={styles.inputGroup}>
             <label htmlFor="email">Email</label>
             <input
@@ -64,9 +78,10 @@ export default function SignInPage() {
               required
               disabled={isLoading}
               className={styles.input}
+              autoComplete="email"
             />
           </div>
-          
+
           <div className={styles.inputGroup}>
             <label htmlFor="password">Password</label>
             <input
@@ -78,9 +93,10 @@ export default function SignInPage() {
               required
               disabled={isLoading}
               className={styles.input}
+              autoComplete="current-password"
             />
           </div>
-          
+
           <button type="submit" disabled={isLoading} className={styles.button}>
             {isLoading ? "Signing In..." : "Sign In"}
           </button>
@@ -88,7 +104,6 @@ export default function SignInPage() {
 
         <div className={styles.links}>
           <p>
-            {/* ✅ FIX: Escaped the apostrophe */}
             Don&apos;t have an account?{" "}
             <Link href="/signup" className={styles.link}>
               Sign Up

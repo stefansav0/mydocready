@@ -5,31 +5,38 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import type { Metadata } from "next";
-import { blogContent } from "@/lib/blogData"; // Make sure this is the correct path
+import { blogContent } from "@/lib/blogData"; // Make sure this path is correct
 
-// ✅ Generate static paths for all slugs
+// Generate static params for all slugs
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   return Object.keys(blogContent).map((slug) => ({ slug }));
 }
 
-// ✅ Generate dynamic metadata based on slug
+// Generate dynamic metadata based on slug
 export async function generateMetadata(props: unknown): Promise<Metadata> {
   const { params } = props as { params: { slug: string } };
-  const blog = blogContent[params.slug];
-  if (!blog) {
+
+  if (!(params.slug in blogContent)) {
     return { title: "Blog Post Not Found | MydocReady" };
   }
+
+  const blog = blogContent[params.slug as keyof typeof blogContent];
+
   return {
     title: `${blog.title} | MydocReady`,
     description: blog.description,
   };
 }
 
-// ✅ Render the blog detail page
+// Render the blog detail page
 export default function BlogDetailPage(props: unknown) {
   const { params } = props as { params: { slug: string } };
-  const blog = blogContent[params.slug];
-  if (!blog) notFound();
+
+  if (!(params.slug in blogContent)) {
+    notFound();
+  }
+
+  const blog = blogContent[params.slug as keyof typeof blogContent];
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
@@ -58,7 +65,7 @@ export default function BlogDetailPage(props: unknown) {
                 <li className="text-gray-700 dark:text-gray-300" {...props} />
               ),
               a: ({ ...props }) => (
-                <a className="text-blue-500 underline" target="_blank" {...props} />
+                <a className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" {...props} />
               ),
               strong: ({ ...props }) => (
                 <strong className="font-semibold" {...props} />
