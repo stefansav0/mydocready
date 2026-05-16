@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+// Ignore missing type declarations for CSS side-effect import
+// @ts-ignore
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import SupabaseProvider from "./supabase-provider";
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,22 +62,16 @@ export default function RootLayout({
           `}
         </Script>
 
-       {/* ✅ Google AdSense */}
-<Script
-  strategy="afterInteractive"
-  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
-  crossOrigin="anonymous"
-/>
+        {/* ✅ Google AdSense */}
+        <Script
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
+          crossOrigin="anonymous"
+        />
 
-
-
-        <SupabaseProvider>
-          <div className="min-h-screen flex flex-col">
-            <NavBar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </SupabaseProvider>
+        <NavBar />
+        {children}
+        <Footer />
       </body>
     </html>
   );

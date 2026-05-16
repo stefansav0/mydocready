@@ -1,91 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image"; // Use next/image for avatars
 import { useState, useEffect } from "react";
-import { Menu, X, User as UserIcon } from "lucide-react";
-import { createClient, type User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
-);
-
-const Avatar = ({ user }: { user: User }) => {
-  const avatarUrl = user.user_metadata?.avatar_url as string | undefined;
-  const email = user.email ?? "";
-
-  if (avatarUrl) {
-    // Use next/image for optimized loading
-    return (
-      <Image
-        src={avatarUrl}
-        alt="User profile"
-        width={36}
-        height={36}
-        className="rounded-full object-cover"
-        priority={false}
-      />
-    );
-  }
-
-  const initials = email.substring(0, 2).toUpperCase();
-
-  return (
-    <div className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-      {initials || <UserIcon size={20} />}
-    </div>
-  );
-};
 
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
+
     onScroll();
+
     window.addEventListener("scroll", onScroll);
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data?.session?.user ?? null);
-    };
-    getUser();
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      router.refresh();
-    });
-
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, [router]);
-
   const toggleMenu = () => setMenuOpen((prev) => !prev);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    router.push("/signin");
-  };
 
   return (
     <header
@@ -101,58 +35,66 @@ export default function NavBar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6">
-          <Link href="/resize" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            href="/resize"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             Resize
           </Link>
-          <Link href="/resize-signature" className="text-sm text-muted-foreground hover:text-foreground">
+
+          <Link
+            href="/resize-signature"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             Resize Signature
           </Link>
-          <Link href="/passport-photo" className="text-sm text-muted-foreground hover:text-foreground">
+
+          <Link
+            href="/passport-photo"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             Passport
           </Link>
-          <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
+
+          <Link
+            href="/presentation-maker"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Presentation
+          </Link>
+          <Link
+            href="/converter"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Converter
+          </Link>
+          <Link
+            href="/resume-maker"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Resume
+          </Link>
+
+          <Link
+            href="/blog"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             Tips
           </Link>
         </nav>
 
-        {/* Desktop Auth Links */}
+        {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-4">
-          {!user ? (
-            <>
-              <Link href="/signin" className="text-sm text-muted-foreground hover:text-foreground">
-                Sign In
-              </Link>
-              <Button asChild>
-                <Link href="/signup">Get Started</Link>
-              </Button>
-            </>
-          ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className="cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                aria-label="User menu"
-              >
-                <Avatar user={user} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel>
-                  <p className="font-medium">My Account</p>
-                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handleSignOut}
-                  className="text-red-500 focus:text-red-500 focus:bg-red-50"
-                >
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          <Link
+            href="/signin"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Sign In
+          </Link>
+
+          <Button asChild>
+            <Link href="/signup">Get Started</Link>
+          </Button>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -175,37 +117,63 @@ export default function NavBar() {
             <Link href="/resize" className="text-sm" onClick={toggleMenu}>
               Resize
             </Link>
-            <Link href="/resize-signature" className="text-sm" onClick={toggleMenu}>
+
+            <Link
+              href="/resize-signature"
+              className="text-sm"
+              onClick={toggleMenu}
+            >
               Resize Signature
             </Link>
-            <Link href="/passport-photo" className="text-sm" onClick={toggleMenu}>
+            <Link
+              href="/converter"
+              className="text-sm"
+              onClick={toggleMenu}
+            >
+              Converter
+            </Link>
+            <Link
+              href="/resume-maker"
+              className="text-sm"
+              onClick={toggleMenu}
+            >
+              Resume
+            </Link>
+            <Link
+              href="/presentation-maker"
+              className="text-sm"
+              onClick={toggleMenu}
+            >
+              Presentation
+            </Link>
+
+
+            <Link
+              href="/passport-photo"
+              className="text-sm"
+              onClick={toggleMenu}
+            >
               Passport
             </Link>
+
             <Link href="/blog" className="text-sm" onClick={toggleMenu}>
               Tips
             </Link>
+
             <div className="border-t pt-4 mt-2 space-y-4">
-              {!user ? (
-                <>
-                  <Link href="/signin" className="block text-sm" onClick={toggleMenu}>
-                    Sign In
-                  </Link>
-                  <Button asChild className="w-full">
-                    <Link href="/signup" onClick={toggleMenu}>
-                      Get Started
-                    </Link>
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Link href="/profile" className="block text-sm" onClick={toggleMenu}>
-                    Profile
-                  </Link>
-                  <Button onClick={handleSignOut} variant="outline" className="w-full">
-                    Sign Out
-                  </Button>
-                </>
-              )}
+              <Link
+                href="/signin"
+                className="block text-sm"
+                onClick={toggleMenu}
+              >
+                Sign In
+              </Link>
+
+              <Button asChild className="w-full">
+                <Link href="/signup" onClick={toggleMenu}>
+                  Get Started
+                </Link>
+              </Button>
             </div>
           </nav>
         </div>
