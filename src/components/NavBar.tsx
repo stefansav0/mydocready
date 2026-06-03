@@ -1,461 +1,306 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, ChangeEvent } from "react";
-import ReactCrop, { type Crop, type PixelCrop, centerCrop, makeAspectCrop } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-
+import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 import { 
-  UploadCloud, 
-  Download, 
-  Sun, 
-  Contrast, 
-  Droplet, 
-  RotateCw, 
-  FlipHorizontal,
-  FlipVertical,
-  Palette,
-  Image as ImageIcon,
-  Crop as CropIcon,
-  Settings2,
-  RefreshCcw,
-  Square,
-  RectangleHorizontal,
-  RectangleVertical,
-  Sliders
+  Menu, X, ChevronDown, FileText, Image as ImageIcon, 
+  FileImage, Grid, Presentation, FileSpreadsheet, Sparkles, 
+  LogIn, User, LogOut, FolderHeart, ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Toggle } from "@/components/ui/toggle";
 
-// Helper to automatically center the crop box when selecting a preset aspect ratio
-function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: number) {
-  return centerCrop(
-    makeAspectCrop({ unit: '%', width: 80 }, aspect, mediaWidth, mediaHeight),
-    mediaWidth,
-    mediaHeight
-  );
+interface UserProfile {
+  name?: string; // Marked as optional since it might be missing
+  email: string;
+  avatarUrl?: string;
 }
 
-export default function ImageEditorPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [sourceImageUrl, setSourceImageUrl] = useState<string>("");
-  const [processedImageUrl, setProcessedImageUrl] = useState<string>("");
+export default function NavBar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   
-  const [activeTab, setActiveTab] = useState<'adjust' | 'crop'>('adjust');
-  const [isDragging, setIsDragging] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  
-  // Transform State (Applied to the hidden canvas before cropping)
-  const [rotation, setRotation] = useState(0);
-  const [flipX, setFlipX] = useState(1);
-  const [flipY, setFlipY] = useState(1);
-  
-  // Adjust State (Filters)
-  const [brightness, setBrightness] = useState(100);
-  const [contrast, setContrast] = useState(100);
-  const [saturation, setSaturation] = useState(100);
-  const [grayscale, setGrayscale] = useState(false);
-  
-  // Crop State
-  const [crop, setCrop] = useState<Crop>();
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
-  const [aspect, setAspect] = useState<number | undefined>(undefined);
-  const imgRef = useRef<HTMLImageElement>(null);
+  // Track authenticated user data layer cleanly
+  const [user, setUser] = useState<UserProfile | null>(null);
 
-  // 1. Handle File Upload
-  const handleFileSelect = useCallback((selectedFile: File | null) => {
-    if (!selectedFile || !selectedFile.type.startsWith("image/")) return;
-    
-    setFile(selectedFile);
-    const url = URL.createObjectURL(selectedFile);
-    setSourceImageUrl(url);
-    resetAllSettings();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  // 1. Monitors page scrolling coordinates
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const resetAllSettings = () => {
-    setBrightness(100);
-    setContrast(100);
-    setSaturation(100);
-    setGrayscale(false);
-    setRotation(0);
-    setFlipX(1);
-    setFlipY(1);
-    setCrop(undefined);
-    setCompletedCrop(undefined);
-    setAspect(undefined);
-    setActiveTab('adjust');
-  };
-
-  // 2. Bake Rotation/Flipping into a new image blob
-  // This ensures the crop box always aligns perfectly even if the image is rotated
+  // 2. Safely extracts logged in profile sessions after client-side hydration completes
   useEffect(() => {
-    if (!sourceImageUrl) return;
-    
-    setIsProcessing(true);
-    const img = new Image();
-    img.src = sourceImageUrl;
-    img.onload = () => {
-      if (rotation === 0 && flipX === 1 && flipY === 1) {
-        setProcessedImageUrl(sourceImageUrl);
-        setIsProcessing(false);
-        return;
+    const storedUser = localStorage.getItem("user_session");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse active user session profiles", e);
       }
+    }
+  }, []);
 
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const isRotated = rotation === 90 || rotation === 270;
-      canvas.width = isRotated ? img.height : img.width;
-      canvas.height = isRotated ? img.width : img.height;
-
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate((rotation * Math.PI) / 180);
-      ctx.scale(flipX, flipY);
-      ctx.drawImage(img, -img.width / 2, -img.height / 2);
-
-      canvas.toBlob((blob) => {
-        if (blob) {
-          setProcessedImageUrl(URL.createObjectURL(blob));
-          setCrop(undefined); // Reset crop box after rotation
-          setCompletedCrop(undefined);
-        }
-        setIsProcessing(false);
-      }, "image/png"); 
+  // 3. Dismisses overlay flyouts if clicks register outside the bounds of active dropdown panels
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (dropdownRef.current && !dropdownRef.current.contains(target)) {
+        setToolsDropdownOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(target)) {
+        setProfileDropdownOpen(false);
+      }
     };
-  }, [sourceImageUrl, rotation, flipX, flipY]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  // Handle Preset Aspect Ratio Clicks
-  const handlePresetAspect = (newAspect: number | undefined) => {
-    setAspect(newAspect);
-    if (newAspect && imgRef.current) {
-      const { width, height } = imgRef.current;
-      const newCrop = centerAspectCrop(width, height, newAspect);
-      setCrop(newCrop);
-      
-      // Auto-set the completed crop mathematically so the export doesn't fail if they don't manually drag it
-      setCompletedCrop({
-        x: (newCrop.x / 100) * width,
-        y: (newCrop.y / 100) * height,
-        width: (newCrop.width / 100) * width,
-        height: (newCrop.height / 100) * height,
-        unit: 'px'
-      });
-    } else {
-      setCrop(undefined);
-      setCompletedCrop(undefined);
-    }
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+
+  // Clears storage signatures and updates runtime contexts smoothly on signout execution
+  const handleSignOut = () => {
+    localStorage.removeItem("user_session");
+    setUser(null);
+    setProfileDropdownOpen(false);
+    setMenuOpen(false);
+    window.location.href = "/";
   };
 
-  // 3. EXPORT LOGIC: Perfectly scaling DOM coordinates to Natural Image coordinates
-  const handleDownload = () => {
-    if (!imgRef.current || !processedImageUrl || !file) return;
-
-    const img = imgRef.current;
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // CRITICAL FIX: Calculate scale to map the responsive DOM pixels back to original image resolution
-    const scaleX = img.naturalWidth / img.width;
-    const scaleY = img.naturalHeight / img.height;
-
-    // Build the CSS filter string
-    let filterStr = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
-    if (grayscale) filterStr += ' grayscale(100%)';
-    
-    // Apply filters to canvas context
-    ctx.filter = filterStr;
-
-    // If the user made a crop box
-    if (completedCrop && completedCrop.width > 0 && completedCrop.height > 0) {
-      // Multiply the DOM crop coordinates by the scale factor to get exact pixel locations on the real image
-      const cropX = completedCrop.x * scaleX;
-      const cropY = completedCrop.y * scaleY;
-      const cropWidth = completedCrop.width * scaleX;
-      const cropHeight = completedCrop.height * scaleY;
-
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
-
-      ctx.drawImage(
-        img,
-        cropX, cropY, cropWidth, cropHeight, // Source Coordinates
-        0, 0, cropWidth, cropHeight          // Destination Coordinates
-      );
-    } else {
-      // Export full image if no crop
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-
-    // Trigger Download
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `edited_${file.name}`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }, file.type, 0.95);
-  };
-
-  // Drag handlers
-  const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); };
-  const handleDragLeave = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(false); };
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile) handleFileSelect(droppedFile);
-  };
+  const converterTools = [
+    { name: "Word to PDF", href: "/converter/word-to-pdf", icon: <FileText size={16} className="text-blue-500" /> },
+    { name: "PDF to Word", href: "/converter/pdf-to-word", icon: <FileText size={16} className="text-indigo-500" /> },
+    { name: "Excel to PDF", href: "/converter/excel-to-pdf", icon: <FileSpreadsheet size={16} className="text-emerald-500" /> },
+    { name: "PDF to Excel", href: "/converter/pdf-to-excel", icon: <Grid size={16} className="text-green-500" /> },
+    { name: "PowerPoint to PDF", href: "/converter/powerpoint-to-pdf", icon: <Presentation size={16} className="text-orange-500" /> },
+    { name: "PDF to PowerPoint", href: "/converter/pdf-to-powerpoint", icon: <Presentation size={16} className="text-amber-500" /> },
+    { name: "JPG to PDF", href: "/converter/jpg-to-pdf", icon: <ImageIcon size={16} className="text-red-500" /> },
+    { name: "PDF to JPG", href: "/converter/pdf-to-jpg", icon: <FileImage size={16} className="text-rose-500" /> },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 selection:bg-indigo-100 selection:text-indigo-900">
-      <div className="container mx-auto max-w-7xl px-4">
-        
-        {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
-            Pro Document <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-500">Editor</span>
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Crop perfectly, fix lighting, and align your official photos right in your browser.
-          </p>
-        </div>
+    <header
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        scrolled 
+          ? "bg-white/95 border-border shadow-sm py-2 backdrop-blur-md dark:bg-slate-900/95" 
+          : "bg-transparent border-transparent py-4"
+      }`}
+    >
+      <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
+        {/* Logo */}
+        <Link href="/" className="text-xl font-black tracking-tight group flex items-center gap-1.5 text-foreground">
+          <Sparkles className="text-indigo-600 group-hover:rotate-12 transition-transform duration-300" size={22} />
+          <span>Mydoc<span className="text-indigo-600">Ready</span></span>
+        </Link>
 
-        <div className="grid gap-8 lg:grid-cols-12">
-          
-          {/* --- LEFT COLUMN: CONTROLS --- */}
-          <div className="lg:col-span-4 space-y-6">
-            <Card className="border-slate-200 shadow-sm overflow-hidden h-full flex flex-col">
-              <div className="bg-slate-900 px-6 py-4 border-b border-slate-800 flex justify-between items-center">
-                <CardTitle className="flex items-center gap-2 text-white text-base">
-                  <Settings2 className="w-5 h-5 text-violet-400" />
-                  Workspace Tools
-                </CardTitle>
-                {sourceImageUrl && (
-                  <button onClick={resetAllSettings} className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors">
-                    <RefreshCcw className="w-3 h-3" /> Reset
-                  </button>
-                )}
-              </div>
-              
-              <CardContent className="p-6 space-y-8 bg-white flex-1 overflow-y-auto">
-                
-                {/* Upload Zone (Hides when image is loaded) */}
-                {!sourceImageUrl && (
-                  <div 
-                    onDragOver={handleDragOver} 
-                    onDragLeave={handleDragLeave} 
-                    onDrop={handleDrop} 
-                    className={`relative group flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${ 
-                      isDragging 
-                      ? "border-violet-500 bg-violet-50 ring-4 ring-violet-500/20 scale-[1.02]" 
-                      : "border-slate-300 hover:border-violet-400 hover:bg-slate-50" 
-                    }`} 
+        {/* Desktop Navigation links */}
+        <nav className="hidden md:flex items-center gap-1">
+          <Link href="/converter" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            All Tools
+          </Link>
+
+          {/* Converters Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
+              className={`flex items-center gap-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors outline-none ${
+                toolsDropdownOpen ? "text-indigo-600 bg-indigo-50/50" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <span>Converters</span>
+              <ChevronDown size={14} className={`transition-transform duration-200 ${toolsDropdownOpen ? "rotate-180 text-indigo-600" : ""}`} />
+            </button>
+
+            {toolsDropdownOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[500px] bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 grid grid-cols-2 gap-1.5 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                {converterTools.map((tool, idx) => (
+                  <Link
+                    key={idx}
+                    href={tool.href}
+                    onClick={() => setToolsDropdownOpen(false)}
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors text-slate-700 dark:text-slate-300 hover:text-indigo-600 group"
                   >
-                    <div className="p-4 rounded-full mb-4 bg-violet-100 group-hover:bg-violet-200 transition-colors">
-                      <UploadCloud className="h-8 w-8 text-violet-600" />
+                    <div className="p-2 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-lg group-hover:bg-white dark:group-hover:bg-slate-950">
+                      {tool.icon}
                     </div>
-                    <h3 className="font-semibold text-slate-800 mb-1">Click or drag image here</h3>
-                    <p className="text-sm text-slate-500">Supports JPG, PNG, WEBP</p>
-                    <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={(e: ChangeEvent<HTMLInputElement>) => handleFileSelect(e.target.files?.[0] || null)} />
-                  </div>
-                )}
-
-                {sourceImageUrl && (
-                  <div className="space-y-6 animate-in fade-in duration-500">
-                    
-                    {/* Tabs */}
-                    <div className="flex bg-slate-100 p-1 rounded-xl">
-                      <button 
-                        onClick={() => setActiveTab('adjust')}
-                        className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'adjust' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        <Sliders className="w-4 h-4" /> Adjust
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('crop')}
-                        className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'crop' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        <CropIcon className="w-4 h-4" /> Crop & Align
-                      </button>
-                    </div>
-
-                    {/* Adjust Mode */}
-                    {activeTab === 'adjust' && (
-                      <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <Label className="text-slate-700 flex items-center gap-2"><Sun className="w-4 h-4 text-slate-400"/> Brightness</Label>
-                            <span className="text-xs text-slate-400 font-mono">{brightness}%</span>
-                          </div>
-                          <input type="range" min="0" max="200" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full accent-violet-600" />
-                        </div>
-
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <Label className="text-slate-700 flex items-center gap-2"><Contrast className="w-4 h-4 text-slate-400"/> Contrast</Label>
-                            <span className="text-xs text-slate-400 font-mono">{contrast}%</span>
-                          </div>
-                          <input type="range" min="0" max="200" value={contrast} onChange={(e) => setContrast(Number(e.target.value))} className="w-full accent-violet-600" />
-                        </div>
-
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <Label className="text-slate-700 flex items-center gap-2"><Droplet className="w-4 h-4 text-slate-400"/> Saturation</Label>
-                            <span className="text-xs text-slate-400 font-mono">{saturation}%</span>
-                          </div>
-                          <input type="range" min="0" max="200" value={saturation} onChange={(e) => setSaturation(Number(e.target.value))} className="w-full accent-violet-600" />
-                        </div>
-
-                        <div className="pt-2">
-                          <Toggle pressed={grayscale} onPressedChange={setGrayscale} className="w-full gap-2 border border-slate-200 data-[state=on]:bg-slate-900 data-[state=on]:text-white h-11">
-                            Convert to Black & White
-                          </Toggle>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Crop & Align Mode */}
-                    {activeTab === 'crop' && (
-                      <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
-                        <div className="space-y-3">
-                          <Label className="text-slate-700 font-semibold">Aspect Ratio</Label>
-                          <div className="grid grid-cols-4 gap-2">
-                            <button onClick={() => handlePresetAspect(undefined)} className={`flex flex-col items-center justify-center py-3 rounded-lg border transition-colors ${!aspect ? 'bg-violet-50 border-violet-500 text-violet-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
-                              <CropIcon className="w-5 h-5 mb-1" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider">Free</span>
-                            </button>
-                            <button onClick={() => handlePresetAspect(1)} className={`flex flex-col items-center justify-center py-3 rounded-lg border transition-colors ${aspect === 1 ? 'bg-violet-50 border-violet-500 text-violet-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
-                              <Square className="w-5 h-5 mb-1" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider">1:1</span>
-                            </button>
-                            <button onClick={() => handlePresetAspect(16/9)} className={`flex flex-col items-center justify-center py-3 rounded-lg border transition-colors ${aspect === 16/9 ? 'bg-violet-50 border-violet-500 text-violet-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
-                              <RectangleHorizontal className="w-5 h-5 mb-1" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider">16:9</span>
-                            </button>
-                            <button onClick={() => handlePresetAspect(3.5/4.5)} className={`flex flex-col items-center justify-center py-3 rounded-lg border transition-colors ${aspect === 3.5/4.5 ? 'bg-violet-50 border-violet-500 text-violet-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
-                              <RectangleVertical className="w-5 h-5 mb-1" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider">Pass</span>
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="space-y-3 pt-4 border-t border-slate-100">
-                          <Label className="text-slate-700 font-semibold">Transform Image</Label>
-                          <div className="grid grid-cols-2 gap-3">
-                            <Button variant="outline" onClick={() => setRotation((r) => (r + 90) % 360)} className="w-full gap-2 border-slate-200 text-slate-700 hover:bg-violet-50 hover:text-violet-700 hover:border-violet-200">
-                              <RotateCw className="w-4 h-4" /> Rotate 90°
-                            </Button>
-                            <Button variant="outline" onClick={() => setFlipX((f) => f * -1)} className="w-full gap-2 border-slate-200 text-slate-700 hover:bg-violet-50 hover:text-violet-700 hover:border-violet-200">
-                              <FlipHorizontal className="w-4 h-4" /> Flip Horiz
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="pt-6">
-                      <Button onClick={handleDownload} className="w-full h-12 text-base font-semibold bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-200">
-                        <Download className="w-5 h-5 mr-2" /> Export Final Image
-                      </Button>
-                    </div>
-
-                  </div>
-                )}
-                
-              </CardContent>
-            </Card>
+                    <span className="text-xs font-bold tracking-tight">{tool.name}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* --- RIGHT COLUMN: PREVIEW --- */}
-          <div className="lg:col-span-8">
-            <Card className="border-slate-200 shadow-sm h-full min-h-[600px] flex flex-col overflow-hidden">
-              <div className="bg-slate-900 px-6 py-4 border-b border-slate-800 flex justify-between items-center z-10">
-                <CardTitle className="text-white flex items-center gap-2 text-base">
-                  <ImageIcon className="w-5 h-5 text-violet-400" />
-                  Live Preview
-                </CardTitle>
-                
-                {sourceImageUrl && (
-                  <div className="flex gap-3 items-center">
-                    {completedCrop && completedCrop.width > 0 && (
-                      <span className="hidden sm:inline-block bg-violet-500/20 text-violet-300 border border-violet-500/30 px-3 py-1 rounded text-xs font-mono tracking-wide">
-                        {Math.round(completedCrop.width * (imgRef.current?.naturalWidth || 1) / (imgRef.current?.width || 1))} x {Math.round(completedCrop.height * (imgRef.current?.naturalHeight || 1) / (imgRef.current?.height || 1))} px
-                      </span>
-                    )}
-                    <div className="relative overflow-hidden cursor-pointer">
-                      <button className="text-xs bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded flex items-center gap-2 transition-colors border border-slate-700">
-                        <UploadCloud className="w-3 h-3" /> Change Photo
-                      </button>
-                      <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={(e: ChangeEvent<HTMLInputElement>) => handleFileSelect(e.target.files?.[0] || null)} />
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              <CardContent className="p-0 flex-1 relative bg-slate-800">
-                {/* Checkerboard Background for visibility */}
-                <div 
-                  className="absolute inset-0 z-0"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(45deg, #1e293b 25%, transparent 25%), 
-                      linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
-                      linear-gradient(45deg, transparent 75%, #1e293b 75%), 
-                      linear-gradient(-45deg, transparent 75%, #1e293b 75%)
-                    `,
-                    backgroundSize: '24px 24px',
-                    backgroundPosition: '0 0, 0 12px, 12px -12px, -12px 0px',
-                    backgroundColor: '#0f172a'
-                  }}
-                />
+          <Link href="/resize" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            Resize Image
+          </Link>
 
-                <div className="absolute inset-0 z-10 flex items-center justify-center p-6 overflow-hidden">
-                  {processedImageUrl ? (
-                    <div className={`relative max-w-full max-h-full transition-opacity duration-300 ${isProcessing ? 'opacity-50' : 'opacity-100'}`}>
-                      <ReactCrop
-                        crop={crop}
-                        onChange={(_, percentCrop) => setCrop(percentCrop)}
-                        onComplete={(c) => setCompletedCrop(c)}
-                        aspect={aspect}
-                        disabled={activeTab !== 'crop'} // Prevent drawing crops while in Adjust mode
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          ref={imgRef}
-                          src={processedImageUrl}
-                          alt="Editor Preview"
-                          style={{
-                            maxHeight: 'calc(100vh - 250px)',
-                            objectFit: 'contain',
-                            filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) ${grayscale ? 'grayscale(100%)' : ''}`
-                          }}
-                          className="shadow-2xl border border-slate-700/50 rounded"
-                        />
-                      </ReactCrop>
-                    </div>
+          <Link href="/passport-photo" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            Passport Photo
+          </Link>
+
+          <Link href="/presentation-maker" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            Slide Maker
+          </Link>
+
+          <Link href="/resume-maker" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            Resume
+          </Link>
+
+          <Link href="/blog" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            Tips
+          </Link>
+        </nav>
+
+        {/* Desktop Interface Conditional Control Actions */}
+        <div className="hidden md:flex items-center gap-3">
+          {!user ? (
+            <>
+              <Link
+                href="/signin"
+                className="text-sm font-bold text-muted-foreground hover:text-foreground flex items-center gap-1.5 px-3 py-2 transition-colors"
+              >
+                <LogIn size={16} /> Sign In
+              </Link>
+              <Button asChild className="rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-100 transition-all">
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </>
+          ) : (
+            <div className="relative" ref={profileRef}>
+              <button
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                className="flex items-center gap-2 p-1.5 pr-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors outline-none shadow-sm"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-xs flex items-center justify-center shadow-inner">
+                  {user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
                   ) : (
-                    <div className="text-center text-slate-500 bg-slate-900/50 p-8 rounded-2xl backdrop-blur-sm border border-slate-700/50">
-                      <Palette className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                      <p className="font-medium text-lg text-slate-300 mb-1">No Image Selected</p>
-                      <p className="text-sm">Upload a photo to start editing</p>
-                    </div>
+                    // CRITICAL FIX: Safe fallback if name is undefined
+                    (user.name || user.email || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
                   )}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-200 max-w-[100px] truncate">
+                  {user.name || "My Account"}
+                </span>
+                <ChevronDown size={14} className={`text-slate-400 transition-transform ${profileDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
 
+              {profileDropdownOpen && (
+                <div className="absolute right-0 mt-3 w-64 bg-white border border-slate-200 shadow-2xl rounded-2xl p-2 flex flex-col animate-in fade-in slide-in-from-top-2 duration-150 z-50">
+                  <div className="p-3 border-b border-slate-100 mb-1">
+                    <p className="text-xs font-black text-slate-800 truncate">{user.name || "User"}</p>
+                    <p className="text-[11px] font-medium text-slate-400 truncate">{user.email}</p>
+                  </div>
+                  
+                  <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors text-slate-600 text-xs font-bold">
+                    <User size={16} className="text-slate-400" /> Account Dashboard
+                  </Link>
+                  
+                  
+
+                  <button 
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 transition-colors text-xs font-black border-t border-slate-100 mt-1"
+                  >
+                    <LogOut size={16} /> Log Out
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* Mobile View Toggle Controller */}
+        <button
+          className="md:hidden p-2 hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-xl transition-colors text-slate-700"
+          onClick={toggleMenu}
+          aria-label={menuOpen ? "Close Menu" : "Open Menu"}
+          aria-expanded={menuOpen}
+          type="button"
+        >
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </div>
-    </div>
+
+      {/* Mobile Modal Dropdown Action Drawer */}
+      {menuOpen && (
+        <div id="mobile-menu" className="md:hidden bg-white dark:bg-slate-950 border-t border-border shadow-inner max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-300 pb-8 z-50">
+          <nav className="flex flex-col gap-1 p-4">
+            
+            {user && (
+              <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 flex items-center gap-3 border border-slate-100 dark:border-slate-800 mb-3 mx-1">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-sm flex items-center justify-center shadow-md">
+                  {/* CRITICAL FIX: Safe fallback if name is undefined */}
+                  {(user.name || user.email || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)}
+                </div>
+                <div className="overflow-hidden">
+                  <p className="text-xs font-black text-slate-800 dark:text-slate-200 truncate">{user.name || "My Account"}</p>
+                  <p className="text-[10px] font-medium text-slate-400 truncate">{user.email}</p>
+                </div>
+              </div>
+            )}
+
+            <div className="text-[10px] font-bold tracking-wider text-slate-400 uppercase px-3 mb-2">Core Services</div>
+            
+            <Link href="/converter" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all" onClick={toggleMenu}>
+              Document Converter Engine
+            </Link>
+            <Link href="/resize" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all" onClick={toggleMenu}>
+              Resize Images & Forms
+            </Link>
+            <Link href="/passport-photo" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all" onClick={toggleMenu}>
+              Passport Document Creator
+            </Link>
+            <Link href="/presentation-maker" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all" onClick={toggleMenu}>
+              Widescreen Presentation Maker
+            </Link>
+            <Link href="/resume-maker" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all" onClick={toggleMenu}>
+              Smart Resume Builder
+            </Link>
+            <Link href="/blog" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all" onClick={toggleMenu}>
+              Career Guidelines & Tips
+            </Link>
+
+            <div className="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 px-2 space-y-3">
+              {!user ? (
+                <>
+                  <Link
+                    href="/signin"
+                    className="block text-center text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl py-3 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
+                    onClick={toggleMenu}
+                  >
+                    Sign In
+                  </Link>
+                  <Button asChild className="w-full rounded-xl py-6 font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-100">
+                    <Link href="/signup" onClick={toggleMenu}>
+                      Get Started Free
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link href="/profile" className="block text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-lg" onClick={toggleMenu}>
+                    My Account Dashboard
+                  </Link>
+                  <button 
+                    onClick={handleSignOut}
+                    className="w-full text-left text-sm font-black text-red-600 px-3 py-3 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 rounded-xl transition-colors flex items-center justify-between mt-2"
+                  >
+                    <span>Sign Out of Profile</span>
+                    <LogOut size={16} />
+                  </button>
+                </>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }

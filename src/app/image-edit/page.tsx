@@ -28,7 +28,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Toggle } from "@/components/ui/toggle";
 
-// Helper to calculate centered crop based on aspect ratio
+// Helper to automatically center the crop box when selecting a preset aspect ratio
 function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: number) {
   return centerCrop(
     makeAspectCrop({ unit: '%', width: 80 }, aspect, mediaWidth, mediaHeight),
@@ -46,12 +46,12 @@ export default function ImageEditorPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   
-  // Transform State (Applied before cropping)
+  // Transform State (Applied to the hidden canvas before cropping)
   const [rotation, setRotation] = useState(0);
   const [flipX, setFlipX] = useState(1);
   const [flipY, setFlipY] = useState(1);
   
-  // Adjust State (CSS Filters applied visually, then baked on export)
+  // Adjust State (Filters)
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
   const [saturation, setSaturation] = useState(100);
@@ -87,7 +87,8 @@ export default function ImageEditorPage() {
     setActiveTab('adjust');
   };
 
-  // 2. Bake Rotation/Flipping into a new image URL so ReactCrop handles it flawlessly
+  // 2. Bake Rotation/Flipping into a new image blob
+  // This ensures the crop box always aligns perfectly even if the image is rotated
   useEffect(() => {
     if (!sourceImageUrl) return;
     
@@ -117,8 +118,7 @@ export default function ImageEditorPage() {
       canvas.toBlob((blob) => {
         if (blob) {
           setProcessedImageUrl(URL.createObjectURL(blob));
-          // Reset crop box since dimensions changed
-          setCrop(undefined); 
+          setCrop(undefined); // Reset crop box after rotation
           setCompletedCrop(undefined);
         }
         setIsProcessing(false);
@@ -131,51 +131,67 @@ export default function ImageEditorPage() {
     setAspect(newAspect);
     if (newAspect && imgRef.current) {
       const { width, height } = imgRef.current;
-      setCrop(centerAspectCrop(width, height, newAspect));
+      const newCrop = centerAspectCrop(width, height, newAspect);
+      setCrop(newCrop);
+      
+      // Auto-set the completed crop mathematically so the export doesn't fail if they don't manually drag it
+      setCompletedCrop({
+        x: (newCrop.x / 100) * width,
+        y: (newCrop.y / 100) * height,
+        width: (newCrop.width / 100) * width,
+        height: (newCrop.height / 100) * height,
+        unit: 'px'
+      });
     } else {
       setCrop(undefined);
+      setCompletedCrop(undefined);
     }
   };
 
-  // 3. Export Logic (Combines Crop + Filters)
-  const handleDownload = async () => {
-    if (!processedImageUrl || !file) return;
+  // 3. EXPORT LOGIC: Perfectly scaling DOM coordinates to Natural Image coordinates
+  const handleDownload = () => {
+    if (!imgRef.current || !processedImageUrl || !file) return;
 
-    const img = new Image();
-    img.src = processedImageUrl;
-    await new Promise((r) => (img.onload = r));
-
+    const img = imgRef.current;
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set canvas size to crop size, or full image size
-    const targetWidth = completedCrop?.width || img.width;
-    const targetHeight = completedCrop?.height || img.height;
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
+    // CRITICAL FIX: Calculate scale to map the responsive DOM pixels back to original image resolution
+    const scaleX = img.naturalWidth / img.width;
+    const scaleY = img.naturalHeight / img.height;
 
-    // Apply CSS filters to context
-    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) ${grayscale ? 'grayscale(100%)' : ''}`;
+    // Build the CSS filter string
+    let filterStr = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+    if (grayscale) filterStr += ' grayscale(100%)';
+    
+    // Apply filters to canvas context
+    ctx.filter = filterStr;
 
-    // Draw the specific cropped region (or full image)
-    if (completedCrop && completedCrop.width && completedCrop.height) {
+    // If the user made a crop box
+    if (completedCrop && completedCrop.width > 0 && completedCrop.height > 0) {
+      // Multiply the DOM crop coordinates by the scale factor to get exact pixel locations on the real image
+      const cropX = completedCrop.x * scaleX;
+      const cropY = completedCrop.y * scaleY;
+      const cropWidth = completedCrop.width * scaleX;
+      const cropHeight = completedCrop.height * scaleY;
+
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
       ctx.drawImage(
         img,
-        completedCrop.x,
-        completedCrop.y,
-        completedCrop.width,
-        completedCrop.height,
-        0,
-        0,
-        targetWidth,
-        targetHeight
+        cropX, cropY, cropWidth, cropHeight, // Source Coordinates
+        0, 0, cropWidth, cropHeight          // Destination Coordinates
       );
     } else {
-      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+      // Export full image if no crop
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
 
-    // Export and trigger download
+    // Trigger Download
     canvas.toBlob((blob) => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
@@ -348,7 +364,7 @@ export default function ImageEditorPage() {
 
                     <div className="pt-6">
                       <Button onClick={handleDownload} className="w-full h-12 text-base font-semibold bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-200">
-                        <Download className="w-5 h-5 mr-2" /> Export Image
+                        <Download className="w-5 h-5 mr-2" /> Export Final Image
                       </Button>
                     </div>
 
@@ -370,9 +386,9 @@ export default function ImageEditorPage() {
                 
                 {sourceImageUrl && (
                   <div className="flex gap-3 items-center">
-                    {completedCrop && (
-                      <span className="bg-violet-500/20 text-violet-300 border border-violet-500/30 px-3 py-1 rounded text-xs font-mono tracking-wide">
-                        {Math.round(completedCrop.width)} x {Math.round(completedCrop.height)} px
+                    {completedCrop && completedCrop.width > 0 && (
+                      <span className="hidden sm:inline-block bg-violet-500/20 text-violet-300 border border-violet-500/30 px-3 py-1 rounded text-xs font-mono tracking-wide">
+                        {Math.round(completedCrop.width * (imgRef.current?.naturalWidth || 1) / (imgRef.current?.width || 1))} x {Math.round(completedCrop.height * (imgRef.current?.naturalHeight || 1) / (imgRef.current?.height || 1))} px
                       </span>
                     )}
                     <div className="relative overflow-hidden cursor-pointer">
@@ -405,14 +421,12 @@ export default function ImageEditorPage() {
                 <div className="absolute inset-0 z-10 flex items-center justify-center p-6 overflow-hidden">
                   {processedImageUrl ? (
                     <div className={`relative max-w-full max-h-full transition-opacity duration-300 ${isProcessing ? 'opacity-50' : 'opacity-100'}`}>
-                      {/* ReactCrop handles the cropping overlay */}
                       <ReactCrop
                         crop={crop}
                         onChange={(_, percentCrop) => setCrop(percentCrop)}
                         onComplete={(c) => setCompletedCrop(c)}
                         aspect={aspect}
-                        disabled={activeTab !== 'crop'} // Disable drawing new crops if in Adjust mode
-                        className={activeTab === 'adjust' ? 'pointer-events-none' : ''} // Optional visual cue
+                        disabled={activeTab !== 'crop'} // Prevent drawing crops while in Adjust mode
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -422,7 +436,6 @@ export default function ImageEditorPage() {
                           style={{
                             maxHeight: 'calc(100vh - 250px)',
                             objectFit: 'contain',
-                            // We apply the CSS filters here so the user sees them live inside the crop box
                             filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) ${grayscale ? 'grayscale(100%)' : ''}`
                           }}
                           className="shadow-2xl border border-slate-700/50 rounded"
