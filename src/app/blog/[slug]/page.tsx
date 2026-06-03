@@ -1,26 +1,30 @@
-// File: app/blog/[slug]/page.tsx
-
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import type { Metadata } from "next";
-import { blogContent } from "@/lib/blogData"; // Make sure this path is correct
+import { blogContent } from "@/lib/blogData"; 
+
+// Next.js 15+ requires params to be a Promise
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
 // Generate static params for all slugs
-export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+export async function generateStaticParams() {
   return Object.keys(blogContent).map((slug) => ({ slug }));
 }
 
 // Generate dynamic metadata based on slug
-export async function generateMetadata(props: unknown): Promise<Metadata> {
-  const { params } = props as { params: { slug: string } };
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Await the params!
+  const { slug } = await params;
 
-  if (!(params.slug in blogContent)) {
+  if (!(slug in blogContent)) {
     return { title: "Blog Post Not Found | MydocReady" };
   }
 
-  const blog = blogContent[params.slug as keyof typeof blogContent];
+  const blog = blogContent[slug as keyof typeof blogContent];
 
   return {
     title: `${blog.title} | MydocReady`,
@@ -29,14 +33,16 @@ export async function generateMetadata(props: unknown): Promise<Metadata> {
 }
 
 // Render the blog detail page
-export default function BlogDetailPage(props: unknown) {
-  const { params } = props as { params: { slug: string } };
+export default async function BlogDetailPage({ params }: Props) {
+  // Await the params!
+  const { slug } = await params;
 
-  if (!(params.slug in blogContent)) {
+  // If the slug isn't in our blogData.ts file, show 404
+  if (!(slug in blogContent)) {
     notFound();
   }
 
-  const blog = blogContent[params.slug as keyof typeof blogContent];
+  const blog = blogContent[slug as keyof typeof blogContent];
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
@@ -44,7 +50,7 @@ export default function BlogDetailPage(props: unknown) {
         <article className="prose prose-lg dark:prose-invert">
           <Link
             href="/blog"
-            className="text-sm text-primary no-underline hover:underline mb-4 inline-block"
+            className="text-sm font-bold text-indigo-600 no-underline hover:text-indigo-800 mb-6 inline-flex items-center gap-2 transition-colors"
           >
             &larr; Back to All Articles
           </Link>
@@ -53,27 +59,32 @@ export default function BlogDetailPage(props: unknown) {
             {blog.title}
           </h1>
 
-          <ReactMarkdown
-            components={{
-              h3: ({ ...props }) => (
-                <h3 className="text-xl font-bold mt-6 mb-3" {...props} />
-              ),
-              ul: ({ ...props }) => (
-                <ul className="list-disc pl-5 space-y-2" {...props} />
-              ),
-              li: ({ ...props }) => (
-                <li className="text-gray-700 dark:text-gray-300" {...props} />
-              ),
-              a: ({ ...props }) => (
-                <a className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" {...props} />
-              ),
-              strong: ({ ...props }) => (
-                <strong className="font-semibold" {...props} />
-              ),
-            }}
-          >
-            {blog.content || "No content available."}
-          </ReactMarkdown>
+          <div className="text-gray-700 dark:text-gray-300">
+            <ReactMarkdown
+              components={{
+                h3: ({ ...props }) => (
+                  <h3 className="text-xl font-bold mt-8 mb-4 text-gray-900 dark:text-gray-100" {...props} />
+                ),
+                ul: ({ ...props }) => (
+                  <ul className="list-disc pl-5 space-y-2 my-4" {...props} />
+                ),
+                li: ({ ...props }) => (
+                  <li className="text-gray-700 dark:text-gray-300" {...props} />
+                ),
+                a: ({ ...props }) => (
+                  <a className="text-indigo-600 font-semibold hover:underline" target="_blank" rel="noopener noreferrer" {...props} />
+                ),
+                strong: ({ ...props }) => (
+                  <strong className="font-bold text-gray-900 dark:text-gray-100" {...props} />
+                ),
+                p: ({ ...props }) => (
+                  <p className="mb-4 leading-relaxed" {...props} />
+                )
+              }}
+            >
+              {blog.content || "No content available."}
+            </ReactMarkdown>
+          </div>
         </article>
       </div>
     </div>

@@ -1,26 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-
 import styles from "./SignInPage.module.css";
 
 export default function SignInPage() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState<string | null>(null);
-
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignIn = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setError(null);
 
     if (!email || !password) {
@@ -48,14 +39,16 @@ export default function SignInPage() {
         throw new Error(data.error || "Login failed");
       }
 
+      // MATCH NATURALLY: Write tracking states onto the key key specified inside NavBar.tsx
       localStorage.setItem(
-        "user",
+        "user_session",
         JSON.stringify(data.user)
       );
 
-      router.push("/");
+      // FORCE BOOTSTRAP RE-EVALUATION: Forcing a hard re-load accurately alerts 
+      // out-of-scope stick layout wrappers like sticky navigation bars to user state flips
+      window.location.href = "/";
 
-      router.refresh();
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -70,37 +63,23 @@ export default function SignInPage() {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>
-          Sign In
-        </h1>
+        <h1 className={styles.title}>Sign In</h1>
 
         <p className={styles.subtitle}>
           Welcome back! Please enter your details.
         </p>
 
-        <form
-          onSubmit={handleSignIn}
-          className={styles.form}
-        >
-          {error && (
-            <p className={styles.error}>
-              {error}
-            </p>
-          )}
+        <form onSubmit={handleSignIn} className={styles.form}>
+          {error && <p className={styles.error}>{error}</p>}
 
           <div className={styles.inputGroup}>
-            <label htmlFor="email">
-              Email
-            </label>
-
+            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
               placeholder="you@example.com"
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
               required
               disabled={isLoading}
               className={styles.input}
@@ -109,18 +88,13 @@ export default function SignInPage() {
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="password">
-              Password
-            </label>
-
+            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               placeholder="••••••••"
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
               required
               disabled={isLoading}
               className={styles.input}
@@ -133,27 +107,19 @@ export default function SignInPage() {
             disabled={isLoading}
             className={styles.button}
           >
-            {isLoading
-              ? "Signing In..."
-              : "Sign In"}
+            {isLoading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
         <div className={styles.links}>
           <p>
             Don&apos;t have an account?{" "}
-            <Link
-              href="/signup"
-              className={styles.link}
-            >
+            <Link href="/signup" className={styles.link}>
               Sign Up
             </Link>
           </p>
 
-          <Link
-            href="/forgot-password"
-            className={styles.link}
-          >
+          <Link href="/forgot-password" className={styles.link}>
             Forgot Password?
           </Link>
         </div>
