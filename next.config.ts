@@ -1,15 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Fixes the TypeScript "any" errors on build
+  // Bypasses static type checking blockers during production compilation
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Fixes linter blocks/warnings on build
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  // Retain the custom Webpack build configuration from your previous step
+  
+  // NOTE: The 'eslint' object block has been removed because it is deprecated 
+  // and no longer supported or required in newer Next.js builds.
+
+  // Universal fallback overrides for client-side compilation engines
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {
       config.resolve.fallback = {
