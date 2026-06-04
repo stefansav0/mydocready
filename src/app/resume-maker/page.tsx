@@ -36,10 +36,10 @@ export default function ResumeMaker() {
   // STATES WITH INITIAL EXAMPLES PRE-FILLED
   // ============================================
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [name, setName] = useState("RAVI KUMAR");
-  const [address, setAddress] = useState("DLF Building 14 Gurugram cyber hub, India");
-  const [phone, setPhone] = useState("07017950878");
-  const [email, setEmail] = useState("ravikumar.kumar2333@gmail.com");
+  const [name, setName] = useState("User Name");
+  const [address, setAddress] = useState("Your address goes here, city, country");
+  const [phone, setPhone] = useState("your phone number");
+  const [email, setEmail] = useState("your email address");
   const [objective, setObjective] = useState(
     "Results-driven professional with experience in operations and client management. Skilled in team coordination, problem-solving, and maintaining strong customer relationships. Seeking to contribute my expertise and grow within a dynamic organization."
   );
@@ -54,11 +54,11 @@ export default function ResumeMaker() {
   const [educations, setEducations] = useState<Education[]>([
     {
       id: "1",
-      schoolName: "Dr Bhim rao amedker univeraticy",
-      schoolLocation: "Agra, India",
-      degree: "BA - bached of art",
+      schoolName: "university name",
+      schoolLocation: "city, country",
+      degree: "Bachelor of Arts",
       fieldOfStudy: "Political Science & History",
-      graduationDate: "may 2024",
+      graduationDate: "completed year",
       isEnrolled: false,
       description: "Studied subjects including History, Political Science, Sociology, Hindi, and English. Developed strong communication, analytical, and research skills through academic projects, assignments, and presentations."
     }
@@ -68,7 +68,7 @@ export default function ResumeMaker() {
     {
       id: "1",
       jobTitle: "manager",
-      employer: "Gokhana",
+      employer: "Comapny Name",
       city: "delhi",
       country: "india",
       startDate: "jan 2022",
