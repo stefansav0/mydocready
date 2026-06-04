@@ -64,6 +64,7 @@ export default function HomeTemplatePicker() {
           <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Auto-Formatting</span>
         </div>
       </header>
+      
 
       {/* HERO SECTION */}
       <section className="text-center pt-16 pb-12 px-4 max-w-3xl mx-auto">
