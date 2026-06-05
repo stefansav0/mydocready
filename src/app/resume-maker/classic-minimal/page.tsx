@@ -31,62 +31,83 @@ type Education = {
   description: string;
 };
 
-export default function ResumeMakerTypographic() {
+export default function ResumeMakerClassic() {
   // ============================================
-  // STATES PRE-FILLED WITH TYPOGRAPHIC EXAMPLES
+  // STATES PRE-FILLED WITH CLASSIC EXAMPLES
   // ============================================
-  const [name, setName] = useState("KABIR MALHOTRA");
-  const [address, setAddress] = useState("704, Windsor Towers, Hiranandani, Powai, Mumbai 400076");
-  const [phone, setPhone] = useState("+91 98111 22233");
-  const [email, setEmail] = useState("kabir.malhotra.data@gmail.com");
+  const [name, setName] = useState("Your Name");
+  const [address, setAddress] = useState("Your address goes here, city, country");
+  const [phone, setPhone] = useState("your phone number");
+  const [email, setEmail] = useState("your email address");
   const [objective, setObjective] = useState(
-    "Senior Business Intelligence Architect and Analytics Director with over 6 years of expertise leading corporate data strategy initiatives. Specialized in cross-functional data pipeline modeling, predictive analytics architectures, and deploying visual reporting governance structures that convert complex enterprise data into clean, actionable revenue streams."
+    "Operations & F&B Management Professional with 4+ years of experience in corporate cafeteria operations. Skilled in end-to-end operations, corporate event management, invoice processing, SOP implementation, and client-side menu management. Experienced in vendor coordination, customer feedback handling, and digital & manual checklist management with a strong focus on service quality and client satisfaction."
   );
   const [skills, setSkills] = useState(
-    "• Business Intelligence & Analytics\n• Data Architecture & Modeling\n• Advanced SQL & Python Execution\n• Tableau & Power BI Governance\n• Cross-functional Strategy Sprints\n• Predictive Data Forecasting\n• ETL Pipeline Infrastructures\n• Executive Stakeholder Relations"
+    "• Problem Solving & Decision Making\n• Team Supervision\n• Operations Management\n• Vendor Coordination\n• Customer Feedback Handling\n• Corporate Event Management\n• Workplace management\n• Housekeeping management"
   );
-  const [interests, setInterests] = useState("• Technical Mentorship Systems • Financial Market Analysis • Strategic Chess Formations");
-  const [languages, setLanguages] = useState("• English (Native/Fluent Proficiency)\n• Hindi (Native Speaker)\n• Spanish (Basic Working Framework)");
+  const [interests, setInterests] = useState("• Recognized for outstanding performance in F&B operations management, service excellence, and client satisfaction.");
+  const [languages, setLanguages] = useState("• English\n• Hindi");
   const [certifications, setCertifications] = useState(
-    "• Certified Business Intelligence Professional (CBIP)\n• Snowflake Core Data Engineer Certificate\n• Google Advanced Cloud Data Analytics Badge"
+    "• Food Safety Practices & Safe Storage\n• FOSTAC (FSSAI Certified)\n• Waste Management & RUCO Compliance\n• Customer Handling & Service Excellence\n• Root Cause Analysis (RCA)\n• Hazard Identification & Control\n• FSSAI Audit & Compliance\n• Cross Contamination Prevention\n• support services\n• CAPA and Recall"
   );
-  const [declaration, setDeclaration] = useState("I hereby declare that all the professional and academic records stated above are authentic and true.");
+  const [declaration, setDeclaration] = useState("");
 
   const [educations, setEducations] = useState<Education[]>([
     {
       id: "1",
-      schoolName: "Indian Institute of Technology (IIT)",
-      schoolLocation: "Bombay, India",
-      degree: "M.Tech in Data Science & Engineering",
-      fieldOfStudy: "Applied Statistics",
-      graduationDate: "Graduated: 2020",
+      schoolName: "university name",
+      schoolLocation: "your city, country",
+      degree: "• Bachelor of Arts (B.A.)",
+      fieldOfStudy: "Indian English Literature",
+      graduationDate: "2024",
       isEnrolled: false,
-      description: "Graduated top 5% of class. Thesis specialized in optimizing computational matrix structures for multi-tenant analytical platforms."
+      description: "Developing expertise in professional communication, digital proficiency, and organizational management to strengthen corporate operational skills."
+    },
+    {
+      id: "2",
+      schoolName: "Introduction to Operations Management – Pursuing",
+      schoolLocation: "your city, country",
+      degree: "• Certifications - coursera",
+      fieldOfStudy: "",
+      graduationDate: "2025",
+      isEnrolled: true,
+      description: "Gaining in-depth knowledge of process optimization, supply chain fundamentals, workflow planning, cost control, quality management, and performance improvement to enhance operational efficiency in corporate environments."
     }
   ]);
 
   const [experiences, setExperiences] = useState<Experience[]>([
     {
       id: "1",
-      jobTitle: "Lead Business Intelligence Architect",
-      employer: "Apex Analytics Corporate Group",
-      city: "Mumbai",
-      country: "India",
-      startDate: "Nov 2023",
+      jobTitle: "Executive – Operations",
+      employer: "your company name",
+      city: "your city",
+      country: "your country",
+      startDate: "Jan -2023",
       endDate: "Present",
       isCurrent: true,
-      description: "• Spearheaded deployment of centralized analytical reporting architectures, reducing cross-department data parsing loops by 45%.\n• Designed scalable machine-learning models to forecast shifting customer lifecycles, protecting multi-million rupee revenue streams.\n• Directed data translation protocols for 4 separate engineering pipelines to secure unified reporting governance."
+      description: "• Managed end-to-end F&B and corporate site operations\n• Executed corporate events as per client requirements\n• Planned and managed client-side menu operations\n• Ensured hygiene, quality standards, and audit compliance\n• coordinated vendors and ensured timely service delivery\n• Resolved customer feedback and service inquiries efficiently\n• Prepared daily, weekly, and monthly operational reports include SLA reports & AMC\n• Vendor Staff Training & Development\n• Managed overall F&B operations ensuring quality and service excellence\n• Ensured smooth day-to-day facility operations by managing maintenance, vendors, and workplace services to support uninterrupted business activities."
     },
     {
       id: "2",
-      jobTitle: "Senior Data Operations Analyst",
-      employer: "Vanguard Global Digital Matrix",
-      city: "Bengaluru",
-      country: "India",
-      startDate: "May 2021",
-      endDate: "Oct 2023",
+      jobTitle: "Team Leader – Food & Beverage Operations",
+      employer: "your company name",
+      city: "your city",
+      country: "your country",
+      startDate: "Dec 2021",
+      endDate: "Dec 2022",
       isCurrent: false,
-      description: "• Architected dynamic data warehouse routing systems, shortening standard weekly extraction intervals down from 14 hours to 4 hours.\n• Interfaced localized reporting clusters with enterprise dashboard matrices to improve logistical clarity across branches.\n• Coordinated with business infrastructure pods to build responsive continuous analytics loops for live deployment strategies."
+      description: "• Managed shift operations and supervised team members\n• Handled customer service and resolved complaints\n• Supported inventory and stock control\n• Controlled/Ensured proper storage as per hygiene and safety standardsd food cost and minimized wastage\n• Supervised KFC product preparation ensuring strict hygiene and food safety standards"
+    },
+    {
+      id: "3",
+      jobTitle: "Front Office Executive",
+      employer: "your company name",
+      city: "your city",
+      country: "your country",
+      startDate: "Jan 2021",
+      endDate: "Nov 2021",
+      isCurrent: false,
+      description: "• Managed front desk operations and visitor coordination\n• Managed calls, emails, and appointment scheduling\n• Handled client inquiries and provided service assistance\n• Ensured professional communication and customer satisfaction\n• Visitor & Call Management\n• Reception & Client Management"
     }
   ]);
 
@@ -137,64 +158,104 @@ export default function ResumeMakerTypographic() {
   const removeExperience = (id: string) => setExperiences(experiences.filter(exp => exp.id !== id));
 
   // ============================================
-  // TYPOGRAPHIC ACCENT EDITORIAL TEMPLATE
+  // AUTO-SPACE FILLING CLASSIC RESUME PREVIEW
+  // Rebalanced sizes, relaxation spaces, and padding distributions to seamlessly occupy the full canvas.
   // ============================================
   const ResumePreviewContent = ({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | null> }) => (
     <div
       ref={innerRef}
-      className="w-[800px] h-[1131px] bg-[#ffffff] text-[#0f172a] shadow-2xl p-10 flex flex-col overflow-hidden shrink-0 font-serif"
+      className="w-[800px] h-[1131px] bg-[#ffffff] text-[#000000] shadow-2xl p-10 flex flex-col overflow-hidden shrink-0"
       style={{ letterSpacing: "normal" }}
     >
-      {/* MINIMAL HIGH-END TYPOGRAPHY HEADER */}
-      <div className="w-full flex justify-between items-baseline mb-3">
-        <div>
-          <h1 className="text-4xl font-light tracking-wide text-[#0f172a]">
-            {name || "YOUR NAME"}
-          </h1>
-          <p className="text-[#4338ca] text-[12px] uppercase font-bold tracking-widest mt-1 font-sans">
-            {experiences[0]?.jobTitle || "Professional Title Placement"}
-          </p>
-        </div>
-        <div className="text-right text-[11px] text-[#475569] space-y-0.5 font-sans font-medium">
-          <p>{email || "name@example.com"}</p>
-          <p>{phone || "+91 00000 00000"}</p>
-          <p>{address || "City, State, Country Location"}</p>
+      {/* HEADER SECTION */}
+      <div className="w-full mb-3">
+        <h1 className="text-[38px] font-bold tracking-normal text-[#000000] mb-3 leading-none">
+          {name || "YOUR NAME"}
+        </h1>
+        <div className="text-[12.5px] text-[#000000] space-y-1 font-normal leading-normal">
+          <p><span className="font-bold">Email</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;– {email || "your.email@gmail.com"}</p>
+          <p><span className="font-bold">Contact</span> &nbsp;– {phone || "0000000000"}</p>
+          <p><span className="font-bold">Address</span> – {address || "Your full address details go here"}</p>
         </div>
       </div>
 
-      {/* TYPOGRAPHIC DECORATIVE SOLID ACCENT RULE */}
-      <div className="w-full h-[3px] bg-[#4338ca] mb-6"></div>
+      {/* TOP SEPARATOR HORIZONTAL RULE */}
+      <div className="w-full border-t-2 border-[#000000] mb-6"></div>
 
-      {/* ASYMMETRIC CONTENT WRAPPER */}
+      {/* TWO COLUMN CONTENT WRAPPER */}
       <div className="w-full flex flex-row gap-8 flex-1 overflow-hidden">
         
-        {/* LEFT MAIN PANE: PROFESSIONAL HISTORY & OBJECTIVE (62% Width) */}
-        <div className="w-[62%] flex flex-col gap-6 overflow-hidden text-justify">
+        {/* LEFT COLUMN (32% Width) */}
+        <div className="w-[32%] flex flex-col gap-6 text-justify">
           <div>
-            <h2 className="text-[13px] font-bold text-[#4338ca] border-b border-[#cbd5e1] pb-1 uppercase tracking-wider mb-2.5 font-sans">
-              Executive Profile
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-2.5 uppercase tracking-wide">
+              PROFILE
             </h2>
-            <p className="text-[#334155] leading-relaxed text-[11.5px] whitespace-pre-wrap">
-              {objective || "Write your core competitive professional description summary statement here."}
+            <p className="text-[#000000] leading-relaxed text-[11px] whitespace-pre-wrap">
+              {objective || "Write a brief career profile details here."}
             </p>
           </div>
 
           <div>
-            <h2 className="text-[13px] font-bold text-[#4338ca] border-b border-[#cbd5e1] pb-1 uppercase tracking-wider mb-3.5 font-sans">
-              Employment History
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-2.5 uppercase tracking-wide">
+              SKILLS
             </h2>
-            <div className="flex flex-col gap-4.5">
+            <p className="text-[#000000] leading-relaxed text-[11px] whitespace-pre-wrap">
+              {skills || "Your list of skills will appear here."}
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-2.5 uppercase tracking-wide">
+              OTHER CERTIFICATIONS
+            </h2>
+            <p className="text-[#000000] leading-relaxed text-[10.5px] whitespace-pre-wrap">
+              {certifications || "List additional professional certificates here."}
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-2.5 uppercase tracking-wide">
+              LANGUAGE
+            </h2>
+            <p className="text-[#000000] leading-relaxed text-[11px] whitespace-pre-wrap">
+              {languages || "Your languages."}
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-2.5 uppercase tracking-wide">
+              AWARDS
+            </h2>
+            <p className="text-[#000000] leading-relaxed text-[11px] whitespace-pre-wrap italic">
+              {interests || "Honors and accomplishments go here."}
+            </p>
+          </div>
+        </div>
+
+        {/* VERTICAL DIVIDER LINE */}
+        <div className="h-full border-l-2 border-[#b2becd]"></div>
+
+        {/* RIGHT COLUMN (65% Width) */}
+        <div className="w-[65%] flex flex-col gap-6">
+          
+          {/* WORK EXPERIENCE */}
+          <div>
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-3 uppercase tracking-wide">
+              WORK EXPERIENCE
+            </h2>
+            <div className="flex flex-col gap-5">
               {experiences.map((exp) => (
-                <div key={exp.id} className="text-[11.5px]">
-                  <div className="flex justify-between items-baseline font-bold text-[#0f172a]">
-                    <span className="text-[13px] text-[#0f172a] font-bold">{exp.jobTitle || "Job Designation Title"}</span>
-                    <span className="text-[10.5px] font-medium text-[#64748b] font-sans">{exp.startDate || "Start"} – {exp.isCurrent ? "Present" : (exp.endDate || "End")}</span>
+                <div key={exp.id} className="text-[11px]">
+                  <div className="flex justify-between items-baseline font-bold text-[#000000]">
+                    <span className="text-[13px] uppercase tracking-tight">{exp.employer || "Employer/Company"}</span>
+                    <span className="text-[11px] font-semibold">{exp.startDate || "Start"} to {exp.isCurrent ? "present" : (exp.endDate || "End")}</span>
                   </div>
-                  <div className="text-[#4338ca] font-semibold text-[11px] font-sans mt-0.5">
-                    {exp.employer || "Employer/Company Organization"} {exp.city && `| ${exp.city}`}
+                  <div className="font-bold text-[#111827] text-[11.5px] mt-0.5">
+                    {exp.jobTitle || "Job Title"} {exp.city && `– ${exp.city}`}
                   </div>
                   {exp.description && (
-                    <p className="mt-1.5 text-[#334155] leading-relaxed whitespace-pre-wrap">
+                    <p className="mt-2 text-[#000000] leading-relaxed whitespace-pre-wrap">
                       {exp.description}
                     </p>
                   )}
@@ -203,34 +264,23 @@ export default function ResumeMakerTypographic() {
             </div>
           </div>
 
-          {/* DECLARATION FIELD PANEL */}
-          {declaration && (
-            <div className="mt-auto pt-3 border-t border-[#f1f5f9]">
-              <p className="text-[10.5px] text-[#64748b] italic whitespace-pre-wrap leading-relaxed">
-                {declaration}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* RIGHT SUB PANE: INSTITUTIONAL & META CRITERIA (38% Width) */}
-        <div className="w-[38%] flex flex-col gap-6 overflow-hidden">
+          {/* EDUCATION SECTION */}
           <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-3 font-sans">
-              Education & Background
+            <h2 className="text-[13.5px] font-bold border-b-2 border-[#000000] pb-0.5 text-[#000000] mb-3 uppercase tracking-wide">
+              EDUCATION
             </h2>
-            <div className="flex flex-col gap-3.5">
+            <div className="flex flex-col gap-4">
               {educations.map((edu) => (
-                <div key={edu.id} className="text-[11px] leading-normal">
-                  <div className="flex justify-between items-baseline font-bold text-[#0f172a]">
-                    <span className="text-[12px] text-[#0f172a] font-bold">{edu.degree || "Degree Title Standard"}</span>
-                    <span className="text-[10px] font-medium text-[#64748b] font-sans">{edu.graduationDate || "Year"}</span>
+                <div key={edu.id} className="text-[11px]">
+                  <div className="flex justify-between items-baseline font-bold text-[#000000]">
+                    <span className="text-[12.5px]">{edu.degree || "Degree Title"}</span>
+                    <span className="text-[11px] font-semibold">{edu.graduationDate || "Year"}</span>
                   </div>
-                  <div className="text-[#475569] font-medium mt-0.5 text-[11px]">
-                    {edu.schoolName} {edu.schoolLocation && `| ${edu.schoolLocation}`}
+                  <div className="font-bold text-[#374151] mt-0.5 text-[11.5px]">
+                    {edu.schoolName} {edu.fieldOfStudy && ` - ${edu.fieldOfStudy}`}
                   </div>
                   {edu.description && (
-                    <p className="mt-1 text-[#475569] leading-relaxed whitespace-pre-wrap text-[10.5px]">
+                    <p className="mt-1.5 text-[#000000] leading-relaxed whitespace-pre-wrap text-[10.5px]">
                       {edu.description}
                     </p>
                   )}
@@ -239,43 +289,16 @@ export default function ResumeMakerTypographic() {
             </div>
           </div>
 
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Core Competencies
-            </h2>
-            <p className="text-[#334155] leading-loose text-[11px] font-medium whitespace-pre-wrap">
-              {skills || "Skills mapping specifications items list summary."}
-            </p>
-          </div>
+          {/* DECLARATION (IF PROVIDED) */}
+          {declaration && (
+            <div className="mt-auto">
+              <p className="text-[11px] text-[#374151] italic whitespace-pre-wrap leading-relaxed">
+                {declaration}
+              </p>
+            </div>
+          )}
 
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Certifications
-            </h2>
-            <p className="text-[#334155] leading-relaxed text-[10.5px] whitespace-pre-wrap">
-              {certifications || "Additional training credentials profile blocks."}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Languages Spoken
-            </h2>
-            <p className="text-[#334155] leading-relaxed text-[11px] whitespace-pre-wrap">
-              {languages || "Languages list identifiers inputs."}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Interests & Research
-            </h2>
-            <p className="text-[#334155] leading-relaxed text-[11px] whitespace-pre-wrap">
-              {interests || "Additional projects links or personal hobbies elements metrics."}
-            </p>
-          </div>
         </div>
-
       </div>
     </div>
   );
@@ -283,20 +306,20 @@ export default function ResumeMakerTypographic() {
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-indigo-500/30 overflow-x-hidden relative">
       
-      {/* HIDDEN PRINT TARGET STORAGE */}
+      {/* HIDDEN PRINT TARGET */}
       <div className="absolute top-[-9999px] left-[-9999px]">
         <ResumePreviewContent innerRef={resumeRef} />
       </div>
       
-      {/* APPLICATION HEADER */}
+      {/* HEADER */}
       <header className="sticky top-0 z-10 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-          Typographic Accent Mode
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+          Classic Template Mode
         </h1>
         <button
           onClick={downloadPDF}
           disabled={isDownloading}
-          className="hidden lg:flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+          className="hidden lg:flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
         >
           {isDownloading ? (
             <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -307,134 +330,130 @@ export default function ResumeMakerTypographic() {
         </button>
       </header>
 
-      {/* DASHBOARD GRID PLACEMENT STAGE */}
+      {/* MAIN LAYOUT GRID */}
       <div className="max-w-[1600px] mx-auto p-4 lg:p-8 grid lg:grid-cols-12 gap-8 h-[calc(100vh-73px)]">
         
-        {/* LEFT COLUMN FIELDS CONTROLLER EDITOR PANEL */}
+        {/* INPUT EDITING DASHBOARD PANEL */}
         <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 lg:p-8 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-          <h2 className="text-2xl font-semibold mb-6">Personal Identifiers</h2>
+          <h2 className="text-2xl font-semibold mb-6">Personal Data</h2>
 
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
-                <label className="block mb-1 text-sm text-slate-400">Full Profile Name</label>
-                <input type="text" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none transition-all" value={name} onChange={(e) => setName(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Full Name</label>
+                <input type="text" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none transition-all" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="md:col-span-2">
-                <label className="block mb-1 text-sm text-slate-400">Current Contact Address Line</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-20 resize-none" value={address} onChange={(e) => setAddress(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Address Line</label>
+                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none h-20 resize-none" value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Mobile Phone Line</label>
-                <input type="text" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Contact Number</label>
+                <input type="text" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Professional Email</label>
-                <input type="email" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Email Address</label>
+                <input type="email" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
 
             <hr className="border-slate-800 my-8" />
-            <h2 className="text-2xl font-semibold mb-6">Resume Core Category Anchors</h2>
+            <h2 className="text-2xl font-semibold mb-6">Resume Core Sub-sections</h2>
 
             <div className="space-y-8">
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Executive Profile Summary</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-24 resize-y" value={objective} onChange={(e) => setObjective(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Profile Summary</label>
+                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none h-24 resize-y" value={objective} onChange={(e) => setObjective(e.target.value)} />
               </div>
 
-              {/* DYNAMIC EDUCATION NODE BUILDER COMPONENT */}
+              {/* DYNAMIC EDUCATION BUILDER */}
               <div className="p-4 border border-slate-800 bg-slate-900/50 rounded-xl space-y-4">
-                <h3 className="text-lg font-medium text-slate-200">Education Placements Chronology</h3>
+                <h3 className="text-lg font-medium text-slate-200">Education Details</h3>
                 {educations.map((edu) => (
                   <div key={edu.id} className="p-4 bg-slate-950 border border-slate-800 rounded-lg relative space-y-4">
                     <button onClick={() => removeEducation(edu.id)} className="absolute top-4 right-4 text-slate-500 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div className="md:col-span-2">
-                        <label className="block text-xs text-slate-400 mb-1">University / Institute Name</label>
+                        <label className="block text-xs text-slate-400 mb-1">University / Board Name</label>
                         <input type="text" value={edu.schoolName} onChange={(e) => handleEduChange(edu.id, "schoolName", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Degree Received</label>
+                        <label className="block text-xs text-slate-400 mb-1">Degree Title</label>
                         <input type="text" value={edu.degree} onChange={(e) => handleEduChange(edu.id, "degree", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Graduation Date/Year info</label>
+                        <label className="block text-xs text-slate-400 mb-1">Passing Year</label>
                         <input type="text" value={edu.graduationDate} onChange={(e) => handleEduChange(edu.id, "graduationDate", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
                       </div>
                       <div className="md:col-span-2">
-                        <label className="block text-xs text-slate-400 mb-1">Coursework Description</label>
+                        <label className="block text-xs text-slate-400 mb-1">Core details / info description</label>
                         <textarea value={edu.description} onChange={(e) => handleEduChange(edu.id, "description", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none h-16 resize-y" />
                       </div>
                     </div>
                   </div>
                 ))}
-                <button onClick={addEducation} className="flex items-center gap-2 text-sm text-indigo-400 font-medium py-1"><Plus className="w-4 h-4" /> Add Academic Node</button>
+                <button onClick={addEducation} className="flex items-center gap-2 text-sm text-orange-400 font-medium py-1"><Plus className="w-4 h-4" /> Add Academic Item</button>
               </div>
 
-              {/* DYNAMIC EXPERIENCE TIMELINE COMPONENT PLACEMENT */}
+              {/* DYNAMIC EXPERIENCE BUILDER */}
               <div className="p-4 border border-slate-800 bg-slate-900/50 rounded-xl space-y-4">
-                <h3 className="text-lg font-medium text-slate-200">Work Experience Placements</h3>
+                <h3 className="text-lg font-medium text-slate-200">Professional Experience</h3>
                 {experiences.map((exp) => (
                   <div key={exp.id} className="p-4 bg-slate-950 border border-slate-800 rounded-lg relative space-y-4">
                     <button onClick={() => removeExperience(exp.id)} className="absolute top-4 right-4 text-slate-500 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Company/Corporate Title</label>
+                        <label className="block text-xs text-slate-400 mb-1">Company/Employer Name</label>
                         <input type="text" value={exp.employer} onChange={(e) => handleExpChange(exp.id, "employer", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Role Designation Title</label>
+                        <label className="block text-xs text-slate-400 mb-1">Designation Role</label>
                         <input type="text" value={exp.jobTitle} onChange={(e) => handleExpChange(exp.id, "jobTitle", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Start Date</label>
+                        <label className="block text-xs text-slate-400 mb-1">Start Timeline</label>
                         <input type="text" value={exp.startDate} onChange={(e) => handleExpChange(exp.id, "startDate", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">End Date</label>
+                        <label className="block text-xs text-slate-400 mb-1">End Timeline</label>
                         <input type="text" disabled={exp.isCurrent} value={exp.isCurrent ? "Present" : exp.endDate} onChange={(e) => handleExpChange(exp.id, "endDate", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none disabled:opacity-40" />
                       </div>
                       <div className="md:col-span-2 flex items-center gap-2">
-                        <input type="checkbox" id={`current-${exp.id}`} checked={exp.isCurrent} onChange={(e) => handleExpChange(exp.id, "isCurrent", e.target.checked)} className="w-4 h-4 bg-slate-900 accent-indigo-500" />
-                        <label htmlFor={`current-${exp.id}`} className="text-xs text-slate-300 cursor-pointer">Active Ongoing Position</label>
+                        <input type="checkbox" id={`current-${exp.id}`} checked={exp.isCurrent} onChange={(e) => handleExpChange(exp.id, "isCurrent", e.target.checked)} className="w-4 h-4 bg-slate-900 accent-orange-500" />
+                        <label htmlFor={`current-${exp.id}`} className="text-xs text-slate-300 cursor-pointer">Currently Active Role</label>
                       </div>
                       <div className="md:col-span-2">
-                        <label className="block text-xs text-slate-400 mb-1">Responsibilities / Key Items Achieved</label>
+                        <label className="block text-xs text-slate-400 mb-1">Detailed Responsibilities (Bullet lists recommended)</label>
                         <textarea value={exp.description} onChange={(e) => handleExpChange(exp.id, "description", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none h-24 resize-y" />
                       </div>
                     </div>
                   </div>
                 ))}
-                <button onClick={addExperience} className="flex items-center gap-2 text-sm text-indigo-400 font-medium py-1"><Plus className="w-4 h-4" /> Add Professional Block</button>
+                <button onClick={addExperience} className="flex items-center gap-2 text-sm text-orange-400 font-medium py-1"><Plus className="w-4 h-4" /> Add Experience Placement</button>
               </div>
 
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Technical Skillset Matrix</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-24 resize-y" value={skills} onChange={(e) => setSkills(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Core Expertise Skills</label>
+                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none h-24 resize-y" value={skills} onChange={(e) => setSkills(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Professional Certifications</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-24 resize-y" value={certifications} onChange={(e) => setCertifications(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Other Certifications</label>
+                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none h-24 resize-y" value={certifications} onChange={(e) => setCertifications(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Languages</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-16 resize-y" value={languages} onChange={(e) => setLanguages(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Languages Spoken</label>
+                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none h-16 resize-y" value={languages} onChange={(e) => setLanguages(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Projects & Affiliations</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-20 resize-y" value={interests} onChange={(e) => setInterests(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 text-sm text-slate-400">Declaration Statement</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-16 resize-y" value={declaration} onChange={(e) => setDeclaration(e.target.value)} />
+                <label className="block mb-1 text-sm text-slate-400">Awards & Highlights</label>
+                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-orange-500 outline-none h-20 resize-y" value={interests} onChange={(e) => setInterests(e.target.value)} />
               </div>
             </div>
             <div className="h-20 lg:hidden"></div>
           </div>
         </div>
 
-        {/* RIGHT DESKTOP DISPLAY CANVAS PANEL VIEW */}
+        {/* RIGHT DESKTOP CANVAS VIEW */}
         <div className="hidden lg:flex lg:col-span-7 bg-slate-800 rounded-2xl overflow-auto border border-slate-700 relative items-start justify-center p-8 custom-scrollbar">
           <div className="origin-top scale-[0.6] xl:scale-[0.8] 2xl:scale-[0.9] transition-transform duration-300 flex justify-center">
             <ResumePreviewContent />
@@ -442,19 +461,18 @@ export default function ResumeMakerTypographic() {
         </div>
       </div>
 
-      {/* MOBILE DISPLAY FOOTER CONTROLS POPUP ACTIVATOR */}
+      {/* MOBILE FLOATING INTERFACE MODALS */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent z-20">
-        <button onClick={() => setIsPreviewOpen(true)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl p-4 rounded-xl font-semibold flex items-center justify-center gap-2">
-          <Eye className="w-5 h-5" /> Preview Export Page
+        <button onClick={() => setIsPreviewOpen(true)} className="w-full bg-orange-600 hover:bg-orange-700 text-white shadow-xl p-4 rounded-xl font-semibold flex items-center justify-center gap-2">
+          <Eye className="w-5 h-5" /> View Printable Sheet
         </button>
       </div>
 
-      {/* MOBILE FULL MODAL VIEWS PORTS */}
       {isPreviewOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col lg:hidden">
           <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900">
             <button onClick={() => setIsPreviewOpen(false)} className="p-2 bg-slate-800 rounded-full text-slate-300"><X className="w-5 h-5" /></button>
-            <button onClick={downloadPDF} disabled={isDownloading} className="flex items-center gap-2 bg-indigo-600 px-4 py-2 rounded-lg font-medium">
+            <button onClick={downloadPDF} disabled={isDownloading} className="flex items-center gap-2 bg-orange-600 px-4 py-2 rounded-lg font-medium">
               {isDownloading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Download className="w-4 h-4" />}
               Save Document
             </button>

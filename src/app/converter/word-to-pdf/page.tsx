@@ -85,17 +85,81 @@ export default function WordToPdfPro() {
       
       if (!htmlContent) throw new Error("Could not extract content from this document.");
 
-      // Inject HTML into hidden div for rendering
+      // STEP 2: Inject HTML with CSS Styling for PDF Render
+      // This CSS fixes the missing table borders, list formatting, and bolding seen in raw extractions
       hiddenContentRef.current.innerHTML = `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #000; padding: 20px;">
+        <style>
+
+        .word-render-wrapper {
+  page-break-after: auto;
+}
+
+.word-render-wrapper table,
+.word-render-wrapper img,
+.word-render-wrapper p,
+.word-render-wrapper h1,
+.word-render-wrapper h2,
+.word-render-wrapper h3 {
+  page-break-inside: avoid;
+}
+
+.page-break {
+  page-break-before: always;
+}
+          .word-render-wrapper {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.5;
+            color: #000;
+            font-size: 11pt;
+          }
+          .word-render-wrapper h1, .word-render-wrapper h2, .word-render-wrapper h3 {
+            font-weight: bold;
+            margin-top: 14pt;
+            margin-bottom: 8pt;
+          }
+          .word-render-wrapper h1 { font-size: 18pt; text-align: center; }
+          .word-render-wrapper h2 { font-size: 14pt; }
+          .word-render-wrapper p {
+            margin-bottom: 10pt;
+          }
+          /* Fix for Tables */
+          .word-render-wrapper table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10pt;
+            margin-bottom: 14pt;
+          }
+          .word-render-wrapper th, .word-render-wrapper td {
+            border: 1px solid #000;
+            padding: 6pt;
+            text-align: left;
+            vertical-align: top;
+          }
+          /* Fix for Lists */
+          .word-render-wrapper ul, .word-render-wrapper ol {
+            margin-top: 0;
+            margin-bottom: 10pt;
+            padding-left: 24pt;
+          }
+          .word-render-wrapper li {
+            margin-bottom: 4pt;
+          }
+          /* Typography Resets */
+          .word-render-wrapper strong, .word-render-wrapper b {
+            font-weight: bold !important;
+          }
+          .word-render-wrapper em, .word-render-wrapper i {
+            font-style: italic !important;
+          }
+        </style>
+        <div class="word-render-wrapper">
           ${htmlContent}
         </div>
       `;
 
       setProgress({ current: 50, total: 100, status: 'Formatting pages for PDF...' });
 
-      // STEP 2: Convert HTML to PDF
-      // Dynamically import html2pdf to avoid Next.js SSR window errors
+      // STEP 3: Convert HTML to PDF
       const html2pdf = (await import('html2pdf.js')).default;
       
       const formatMap = {
@@ -104,12 +168,15 @@ export default function WordToPdfPro() {
       };
 
       const opt = {
-        // Assert the array as a strict 4-element tuple
         margin:       [15, 15, 15, 15] as [number, number, number, number], 
-        filename:     `${file.name.replace(/\.[^/.]+$/, "")} .pdf`,
+        filename:     `${file.name.replace(/\.[^/.]+$/, "")}.pdf`,
         image:        { type: 'jpeg' as const, quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        // Narrow types for jsPDF options to satisfy Html2PdfOptions
+        html2canvas: {
+  scale: 4,
+  useCORS: true,
+  logging: false,
+  letterRendering: true
+},
         jsPDF:        { unit: 'mm' as const, format: formatMap[pageSize] as 'a4' | 'letter', orientation: 'portrait' as 'portrait' }
       };
 

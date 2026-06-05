@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface UserProfile {
-  name?: string; // Marked as optional since it might be missing
+  name?: string;
   email: string;
   avatarUrl?: string;
 }
@@ -19,12 +19,14 @@ export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [resizeDropdownOpen, setResizeDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   
   // Track authenticated user data layer cleanly
   const [user, setUser] = useState<UserProfile | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const resizeDropdownRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
   // 1. Monitors page scrolling coordinates
@@ -51,13 +53,18 @@ export default function NavBar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
+      
       if (dropdownRef.current && !dropdownRef.current.contains(target)) {
         setToolsDropdownOpen(false);
+      }
+      if (resizeDropdownRef.current && !resizeDropdownRef.current.contains(target)) {
+        setResizeDropdownOpen(false);
       }
       if (profileRef.current && !profileRef.current.contains(target)) {
         setProfileDropdownOpen(false);
       }
     };
+    
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -136,9 +143,45 @@ export default function NavBar() {
             )}
           </div>
 
-          <Link href="/resize" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
-            Resize Image
-          </Link>
+          {/* Resize Dropdown */}
+          <div className="relative" ref={resizeDropdownRef}>
+            <button
+              onClick={() => setResizeDropdownOpen(!resizeDropdownOpen)}
+              className={`flex items-center gap-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors ${
+                resizeDropdownOpen
+                  ? "text-indigo-600 bg-indigo-50/50"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Resize
+              <ChevronDown
+                size={14}
+                className={`transition-transform ${
+                  resizeDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {resizeDropdownOpen && (
+              <div className="absolute top-full left-0 mt-3 w-56 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-2 z-50">
+                <Link
+                  href="/resize"
+                  onClick={() => setResizeDropdownOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-sm font-medium"
+                >
+                  📷 Resize Photo
+                </Link>
+
+                <Link
+                  href="/resize-signature"
+                  onClick={() => setResizeDropdownOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-sm font-medium"
+                >
+                  ✍️ Resize Signature
+                </Link>
+              </div>
+            )}
+          </div>
 
           <Link href="/passport-photo" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
             Passport Photo
@@ -202,8 +245,6 @@ export default function NavBar() {
                     <User size={16} className="text-slate-400" /> Account Dashboard
                   </Link>
                   
-                  
-
                   <button 
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 text-red-600 transition-colors text-xs font-black border-t border-slate-100 mt-1"

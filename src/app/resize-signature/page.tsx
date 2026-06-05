@@ -81,20 +81,20 @@ export default function ResizeSignaturePage() {
   const savingsPercent = result ? (((originalKB - result.kb) / originalKB) * 100).toFixed(1) : 0;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 selection:bg-blue-100 selection:text-blue-900">
+    <main className="min-h-screen bg-slate-50 py-12 selection:bg-blue-100 selection:text-blue-900">
       <div className="container mx-auto max-w-6xl px-4">
         
         {/* Header */}
-        <div className="text-center mb-10">
+        <header className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
             Smart Signature <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Cleaner</span>
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Upload your signature. We&apos;ll automatically trim the excess white space and compress it to your exact required file size for official portals.
           </p>
-        </div>
+        </header>
 
-        <div className="grid gap-8 lg:grid-cols-12">
+        <div className="grid gap-8 lg:grid-cols-12 mb-16">
           
           {/* --- LEFT COLUMN: CONTROLS --- */}
           <div className="lg:col-span-5 space-y-6">
@@ -250,10 +250,69 @@ export default function ResizeSignaturePage() {
               </CardContent>
             </Card>
           </div>
-
         </div>
+
+        {/* --- SEO ARTICLE SECTION --- */}
+        <article className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12 max-w-4xl mx-auto">
+          <section className="mb-10">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Free Online Signature Cropper & Compressor</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              When applying for jobs, university admissions, or filling out official government forms, you are often required to upload a digital copy of your signature. However, portals frequently reject images because they contain too much blank space or exceed strict file size limits (like 10KB, 20KB, or 50KB). 
+            </p>
+            <p className="text-slate-600 leading-relaxed">
+              Our Smart Signature Cleaner solves this problem instantly. It automatically detects your pen strokes, crops out the unnecessary white space, and compresses the final image to your exact target size. Because everything runs locally in your browser, <strong>your signature remains 100% private and secure</strong>.
+            </p>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">How to Optimize Your Signature</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                { step: "1", title: "Take a Photo", desc: "Sign a blank piece of white paper with a dark pen. Take a clear photo and upload it here." },
+                { step: "2", title: "Set File Size", desc: "Check the requirements of your form (e.g., Max 20KB) and enter that number into our tool." },
+                { step: "3", title: "Trim & Download", desc: "Click process. We will automatically crop the edges and compress the file for immediate download." }
+              ].map((item) => (
+                <div key={item.step} className="bg-slate-50 p-5 rounded-xl border border-slate-100 relative">
+                  <span className="absolute -top-4 -left-4 w-8 h-8 bg-blue-600 text-white flex items-center justify-center rounded-full font-bold border-4 border-white shadow-sm">
+                    {item.step}
+                  </span>
+                  <h3 className="font-semibold text-slate-800 mb-2 mt-2">{item.title}</h3>
+                  <p className="text-sm text-slate-600">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Why Use Our Signature Tool?</h2>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-800">Automatic White Space Trimming</h4>
+                  <p className="text-slate-600 text-sm mt-1">Stop manually cropping photos on your phone. Our smart algorithm scans your image and perfectly crops to the edges of your actual handwriting.</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-800">Bypass Portal Restrictions</h4>
+                  <p className="text-slate-600 text-sm mt-1">Government and university portals are notorious for strict limits. Easily compress your signature to under 10KB, 20KB, or 50KB without losing readability.</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <div>
+                  <h4 className="font-semibold text-slate-800">Total Data Privacy</h4>
+                  <p className="text-slate-600 text-sm mt-1">Your signature is highly sensitive personal data. We utilize HTML5 browser technology so your image is never uploaded, stored, or seen by our servers.</p>
+                </div>
+              </li>
+            </ul>
+          </section>
+        </article>
+
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -281,7 +340,7 @@ const PreviewBox = ({ title, url, kb, isPlaceholder, highlight }: PreviewBoxProp
         )}
       </div>
 
-      {/* Image Area - Dark mode with checkerboard for transparency contrast */}
+      {/* Image Area */}
       <div 
         className="flex-1 w-full bg-slate-800 flex items-center justify-center p-4 pt-14"
         style={{
