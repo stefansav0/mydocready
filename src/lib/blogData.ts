@@ -17,6 +17,7 @@ import { blog as resizeTo35x45mm } from '@/lib/blogs/make-photos-35x45mm';
 import { blog as freeOnlinePhotoResizers } from '@/lib/blogs/free-online-photo-resizers';
 import { blog as photoSizeForJobPortals } from '@/lib/blogs/reduce-photo-size-for-job-portals';
 import { blog as onlineVsOfflinePhotoStudios } from '@/lib/blogs/online-vs-offline-photo-studios';
+import { blog as writeAtsResume } from '@/lib/blogs/write-an-ats-resume';
 
 export const blogContent = {
     "resize-photos-by-kb": resizePhotosByKb,
@@ -38,4 +39,5 @@ export const blogContent = {
     "free-online-photo-resizers": freeOnlinePhotoResizers,
     "reduce-photo-size-for-job-portals": photoSizeForJobPortals,
     "online-vs-offline-photo-studios": onlineVsOfflinePhotoStudios,
+    "write-an-ats-resume": writeAtsResume
 };

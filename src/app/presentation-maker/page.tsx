@@ -5,7 +5,8 @@ import pptxgen from "pptxgenjs";
 import { Rnd } from 'react-rnd';
 import { 
   Plus, Download, Type, Image as ImageIcon, 
-  Palette, Trash2, Layout, X, Move
+  Palette, Trash2, Layout, X, Move, Presentation, 
+  MousePointer2, Smartphone, FileUp, ArrowRight, Pencil
 } from 'lucide-react';
 
 interface CanvasElement {
@@ -28,6 +29,8 @@ const CANVAS_W = 960;
 const CANVAS_H = 540;
 
 export default function PresentationMakerPro() {
+  const [isStarted, setIsStarted] = useState(false);
+
   const [slides, setSlides] = useState<SlideData[]>([
     { 
       id: '1', bgColor: '#ffffff',
@@ -49,26 +52,25 @@ export default function PresentationMakerPro() {
   const selectedElement = activeSlide.elements.find(e => e.id === selectedElementId);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !isStarted) return;
     
     const resizeObserver = new ResizeObserver(entries => {
       for (let entry of entries) {
         const { width, height } = entry.contentRect;
-        const padding = 24; // Padding around the slide canvas
+        const padding = 24; 
         const availableW = width - padding;
         const availableH = height - padding;
         
         const scaleW = availableW / CANVAS_W;
         const scaleH = availableH / CANVAS_H;
         
-        // Prevent scaling up past 1x, but match screen scale down perfectly
         setScale(Math.min(scaleW, scaleH, 1));
       }
     });
     
     resizeObserver.observe(containerRef.current);
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [isStarted]); 
 
   const addSlide = () => {
     const newId = Date.now().toString();
@@ -128,6 +130,7 @@ export default function PresentationMakerPro() {
       ...s, elements: s.elements.filter(el => el.id !== selectedElementId)
     } : s));
     setSelectedElementId(null);
+    setActiveTab('none');
   };
 
   const pxToInches = (px: number, isWidth: boolean) => (px / (isWidth ? CANVAS_W : CANVAS_H)) * (isWidth ? 10 : 5.625);
@@ -162,8 +165,87 @@ export default function PresentationMakerPro() {
     pres.writeFile({ fileName: "My_Presentation.pptx" });
   };
 
+  // --- BLOG STYLE INTRO SCREEN ---
+  if (!isStarted) {
+    return (
+      <div className="min-h-[100dvh] bg-slate-50 flex flex-col items-center py-12 px-6 font-sans text-slate-800 overflow-y-auto">
+        <div className="max-w-3xl w-full">
+          {/* Header Area */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center p-4 bg-indigo-600 rounded-2xl text-white mb-6 shadow-lg">
+              <Presentation size={48} />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight text-slate-900">
+              Welcome to SlideMaker Pro
+            </h1>
+            <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              The ultimate in-browser presentation builder designed for speed, simplicity, and perfect mobile responsiveness.
+            </p>
+          </div>
+          
+          {/* Blog Content Area */}
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-12">
+            <div className="p-8 md:p-12 prose prose-slate max-w-none">
+              
+              <h2 className="text-2xl font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">What is this app?</h2>
+              <p className="text-slate-600 mb-6 leading-relaxed">
+                Creating presentations on a mobile phone or directly in a web browser is traditionally a clunky experience. 
+                SlideMaker Pro changes that. It is a lightweight, responsive tool that allows you to draft slides, position text, 
+                and arrange images using a simple drag-and-drop interface that works just as well on a touch screen as it does with a mouse.
+              </p>
+
+              <h2 className="text-2xl font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2 mt-8">How does it work?</h2>
+              <div className="space-y-6 mb-8">
+                <div className="flex gap-4 items-start">
+                  <div className="bg-indigo-100 p-2.5 rounded-lg text-indigo-600 shrink-0 mt-1"><MousePointer2 size={20} /></div>
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-lg">1. Tap, Move, and Edit</h4>
+                    <p className="text-slate-600">Tap any text or image on the canvas. Use the small floating menu to drag it around, or tap the **Pencil icon** to open the drawer and edit the content, color, or size.</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4 items-start">
+                  <div className="bg-purple-100 p-2.5 rounded-lg text-purple-600 shrink-0 mt-1"><Smartphone size={20} /></div>
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-lg">2. Perfect for Mobile</h4>
+                    <p className="text-slate-600">Unlike bulky desktop software, the interface stays out of your way. The sidebars hide automatically on small screens, and text boxes won't lock up your screen while you are trying to position them.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 items-start">
+                  <div className="bg-emerald-100 p-2.5 rounded-lg text-emerald-600 shrink-0 mt-1"><FileUp size={20} /></div>
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-lg">3. Real PPTX Exports</h4>
+                    <p className="text-slate-600">When you are finished, just hit Export. The app packages your design into a genuine `.pptx` file that you can open in Microsoft PowerPoint, Google Slides, or Apple Keynote.</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            
+            {/* Call to Action Bar */}
+            <div className="bg-slate-50 p-8 border-t border-slate-200 flex flex-col items-center text-center">
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Ready to start designing?</h3>
+              <p className="text-slate-500 mb-6 text-sm">Jump straight into the canvas. No sign-up required.</p>
+              
+              <button 
+                onClick={() => setIsStarted(true)}
+                className="group bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-full text-lg font-black shadow-lg hover:shadow-indigo-500/30 transition-all flex items-center space-x-3 active:scale-95"
+              >
+                <span>Launch Workspace</span>
+                <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    );
+  }
+
+  // --- MAIN APP RENDERING ---
   return (
-    <div className="flex flex-col md:flex-row h-[100dvh] bg-[#f8fafc] font-sans text-slate-900 overflow-hidden" onClick={() => setSelectedElementId(null)}>
+    <div className="flex flex-col md:flex-row h-[100dvh] bg-[#f8fafc] font-sans text-slate-900 overflow-hidden" onClick={() => { setSelectedElementId(null); setActiveTab('none'); }}>
       
       {/* MOBILE HEADER */}
       <div className="md:hidden bg-white h-14 border-b border-gray-200 flex items-center justify-between px-4 z-30 shadow-sm flex-shrink-0">
@@ -181,19 +263,19 @@ export default function PresentationMakerPro() {
           <Layout size={24} />
         </div>
 
-        <button onClick={(e) => { e.stopPropagation(); setActiveTab(activeTab === 'design' && window.innerWidth < 768 ? 'none' : 'design'); }} 
+        <button onClick={(e) => { e.stopPropagation(); setActiveTab(activeTab === 'design' ? 'none' : 'design'); }} 
           className={`flex flex-col items-center space-y-1 w-16 py-2 rounded-xl transition-all ${activeTab === 'design' ? 'text-indigo-600 md:text-indigo-400 md:bg-white/10' : 'text-gray-500 md:text-gray-400 hover:text-indigo-500 md:hover:bg-white/5'}`}>
           <Palette size={22} />
           <span className="text-[10px] font-bold tracking-wider">Design</span>
         </button>
 
-        <button onClick={(e) => { e.stopPropagation(); setActiveTab(activeTab === 'text' && window.innerWidth < 768 ? 'none' : 'text'); }} 
+        <button onClick={(e) => { e.stopPropagation(); setActiveTab(activeTab === 'text' ? 'none' : 'text'); }} 
           className={`flex flex-col items-center space-y-1 w-16 py-2 rounded-xl transition-all ${activeTab === 'text' ? 'text-indigo-600 md:text-indigo-400 md:bg-white/10' : 'text-gray-500 md:text-gray-400 hover:text-indigo-500 md:hover:bg-white/5'}`}>
           <Type size={22} />
           <span className="text-[10px] font-bold tracking-wider">Text</span>
         </button>
 
-        <button onClick={(e) => { e.stopPropagation(); setActiveTab(activeTab === 'uploads' && window.innerWidth < 768 ? 'none' : 'uploads'); }} 
+        <button onClick={(e) => { e.stopPropagation(); setActiveTab(activeTab === 'uploads' ? 'none' : 'uploads'); }} 
           className={`flex flex-col items-center space-y-1 w-16 py-2 rounded-xl transition-all ${activeTab === 'uploads' ? 'text-indigo-600 md:text-indigo-400 md:bg-white/10' : 'text-gray-500 md:text-gray-400 hover:text-indigo-500 md:hover:bg-white/5'}`}>
           <ImageIcon size={22} />
           <span className="text-[10px] font-bold tracking-wider">Images</span>
@@ -205,7 +287,7 @@ export default function PresentationMakerPro() {
         className={`
           absolute md:relative bottom-16 md:bottom-auto w-full md:w-80 bg-white border-t md:border-t-0 md:border-r border-gray-200 
           shadow-[0_-10px_15px_-3px_rgb(0,0,0,0.1)] md:shadow-none z-30 transition-all duration-300 ease-in-out
-          ${activeTab !== 'none' ? 'max-h-[35vh] md:max-h-full overflow-y-auto opacity-100' : 'max-h-0 md:max-h-full overflow-hidden opacity-0 md:opacity-100'}
+          ${activeTab !== 'none' ? 'max-h-[40vh] md:max-h-full overflow-y-auto opacity-100' : 'max-h-0 md:max-h-full overflow-hidden opacity-0 md:opacity-100'}
         `}
         onClick={e => e.stopPropagation()}
       >
@@ -226,7 +308,6 @@ export default function PresentationMakerPro() {
                 <div className="space-y-4 p-4 border border-indigo-100 bg-indigo-50/50 rounded-xl mt-4">
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">Edit Selected Text</span>
-                    <button onClick={deleteSelectedElement} className="text-red-500 hover:text-red-700 bg-red-50 p-1.5 rounded-md"><Trash2 size={16}/></button>
                   </div>
                   <textarea 
                     className="w-full p-3 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 outline-none min-h-[80px] text-base"
@@ -246,7 +327,7 @@ export default function PresentationMakerPro() {
                 </div>
               ) : (
                 <div className="bg-gray-50 rounded-xl p-4 text-center mt-4 border border-dashed border-gray-200">
-                  <p className="text-xs text-gray-500">Tap a text box on the canvas to configure styling updates here.</p>
+                  <p className="text-xs text-gray-500">Tap a text box on the canvas and click 'Edit' to configure styling here.</p>
                 </div>
               )}
             </div>
@@ -280,15 +361,6 @@ export default function PresentationMakerPro() {
                   <span className="text-xs font-bold text-indigo-600">Upload Image File</span>
                 </label>
               </div>
-              
-              {selectedElement?.type === 'image' && (
-                <div className="mt-4 p-4 border border-indigo-100 bg-indigo-50/50 rounded-xl flex justify-between items-center">
-                   <span className="text-xs font-bold text-slate-700">Image Element Selected</span>
-                   <button onClick={deleteSelectedElement} className="text-xs text-red-600 font-bold bg-red-100/50 px-3 py-1.5 rounded-lg">
-                     Delete Asset
-                   </button>
-                </div>
-              )}
             </div>
           )}
         </div>
@@ -309,13 +381,12 @@ export default function PresentationMakerPro() {
           </button>
         </div>
 
-        {/* WORKSPACE AREA USING OUTER-INNER FIX */}
+        {/* WORKSPACE AREA */}
         <div 
           className="flex-1 overflow-hidden flex justify-center items-center p-4 bg-slate-100/50 relative" 
           ref={containerRef}
-          style={{ touchAction: 'none' }}
+          style={{ touchAction: 'none' }} 
         >
-          {/* 1. OUTER WRAPPER: Occupies the precise shrunk layout box bounds inside the layout engine */}
           <div 
             style={{
               width: `${CANVAS_W * scale}px`,
@@ -323,7 +394,6 @@ export default function PresentationMakerPro() {
               position: 'relative'
             }}
           >
-            {/* 2. INNER SLIDE: Locked at 960x540 canvas grid coordinates, scaled uniformly from top left */}
             <div 
               className="shadow-2xl absolute bg-white overflow-hidden ring-1 ring-black/5"
               style={{ 
@@ -331,14 +401,14 @@ export default function PresentationMakerPro() {
                 height: `${CANVAS_H}px`, 
                 backgroundColor: activeSlide.bgColor,
                 transform: `scale(${scale})`,
-                transformOrigin: 'top left' // FIX: Scales seamlessly down directly inside outer placeholder grid bounds
+                transformOrigin: 'top left' 
               }}
             >
               {activeSlide.elements.map(el => (
                 <Rnd
                   key={el.id}
                   bounds="parent"
-                  scale={scale} // Calibrates translation multipliers natively
+                  scale={scale}
                   position={{ x: el.x, y: el.y }}
                   size={{ width: el.w, height: el.h }}
                   onDragStop={(e, d) => updateSelectedElement({ x: d.x, y: d.y })}
@@ -348,29 +418,50 @@ export default function PresentationMakerPro() {
                   onClick={(e: any) => { 
                     e.stopPropagation(); 
                     setSelectedElementId(el.id); 
-                    setActiveTab(el.type === 'image' ? 'uploads' : 'text'); 
+                    // FIX: Do NOT automatically open the editing tab here. Just select the element.
                   }}
-                  className={`group ${selectedElementId === el.id ? 'ring-2 ring-indigo-500 z-50' : 'hover:ring-2 hover:ring-indigo-200 z-10'}`}
+                  className={`group ${selectedElementId === el.id ? 'ring-2 ring-indigo-500 z-50 bg-blue-50/10' : 'hover:ring-2 hover:ring-indigo-200 z-10'}`}
                 >
                   
-                  {/* Floating Action Button Bar on Mobile Viewports */}
+                  {/* Floating Action Menu (Appears above selected element) */}
                   {selectedElementId === el.id && (
-                    <div className="absolute -top-12 right-0 flex gap-1 z-50 bg-white shadow-md rounded-lg p-1 border border-gray-200 md:hidden" style={{ transform: `scale(${1/scale})`, transformOrigin: 'bottom right' }}>
-                      <div className="text-gray-400 p-1.5 cursor-move"><Move size={16} /></div>
-                      <button onClick={(e) => { e.stopPropagation(); deleteSelectedElement(); }} className="bg-red-50 text-red-500 rounded-md p-1.5">
-                        <Trash2 size={16} />
+                    <div className="absolute -top-14 right-0 flex gap-2 z-50 bg-white shadow-lg rounded-xl p-1.5 border border-slate-200" style={{ transform: `scale(${1/scale})`, transformOrigin: 'bottom right' }}>
+                      <div className="text-slate-500 p-2 cursor-move hover:bg-slate-100 rounded-lg"><Move size={18} /></div>
+                      
+                      {/* NEW: Edit button to explicitly open the drawer */}
+                      <button 
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          setActiveTab(el.type === 'image' ? 'uploads' : 'text'); 
+                        }} 
+                        className="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg p-2 transition-colors"
+                      >
+                        <Pencil size={18} />
+                      </button>
+
+                      <button 
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          deleteSelectedElement(); 
+                        }} 
+                        className="bg-red-50 text-red-500 hover:bg-red-100 rounded-lg p-2 transition-colors"
+                      >
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   )}
 
                   {el.type === 'text' ? (
-                    <div className="w-full h-full p-2 cursor-move flex flex-col justify-start" style={{ fontSize: `${el.fontSize}px`, color: el.color }}>
+                    <div 
+                      className="w-full h-full p-2 cursor-move flex flex-col justify-start touch-none" 
+                      style={{ fontSize: `${el.fontSize}px`, color: el.color }}
+                    >
                       {el.content?.split('\n').map((line, i) => (
-                        <div key={i} className="min-h-[1.2em] whitespace-pre-wrap leading-tight">{line}</div>
+                        <div key={i} className="min-h-[1.2em] whitespace-pre-wrap leading-tight pointer-events-none">{line}</div>
                       ))}
                     </div>
                   ) : (
-                    <div className="w-full h-full cursor-move">
+                    <div className="w-full h-full cursor-move touch-none">
                       <img src={el.data} className="w-full h-full object-contain pointer-events-none" alt="Asset" />
                     </div>
                   )}
@@ -385,7 +476,7 @@ export default function PresentationMakerPro() {
           {slides.map((s, idx) => (
             <div key={s.id} className="relative flex-shrink-0 group py-1">
               <div 
-                onClick={() => { setActiveSlideId(s.id); setSelectedElementId(null); }}
+                onClick={() => { setActiveSlideId(s.id); setSelectedElementId(null); setActiveTab('none'); }}
                 className={`w-28 h-16 md:w-40 md:h-24 rounded-xl border-2 cursor-pointer transition-all ${activeSlideId === s.id ? 'border-indigo-600 ring-4 ring-indigo-100 scale-[1.01]' : 'border-gray-200 hover:border-gray-400'}`}
                 style={{ backgroundColor: s.bgColor }}
               >
