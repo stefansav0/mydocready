@@ -8,7 +8,7 @@ export default function Footer() {
 
           {/* Brand Section */}
           <div>
-            <div className="text-lg font-bold">DocReady Photo</div>
+            <div className="text-lg font-bold">MyDocReady</div>
             <p className="mt-2 text-sm text-muted-foreground">
               Resize by KB, make passport photos, and generate document-ready images in seconds.
             </p>
@@ -40,6 +40,11 @@ export default function Footer() {
           <div>
             <div className="font-semibold">Presets</div>
             <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <Link href="/resume-maker" className="text-muted-foreground hover:text-foreground transition">
+                  Resume
+                </Link>
+              </li>
               <li>
                 <Link href="/resize?aadhar=20" className="text-muted-foreground hover:text-foreground transition">
                   Aadhaar 20 KB

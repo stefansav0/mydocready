@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import { Eye, Download, X, UploadCloud, Plus, Trash2 } from "lucide-react";
 
 // ============================================

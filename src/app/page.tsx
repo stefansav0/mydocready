@@ -27,10 +27,7 @@ export default function HomePage() {
         <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-indigo-400 opacity-20 blur-[100px]"></div>
         
         <div className="relative max-w-5xl mx-auto px-4 py-24 text-center flex-1 flex flex-col items-center justify-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-medium mb-6">
-            <span className="flex h-2 w-2 rounded-full bg-indigo-500"></span>
-            100% Free Online Tools
-          </div>
+          
           
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15]">
             Your Complete Digital <br className="hidden md:block" />

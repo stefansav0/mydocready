@@ -102,15 +102,13 @@ export default function NavBar() {
       <div className="container mx-auto flex items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="text-xl font-black tracking-tight group flex items-center gap-1.5 text-foreground">
-          <Sparkles className="text-indigo-600 group-hover:rotate-12 transition-transform duration-300" size={22} />
+          
           <span>Mydoc<span className="text-indigo-600">Ready</span></span>
         </Link>
 
         {/* Desktop Navigation links */}
         <nav className="hidden md:flex items-center gap-1">
-          <Link href="/converter" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
-            All Tools
-          </Link>
+          
 
           {/* Converters Dropdown */}
           <div className="relative" ref={dropdownRef}>
@@ -178,6 +176,13 @@ export default function NavBar() {
                   className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-sm font-medium"
                 >
                   ✍️ Resize Signature
+                </Link>
+                <Link
+                  href="/insert-doc"
+                  onClick={() => setResizeDropdownOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-sm font-medium"
+                >
+                  📄 Insert Document
                 </Link>
               </div>
             )}

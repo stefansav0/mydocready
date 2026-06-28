@@ -1,285 +1,985 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, CheckCircle2, ArrowRight } from "lucide-react";
 
-// ============================================
-// CONFIGURATION: UPDATE YOUR ROUTE PATHS HERE
-// ============================================
-const TEMPLATES = [
-  {
-    id: "sidebar-pro",
-    title: "Two-Column Sidebar Pro",
-    path: "/resume-maker/sidebar-pro", 
-    variant: "sidebar"
-  },
-  {
-    id: "classic-minimal",
-    title: "Classic Minimalist",
-    path: "/resume-maker/classic-minimal",
-    variant: "minimal"
-  },
-  {
-    id: "right-executive",
-    title: "Right-Sidebar Executive",
-    path: "/resume-maker/right-executive",
-    variant: "executive"
-  },
-  {
-    id: "horizontal-grid",
-    title: "Horizontal Row Grid",
-    path: "/resume-maker/horizontal-grid",
-    variant: "row-grid"
-  },
-  {
-    id: "typographic-split",
-    title: "Typographic Editorial",
-    path: "/resume-maker/typographic-split",
-    variant: "editorial"
-  },
-  {
-    id: "timeline-portfolio",
-    title: "Timeline Portfolio",
-    path: "/resume-maker/timeline-portfolio",
-    variant: "timeline"
-  }
-];
+import {
+  ArrowRight,
+  FileText,
+  Sparkles,
+  Layout,
+  Zap,
+  Shield,
+  CheckCircle2,
+  Star,
+  Users,
+  Download,
+  Building2,
+  Briefcase,
+  Globe,
+  GraduationCap,
+  Clock3,
+  Lock,
+  Target,
+Award,
+BadgeCheck,
+FileCheck,
+Search,
+Rocket,
+} from "lucide-react";
 
-export default function HomeTemplatePicker() {
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans flex flex-col">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-blue-200">
       
-      {/* ENTERPRISE HEADER NAVBAR */}
-      <header className="bg-white border-b border-slate-200 px-6 sm:px-10 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
-        <div className="flex items-center gap-2.5">
-          <div className="bg-blue-600 p-1.5 rounded-md">
-            <FileText className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-900">
-            ResumeBuilder
-          </span>
-        </div>
-        <div className="hidden sm:flex items-center gap-5 text-sm font-medium text-slate-600">
-          <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> ATS-Friendly</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Auto-Formatting</span>
-        </div>
-      </header>
       
 
       {/* HERO SECTION */}
-      <section className="text-center pt-16 pb-12 px-4 max-w-3xl mx-auto">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-tight">
-          Choose a resume template
+<section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-24 lg:py-32">
+
+  {/* Background */}
+  <div className="absolute inset-0">
+    <div className="absolute top-20 left-20 w-72 h-72 bg-blue-300/20 rounded-full blur-3xl"></div>
+    <div className="absolute bottom-10 right-10 w-80 h-80 bg-indigo-300/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <div className="relative max-w-7xl mx-auto px-6">
+
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+      {/* LEFT */}
+      <div>
+
+        
+
+        <h1 className="text-5xl md:text-6xl xl:text-7xl font-black leading-tight mb-8">
+
+          Create an
+          <span className="text-blue-600"> ATS-Friendly </span>
+
+          Resume That Gets
+
+          <span className="text-indigo-600"> Interview Calls</span>
+
         </h1>
-        <p className="text-slate-500 text-lg">
-          Select a professional layout to start. You can easily customize it later.
+
+        <p className="text-xl text-slate-600 leading-8 mb-8">
+
+          Build a professional resume in just a few minutes using modern,
+          recruiter-approved templates.
+
+          Increase your chances of getting shortlisted with resumes optimized
+          for Applicant Tracking Systems (ATS).
+
         </p>
+
+        <div className="flex flex-col sm:flex-row gap-5 mb-10">
+
+          <Link
+            href="/resume-maker/templates"
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 py-4 font-bold flex items-center justify-center gap-2 shadow-xl"
+          >
+            Build My Resume
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+
+          <a
+            href="#features"
+            className="border border-slate-300 bg-white rounded-xl px-8 py-4 font-semibold hover:bg-slate-50 text-center"
+          >
+            Explore Features
+          </a>
+
+        </div>
+
+        {/* Feature List */}
+
+        <div className="grid sm:grid-cols-2 gap-4">
+
+          <div className="flex items-center gap-3">
+
+            <CheckCircle2 className="text-green-500 w-5 h-5" />
+
+            <span>ATS Optimized Templates</span>
+
+          </div>
+
+          <div className="flex items-center gap-3">
+
+            <CheckCircle2 className="text-green-500 w-5 h-5" />
+
+            <span>Professional Designs</span>
+
+          </div>
+
+          <div className="flex items-center gap-3">
+
+            <CheckCircle2 className="text-green-500 w-5 h-5" />
+
+            <span>Download PDF Instantly</span>
+
+          </div>
+
+          <div className="flex items-center gap-3">
+
+            <CheckCircle2 className="text-green-500 w-5 h-5" />
+
+            <span>Easy Resume Editing</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* RIGHT */}
+
+      <div className="relative">
+
+        <div className="bg-white rounded-3xl shadow-2xl border overflow-hidden">
+
+          <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
+
+            <div className="font-bold">
+
+              Resume Preview
+
+            </div>
+
+            <Download className="w-5 h-5" />
+
+          </div>
+
+          <div className="p-8">
+
+            <div className="flex items-center gap-4 mb-8">
+
+              <div className="w-16 h-16 rounded-full bg-blue-100"></div>
+
+              <div>
+
+                <div className="h-4 w-40 bg-slate-900 rounded mb-3"></div>
+
+                <div className="h-3 w-28 bg-slate-300 rounded"></div>
+
+              </div>
+
+            </div>
+
+            <div className="space-y-5">
+
+              {[1,2,3,4,5].map((item)=>(
+                <div key={item}>
+
+                  <div className="h-3 w-28 bg-blue-600 rounded mb-3"></div>
+
+                  <div className="space-y-2">
+
+                    <div className="h-2 bg-slate-200 rounded"></div>
+
+                    <div className="h-2 bg-slate-200 rounded w-5/6"></div>
+
+                    <div className="h-2 bg-slate-200 rounded w-4/6"></div>
+
+                  </div>
+
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Floating Card */}
+
+        <div className="absolute -bottom-8 -left-8 bg-white shadow-xl rounded-2xl p-5 hidden lg:flex items-center gap-4">
+
+          <div className="bg-green-100 p-3 rounded-full">
+
+            <CheckCircle2 className="text-green-600" />
+
+          </div>
+
+          <div>
+
+            <p className="font-bold">
+
+              ATS Score
+
+            </p>
+
+            <p className="text-green-600 font-bold text-xl">
+
+              98%
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {/* STATS */}
+
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24">
+
+      <div className="bg-white rounded-2xl p-8 shadow text-center">
+
+        <Users className="mx-auto text-blue-600 mb-3" />
+
+        <h3 className="text-3xl font-bold">
+
+          100K+
+
+        </h3>
+
+        <p className="text-slate-500">
+
+          Happy Users
+
+        </p>
+
+      </div>
+
+      <div className="bg-white rounded-2xl p-8 shadow text-center">
+
+        <Layout className="mx-auto text-indigo-600 mb-3" />
+
+        <h3 className="text-3xl font-bold">
+
+          6+
+
+        </h3>
+
+        <p className="text-slate-500">
+
+          Templates
+
+        </p>
+
+      </div>
+
+      <div className="bg-white rounded-2xl p-8 shadow text-center">
+
+        <Star className="mx-auto text-yellow-500 mb-3" />
+
+        <h3 className="text-3xl font-bold">
+
+          4.9★
+
+        </h3>
+
+        <p className="text-slate-500">
+
+          User Rating
+
+        </p>
+
+      </div>
+
+      <div className="bg-white rounded-2xl p-8 shadow text-center">
+
+        <Zap className="mx-auto text-green-500 mb-3" />
+
+        <h3 className="text-3xl font-bold">
+
+          15 Min
+
+        </h3>
+
+        <p className="text-slate-500">
+
+          Average Build Time
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{/* TRUSTED SECTION */}
+
+<section className="bg-white py-20">
+
+  <div className="max-w-7xl mx-auto px-6">
+
+    <div className="text-center mb-12">
+
+      
+
+      <h2 className="text-4xl font-bold mb-5">
+
+        Helping Job Seekers Build Better Careers
+
+      </h2>
+
+      <p className="text-slate-500 max-w-3xl mx-auto text-lg">
+
+        Whether you're a fresher searching for your first opportunity,
+        an experienced professional looking for career growth,
+        or a student preparing for internships,
+        ResumeBuilder helps create resumes that impress recruiters
+        and pass Applicant Tracking Systems.
+
+      </p>
+
+    </div>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+
+      {[
+        "Software",
+        "Healthcare",
+        "Education",
+        "Finance",
+        "Marketing",
+        "Engineering",
+      ].map((item) => (
+
+        <div
+          key={item}
+          className="rounded-xl border bg-slate-50 py-6 text-center hover:border-blue-500 hover:shadow-lg transition"
+        >
+
+          <Building2 className="mx-auto text-blue-600 mb-3 w-8 h-8" />
+
+          <p className="font-semibold">
+
+            {item}
+
+          </p>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+
+</section>
+
+      {/* FEATURES */}
+
+<section
+  id="features"
+  className="py-24 bg-gradient-to-b from-slate-50 to-white"
+>
+
+  <div className="max-w-7xl mx-auto px-6">
+
+    <div className="text-center mb-20">
+
+      
+      <h2 className="text-5xl font-bold mt-6">
+
+        Everything You Need to Build the Perfect Resume
+
+      </h2>
+
+      <p className="text-slate-500 mt-6 max-w-3xl mx-auto text-lg">
+
+        ResumeBuilder combines modern design, ATS optimization,
+        professional templates, and powerful editing tools to help
+        you create resumes that recruiters actually want to read.
+
+      </p>
+
+    </div>
+
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <FeatureCard
+        icon={<Layout className="text-blue-600 w-8 h-8" />}
+        title="Professional Templates"
+        description="Choose from beautiful recruiter-approved templates designed for every profession."
+      />
+
+      <FeatureCard
+        icon={<Zap className="text-yellow-500 w-8 h-8" />}
+        title="Fast Resume Builder"
+        description="Create a professional resume within minutes using our simple editor."
+      />
+
+      <FeatureCard
+        icon={<Shield className="text-green-600 w-8 h-8" />}
+        title="ATS Friendly"
+        description="Our templates are optimized to pass Applicant Tracking Systems."
+      />
+
+      <FeatureCard
+        icon={<Briefcase className="text-indigo-600 w-8 h-8" />}
+        title="Job Ready"
+        description="Perfect for freshers, professionals, freelancers and experienced candidates."
+      />
+
+      <FeatureCard
+        icon={<GraduationCap className="text-pink-600 w-8 h-8" />}
+        title="Student Friendly"
+        description="Ideal for internships, placements, college admissions and scholarship applications."
+      />
+
+      <FeatureCard
+        icon={<Globe className="text-cyan-600 w-8 h-8" />}
+        title="Global Standard"
+        description="Use internationally accepted resume layouts suitable for companies worldwide."
+      />
+
+    </div>
+
+  </div>
+
+</section>
+
+{/* ================= ATS GUIDE ================= */}
+
+<section className="py-24 bg-slate-900 text-white">
+
+    <div className="max-w-7xl mx-auto px-6">
+
+        <div className="text-center mb-20">
+
+            <span className="bg-blue-600 px-4 py-2 rounded-full text-sm font-semibold">
+
+                ATS Friendly Resume
+
+            </span>
+
+            <h2 className="text-5xl font-bold mt-8">
+
+                Why ATS-Friendly Resumes Matter
+
+            </h2>
+
+            <p className="max-w-3xl mx-auto text-slate-300 mt-8 text-lg leading-8">
+
+                More than 95% of large companies use Applicant Tracking
+                Systems (ATS) to scan resumes before a recruiter reviews
+                them. A resume with poor formatting or missing keywords
+                may never reach a hiring manager.
+
+                ResumeBuilder creates clean, professional resumes that are
+                optimized for ATS software while maintaining an attractive
+                appearance for recruiters.
+
+            </p>
+
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* LEFT */}
+
+            <div className="space-y-8">
+
+                <div className="flex gap-5">
+
+                    <div className="bg-blue-600 rounded-xl p-3 h-fit">
+
+                        <BadgeCheck />
+
+                    </div>
+
+                    <div>
+
+                        <h3 className="text-2xl font-bold mb-2">
+
+                            Recruiter Approved Layouts
+
+                        </h3>
+
+                        <p className="text-slate-300 leading-8">
+
+                            Every template is designed with readability in
+                            mind, ensuring recruiters can quickly identify
+                            your experience, skills, education, and
+                            achievements.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div className="flex gap-5">
+
+                    <div className="bg-green-600 rounded-xl p-3 h-fit">
+
+                        <Search />
+
+                    </div>
+
+                    <div>
+
+                        <h3 className="text-2xl font-bold mb-2">
+
+                            Optimized for ATS Software
+
+                        </h3>
+
+                        <p className="text-slate-300 leading-8">
+
+                            Proper headings, clean typography,
+                            keyword-friendly formatting,
+                            and structured layouts help ATS systems
+                            understand your resume correctly.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div className="flex gap-5">
+
+                    <div className="bg-indigo-600 rounded-xl p-3 h-fit">
+
+                        <Rocket />
+
+                    </div>
+
+                    <div>
+
+                        <h3 className="text-2xl font-bold mb-2">
+
+                            Increase Interview Opportunities
+
+                        </h3>
+
+                        <p className="text-slate-300 leading-8">
+
+                            A well-structured resume improves visibility
+                            during recruitment and increases your chances
+                            of receiving interview invitations.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* RIGHT */}
+
+            <div className="bg-white rounded-3xl p-10 text-slate-900 shadow-2xl">
+
+                <h3 className="text-3xl font-bold mb-8">
+
+                    ATS Checklist
+
+                </h3>
+
+                <div className="space-y-5">
+
+                    {[
+                        "Professional Resume Format",
+                        "Easy to Read Layout",
+                        "Clear Section Headings",
+                        "Keyword Optimized",
+                        "PDF Download",
+                        "No Complex Tables",
+                        "Modern Typography",
+                        "Recruiter Friendly Design",
+                    ].map((item) => (
+
+                        <div
+                            key={item}
+                            className="flex items-center gap-4"
+                        >
+
+                            <CheckCircle2 className="text-green-600" />
+
+                            <span className="font-medium">
+
+                                {item}
+
+                            </span>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+                <div className="mt-10 bg-green-100 rounded-xl p-6">
+
+                    <div className="text-green-700 font-bold text-xl">
+
+                        Estimated ATS Compatibility
+
+                    </div>
+
+                    <div className="text-5xl font-black mt-3">
+
+                        98%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{/* WHY CHOOSE US */}
+
+<section className="py-24 bg-white">
+
+    <div className="max-w-7xl mx-auto px-6">
+
+        <div className="text-center mb-20">
+
+            <span className="text-blue-600 font-bold uppercase tracking-widest">
+
+                Why Choose ResumeBuilder
+
+            </span>
+
+            <h2 className="text-5xl font-bold mt-6">
+
+                Everything Needed to Build a Winning Resume
+
+            </h2>
+
+            <p className="max-w-3xl mx-auto text-slate-500 mt-6 text-lg">
+
+                ResumeBuilder is designed to simplify resume creation
+                while helping candidates present themselves in the best
+                possible way. Whether you're a student, fresher, or
+                experienced professional, our platform provides the
+                tools needed to create polished resumes.
+
+            </p>
+
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            {[
+                {
+                    icon: <Award className="w-10 h-10 text-blue-600"/>,
+                    title:"Professional Templates",
+                    desc:"Beautiful resume templates for every profession."
+                },
+                {
+                    icon:<Clock3 className="w-10 h-10 text-green-600"/>,
+                    title:"Build in Minutes",
+                    desc:"Complete your resume quickly using guided sections."
+                },
+                {
+                    icon:<Lock className="w-10 h-10 text-red-500"/>,
+                    title:"Private & Secure",
+                    desc:"Your personal information stays protected."
+                },
+                {
+                    icon:<FileCheck className="w-10 h-10 text-indigo-600"/>,
+                    title:"Instant PDF",
+                    desc:"Download high-quality resumes ready to apply."
+                }
+            ].map((item,index)=>(
+
+                <div
+                    key={index}
+                    className="rounded-3xl border p-8 hover:shadow-xl hover:-translate-y-2 transition-all"
+                >
+
+                    <div className="mb-6">
+
+                        {item.icon}
+
+                    </div>
+
+                    <h3 className="font-bold text-2xl mb-4">
+
+                        {item.title}
+
+                    </h3>
+
+                    <p className="text-slate-500 leading-8">
+
+                        {item.desc}
+
+                    </p>
+
+                </div>
+
+            ))}
+
+        </div>
+
+    </div>
+
+</section>
+
+{/* ================= RESUME WRITING GUIDE ================= */}
+
+<section className="py-24 bg-slate-50">
+
+  <div className="max-w-6xl mx-auto px-6">
+
+    <div className="text-center mb-16">
+
+      <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-semibold">
+
+        Resume Writing Guide
+
+      </span>
+
+      <h2 className="text-5xl font-bold mt-6">
+
+        How to Create a Professional Resume That Gets Interviews
+
+      </h2>
+
+      <p className="text-slate-500 mt-6 text-lg max-w-3xl mx-auto">
+
+        A resume is often the first impression you make on an employer.
+        Before a recruiter meets you or schedules an interview, your
+        resume tells your professional story. A clear, well-organized,
+        and ATS-friendly resume helps employers quickly understand your
+        skills, experience, education, and achievements.
+
+      </p>
+
+    </div>
+
+    <div className="space-y-12">
+
+      {/* SECTION */}
+
+      <div className="bg-white rounded-3xl shadow-sm border p-10">
+
+        <h3 className="text-3xl font-bold mb-6">
+
+          Why Is a Professional Resume Important?
+
+        </h3>
+
+        <div className="space-y-6 text-slate-600 leading-8 text-lg">
+
+          <p>
+
+            Recruiters usually spend only a short time reviewing each
+            application before deciding whether to continue with a
+            candidate. Because of this, a resume should communicate your
+            qualifications clearly and efficiently. A professional layout,
+            consistent formatting, and well-structured content make it
+            easier for hiring teams to identify your strengths.
+
+          </p>
+
+          <p>
+
+            A resume should do more than list previous jobs. It should
+            highlight measurable achievements, demonstrate relevant
+            skills, and explain how your experience matches the role you
+            are applying for. Strong resumes focus on value, showing how
+            you contributed to projects, teams, or business goals.
+
+          </p>
+
+          <p>
+
+            Employers often receive many applications for a single
+            vacancy. A well-written resume increases your chances of
+            moving to the next stage by presenting your qualifications in
+            a professional and organized way.
+
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* SECTION */}
+
+      <div className="bg-white rounded-3xl shadow-sm border p-10">
+
+        <h3 className="text-3xl font-bold mb-6">
+
+          Understanding Applicant Tracking Systems (ATS)
+
+        </h3>
+
+        <div className="space-y-6 text-slate-600 leading-8 text-lg">
+
+          <p>
+
+            Many organizations use Applicant Tracking Systems (ATS) to
+            organize and review job applications. These systems help
+            recruiters search for relevant skills, qualifications, and
+            experience before manually reviewing resumes.
+
+          </p>
+
+          <p>
+
+            An ATS-friendly resume uses clear headings, standard fonts,
+            logical section order, and clean formatting. Avoiding
+            unnecessary graphics or complicated layouts can help ensure
+            your information is interpreted correctly.
+
+          </p>
+
+          <p>
+
+            Tailoring your resume for each application by including
+            relevant skills and terminology from the job description can
+            make your resume more relevant to the position.
+
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* SECTION */}
+
+      <div className="bg-white rounded-3xl shadow-sm border p-10">
+
+        <h3 className="text-3xl font-bold mb-6">
+
+          Choosing the Right Resume Template
+
+        </h3>
+
+        <div className="space-y-6 text-slate-600 leading-8 text-lg">
+
+          <p>
+
+            Selecting an appropriate template helps create a positive
+            first impression. A professional resume should be clean,
+            consistent, and easy to read on both desktop and mobile
+            devices.
+
+          </p>
+
+          <p>
+
+            Consider the industry you are applying to when selecting a
+            template. Creative roles may allow more visual designs, while
+            finance, engineering, healthcare, education, and government
+            positions generally benefit from simple and structured
+            layouts.
+
+          </p>
+
+          <p>
+
+            Consistent spacing, readable typography, and organized
+            sections improve readability for both recruiters and ATS
+            software.
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+      {/* HOW IT WORKS SECTION */}
+      <section id="how-it-works" className="py-24 bg-slate-900 text-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="text-3xl font-bold mb-16 text-center">How to build your resume</h2>
+          
+          <div className="grid md:grid-cols-3 gap-12 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden md:block absolute top-6 left-[15%] right-[15%] h-[2px] bg-slate-800 z-0"></div>
+            
+            <Step 
+              number="1"
+              title="Pick a Template"
+              description="Select from our library of professional, field-tested designs."
+            />
+            <Step 
+              number="2"
+              title="Fill in your Details"
+              description="Follow our easy prompts to add your experience, skills, and education."
+            />
+            <Step 
+              number="3"
+              title="Download & Apply"
+              description="Export as a pixel-perfect PDF and start landing interviews."
+            />
+          </div>
+
+          <div className="mt-16 text-center">
+            <Link 
+              href="/resume-maker/templates" 
+              className="inline-flex bg-white hover:bg-slate-100 text-slate-900 text-lg font-bold py-4 px-8 rounded-full transition-all items-center gap-2"
+            >
+              Start Building Now <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {/* TEMPLATE PICKER GRID */}
-      <main className="max-w-[1200px] w-full mx-auto px-6 pb-24 flex-1">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {TEMPLATES.map((tmpl) => (
-            <div key={tmpl.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl hover:border-blue-400 transition-all duration-300 flex flex-col group">
-              
-              {/* MINIATURE REALISTIC RESUME PREVIEW */}
-              <div className="w-full h-[320px] bg-slate-100 flex items-center justify-center p-6 border-b border-slate-200 relative overflow-hidden">
-                
-                {/* The "A4 Paper" wrapper with realistic mini-text */}
-                <div className="w-[180px] h-[254px] bg-white shadow-md overflow-hidden relative pointer-events-none border border-slate-200 transition-transform duration-300 group-hover:scale-105">
-                  
-                  {/* 1. Sidebar Pro Realistic Preview */}
-                  {tmpl.variant === "sidebar" && (
-                    <div className="flex h-full w-full">
-                      <div className="w-[35%] bg-[#d9dfe7] h-full flex flex-col items-center pt-5 px-3">
-                        <div className="w-10 h-10 rounded-full bg-slate-400 border-[1.5px] border-white mb-3 shadow-sm"></div>
-                        <div className="w-full flex flex-col gap-1 text-left">
-                          <span className="text-[4px] font-bold text-slate-700 uppercase">Contact</span>
-                          <div className="w-full h-0.5 bg-slate-400 rounded"></div>
-                          <div className="w-4/5 h-0.5 bg-slate-400 rounded mb-2"></div>
-                          <span className="text-[4px] font-bold text-slate-700 uppercase">Skills</span>
-                          <div className="w-full h-0.5 bg-slate-400 rounded"></div>
-                          <div className="w-full h-0.5 bg-slate-400 rounded"></div>
-                        </div>
-                      </div>
-                      <div className="w-[65%] p-4 flex flex-col">
-                        <h2 className="text-[10px] font-black text-slate-800 uppercase leading-none mb-1">RAVI KUMAR</h2>
-                        <span className="text-[4px] text-slate-500 mb-3">ravi@email.com • New Delhi, IN</span>
-                        
-                        <span className="text-[5px] font-bold text-slate-800 uppercase border-b border-slate-300 pb-0.5 mb-1.5">Profile</span>
-                        <div className="w-full h-0.5 bg-slate-200 rounded mb-0.5"></div>
-                        <div className="w-5/6 h-0.5 bg-slate-200 rounded mb-3"></div>
-                        
-                        <span className="text-[5px] font-bold text-slate-800 uppercase border-b border-slate-300 pb-0.5 mb-1.5">Experience</span>
-                        <div className="w-1/2 h-1 bg-slate-300 rounded mb-1"></div>
-                        <div className="w-full h-0.5 bg-slate-200 rounded mb-0.5"></div>
-                        <div className="w-full h-0.5 bg-slate-200 rounded mb-2"></div>
-                      </div>
-                    </div>
-                  )}
+      
+    </div>
+  );
+}
 
-                  {/* 2. Classic Minimal Realistic Preview */}
-                  {tmpl.variant === "minimal" && (
-                    <div className="flex flex-col h-full w-full p-5">
-                      <div className="text-center w-full mb-2">
-                        <h2 className="text-[12px] font-black text-slate-900 uppercase leading-none mb-1">ANOOP SINGH</h2>
-                        <p className="text-[4px] text-slate-600">anoop@email.com • +91 00000 00000 • Gurugram, IN</p>
-                      </div>
-                      <div className="w-full border-t border-slate-800 mb-2"></div>
-                      <div className="flex flex-1 gap-3">
-                        <div className="w-1/3 h-full border-r border-slate-300 pr-2 flex flex-col gap-1.5">
-                          <span className="text-[4px] font-bold text-slate-800 uppercase border-b border-slate-800 pb-0.5 mb-0.5">Profile</span>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded mb-1"></div>
-                          <span className="text-[4px] font-bold text-slate-800 uppercase border-b border-slate-800 pb-0.5 mb-0.5">Skills</span>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                        </div>
-                        <div className="w-2/3 h-full flex flex-col gap-1.5 pl-1">
-                          <span className="text-[4px] font-bold text-slate-800 uppercase border-b border-slate-800 pb-0.5 mb-0.5">Experience</span>
-                          <div className="w-2/3 h-1 bg-slate-300 rounded mb-0.5"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded mb-1"></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+// Sub-components for cleaner code
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="group bg-white rounded-3xl p-8 border hover:border-blue-200 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
 
-                  {/* 3. Right Executive Realistic Preview */}
-                  {tmpl.variant === "executive" && (
-                    <div className="flex flex-col h-full w-full">
-                      <div className="w-full bg-slate-900 px-5 py-4 flex flex-col justify-center">
-                        <h2 className="text-[12px] font-black text-white uppercase leading-none mb-1">PRIYA SHARMA</h2>
-                        <p className="text-[4px] text-sky-400 font-bold uppercase">Software Engineer</p>
-                      </div>
-                      <div className="w-full h-[2px] bg-sky-500"></div>
-                      <div className="flex flex-1">
-                        <div className="w-[60%] h-full p-4 flex flex-col gap-2">
-                          <span className="text-[5px] font-bold text-sky-600 uppercase border-b border-slate-200 pb-0.5">Experience</span>
-                          <div className="w-2/3 h-1 bg-slate-300 rounded mb-0.5 mt-1"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded mb-2"></div>
-                        </div>
-                        <div className="w-[40%] h-full bg-slate-50 border-l border-slate-200 p-3 flex flex-col gap-2">
-                          <span className="text-[5px] font-bold text-slate-800 uppercase border-b border-slate-300 pb-0.5">Expertise</span>
-                          <div className="w-full h-0.5 bg-slate-300 rounded mt-1"></div>
-                          <div className="w-3/4 h-0.5 bg-slate-300 rounded"></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+      <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition">
 
-                  {/* 4. Horizontal Grid Realistic Preview */}
-                  {tmpl.variant === "row-grid" && (
-                    <div className="flex flex-col h-full w-full p-4 gap-1.5">
-                      <div className="w-full mb-1">
-                        <h2 className="text-[12px] font-black text-slate-900 uppercase leading-none mb-1">ROHAN MEHTA</h2>
-                        <p className="text-[4px] text-teal-600 font-bold uppercase">Product Manager</p>
-                      </div>
-                      <div className="w-full flex border-t border-slate-200 pt-1.5">
-                        <div className="w-[25%] text-[4.5px] font-bold text-slate-800 uppercase mt-0.5">Profile</div>
-                        <div className="w-[75%] flex flex-col gap-0.5 ml-2 mt-0.5">
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          <div className="w-5/6 h-0.5 bg-slate-200 rounded"></div>
-                        </div>
-                      </div>
-                      <div className="w-full flex border-t border-slate-200 pt-1.5">
-                        <div className="w-[25%] text-[4.5px] font-bold text-slate-800 uppercase mt-0.5">Experience</div>
-                        <div className="w-[75%] flex flex-col gap-0.5 ml-2 mt-0.5">
-                          <div className="w-2/3 h-1 bg-slate-400 rounded mb-0.5"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded mb-1"></div>
-                          <div className="w-2/3 h-1 bg-slate-400 rounded mb-0.5"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+        {icon}
 
-                  {/* 5. Typographic Editorial Realistic Preview */}
-                  {tmpl.variant === "editorial" && (
-                    <div className="flex flex-col h-full w-full p-5">
-                      <div className="w-full flex justify-between items-end mb-2">
-                        <h2 className="text-[12px] font-light text-slate-900 uppercase leading-none">KABIR MALHOTRA</h2>
-                        <p className="text-[4px] text-slate-500 text-right leading-tight">kabir@email.com<br/>Mumbai, India</p>
-                      </div>
-                      <div className="w-full h-[1.5px] bg-indigo-700 mb-3"></div>
-                      <div className="flex flex-1 gap-4">
-                        <div className="w-[60%] h-full flex flex-col gap-2">
-                          <span className="text-[5px] font-bold text-indigo-700 uppercase border-b border-slate-200 pb-0.5">Experience</span>
-                          <div className="w-2/3 h-1 bg-slate-800 rounded mb-0.5 mt-1"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                        </div>
-                        <div className="w-[40%] h-full flex flex-col gap-2">
-                          <span className="text-[5px] font-bold text-slate-900 uppercase border-b border-indigo-700 pb-0.5">Education</span>
-                          <div className="w-full h-1 bg-slate-600 rounded mb-0.5 mt-1"></div>
-                          <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+      </div>
 
-                  {/* 6. Timeline Portfolio Realistic Preview */}
-                  {tmpl.variant === "timeline" && (
-                    <div className="flex flex-col h-full w-full p-5">
-                      <div className="w-full text-center mb-2">
-                        <h2 className="text-[12px] font-black text-slate-900 uppercase leading-none mb-1">NEHA KAPOOR</h2>
-                        <p className="text-[4px] text-indigo-500 font-bold uppercase">Creative Director</p>
-                      </div>
-                      <div className="w-full h-[1px] bg-slate-200 mb-3"></div>
-                      <div className="flex flex-1 gap-3">
-                        <div className="w-[60%] h-full border-l-[1px] border-indigo-500 pl-2.5 flex flex-col gap-2 relative">
-                          <div className="absolute top-1 left-[-2px] w-[3px] h-[3px] rounded-full bg-indigo-500"></div>
-                          <div>
-                            <span className="text-[4.5px] font-bold text-indigo-500 uppercase block mb-1">Experience</span>
-                            <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          </div>
-                          <div className="absolute top-10 left-[-2px] w-[3px] h-[3px] rounded-full bg-indigo-500"></div>
-                          <div>
-                            <div className="w-2/3 h-1 bg-slate-800 rounded mb-0.5 mt-2"></div>
-                            <div className="w-full h-0.5 bg-slate-200 rounded"></div>
-                          </div>
-                        </div>
-                        <div className="w-[40%] h-full flex flex-col gap-1.5">
-                          <span className="text-[4.5px] font-bold text-slate-900 uppercase border-b border-slate-300 pb-0.5">Skills</span>
-                          <div className="w-full h-0.5 bg-slate-400 rounded mb-0.5 mt-0.5"></div>
-                          <div className="w-3/4 h-0.5 bg-slate-400 rounded"></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+      <h3 className="text-2xl font-bold mb-4">
 
-                </div>
+        {title}
 
-                {/* RESUME-NOW STYLE HOVER ACTION OVERLAY */}
-                <div className="absolute inset-0 bg-slate-900/5 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
-                  <div className="bg-blue-600 text-white text-sm font-bold py-3 px-6 rounded-full shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    Select template
-                  </div>
-                </div>
+      </h3>
 
-              </div>
+      <p className="text-slate-500 leading-8">
 
-              {/* CARD BOTTOM INFO & PERMANENT BUTTON */}
-              <div className="p-6 pt-0 flex flex-col flex-1">
-                <h3 className="text-[18px] font-bold text-slate-900">
-                  {tmpl.title}
-                </h3>
-                
-                {/* ALWAYS VISIBLE BUTTON FOR MOBILE COMPATIBILITY */}
-                <Link 
-                  href={tmpl.path} 
-                  className="mt-auto w-full bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white border border-slate-200 hover:border-blue-600 text-sm font-bold py-3.5 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
-                >
-                  Choose this template <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-              
-            </div>
-          ))}
-        </div>
-      </main>
+        {description}
 
+      </p>
+
+    </div>
+  );
+}
+
+function Step({ number, title, description }: { number: string, title: string, description: string }) {
+  return (
+    <div className="relative z-10 flex flex-col items-center text-center">
+      <div className="w-12 h-12 bg-blue-600 text-white font-bold text-xl rounded-full flex items-center justify-center mb-6 ring-8 ring-slate-900">
+        {number}
+      </div>
+      <h3 className="text-xl font-bold mb-3">{title}</h3>
+      <p className="text-slate-400 leading-relaxed">{description}</p>
     </div>
   );
 }

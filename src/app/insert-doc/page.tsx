@@ -315,8 +315,9 @@ export default function InsertDocPage() {
           <section className="mb-10">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Free Printable Passport Photo Maker</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-              Stop paying for expensive photo studios just to get your passport or visa pictures printed. Our free tool allows you to upload any portrait photo and instantly convert it into a standard <strong>35x45mm passport size</strong> document. 
-            </p>
+  Create perfectly formatted <strong>35×45mm passport-size photos</strong> from any portrait in just a few clicks. Upload your photo, and our free tool automatically converts it into a print-ready passport or visa photo that meets standard size requirements.
+</p>
+
             <p className="text-slate-600 leading-relaxed">
               We perfectly size and scale your image onto an A4 PDF document that you can print directly at home or at a local print shop. Because all PDF generation happens securely in your browser, your personal photos are entirely private and are never uploaded to our servers.
             </p>
