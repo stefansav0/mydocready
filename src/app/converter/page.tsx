@@ -38,7 +38,7 @@ export default function ConverterHub() {
       title: "PDF to Excel",
       description: "Extract tables from PDF documents directly into clean, editable Excel spreadsheets.",
       icon: <Grid size={32} className="text-[#107c41]" />,
-      href: "/converter/pdf-to-excle",
+      href: "/converter/pdf-to-excel",
       color: "bg-green-50/50 hover:border-[#107c41]",
       shadow: "hover:shadow-green-100"
     },
