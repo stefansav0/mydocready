@@ -5,6 +5,12 @@ import Link from "next/link";
 import { 
   Upload, 
   Image as ImageIcon, 
+  Camera,
+  Users,
+  Minimize,
+  PenTool,
+  CalendarDays,
+  Presentation,
   FileText, 
   LucideIcon, 
   ArrowRight, 
@@ -181,112 +187,139 @@ export default function HomePage() {
 
 </section>
 
-      <div className="flex flex-wrap justify-center gap-3 mt-6">
+     {/* --- PREMIUM APP-BOX QUICK LINKS --- */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full">
+  
+  {/* Passport Photo */}
   <Link
     href="/passport-photo"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-blue-50 text-blue-700 border border-blue-100
-    hover:bg-blue-100 hover:border-blue-200 hover:shadow-md hover:-translate-y-0.5
-    transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <ImageIcon className="w-4 h-4 text-blue-500" />
-    Make Passport Photo
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+      <Camera className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Passport Photo
+    </span>
   </Link>
 
+  {/* Resize Photo */}
   <Link
     href="/resize"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-green-50 text-green-700 border border-green-100
-    hover:bg-green-100 hover:border-green-200 hover:shadow-md hover:-translate-y-0.5
-    transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-green-200 dark:hover:border-green-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <ImageIcon className="w-4 h-4 text-green-500" />
-    Resize Photo KB
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform">
+      <Minimize className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Resize Image
+    </span>
   </Link>
 
+  {/* Resize Signature */}
   <Link
     href="/resize-signature"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-purple-50 text-purple-700 border border-purple-100
-    hover:bg-purple-100 hover:border-purple-200 hover:shadow-md hover:-translate-y-0.5
-    transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-purple-200 dark:hover:border-purple-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <ImageIcon className="w-4 h-4 text-purple-500" />
-    Resize Signature KB
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+      <PenTool className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Resize Signature
+    </span>
   </Link>
 
+  {/* AGE Calculator */}
   <Link
     href="/calculators/age"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-amber-50 text-amber-700 border border-amber-100
-    hover:bg-amber-100 hover:border-amber-200 hover:shadow-md hover:-translate-y-0.5
-    transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-amber-200 dark:hover:border-amber-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <Calculator className="w-4 h-4 text-amber-500" />
-    AGE Calculator
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+      <CalendarDays className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Age Calculator
+    </span>
   </Link>
 
+  {/* Resume Builder */}
   <Link
     href="/resume-maker"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-rose-50 text-rose-700 border border-rose-100
-    hover:bg-rose-100 hover:border-rose-200 hover:shadow-md hover:-translate-y-0.5
-    transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-rose-200 dark:hover:border-rose-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <Briefcase className="w-4 h-4 text-rose-500" />
-    Resume Builder
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:scale-110 transition-transform">
+      <Briefcase className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Resume Builder
+    </span>
   </Link>
 
+  {/* Presentation Maker */}
   <Link
     href="/presentation-maker"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-cyan-50 text-cyan-700 border border-cyan-100
-    hover:bg-cyan-100 hover:border-cyan-200 hover:shadow-md hover:-translate-y-0.5
-    transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-cyan-200 dark:hover:border-cyan-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <Globe className="w-4 h-4 text-cyan-500" />
-    Presentation Maker
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 group-hover:scale-110 transition-transform">
+      <Presentation className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Slide Maker
+    </span>
   </Link>
 
+  {/* EMI Calculator */}
   <Link
     href="/calculators/emi"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-emerald-50 text-emerald-700 border border-emerald-100
-    hover:bg-emerald-100 hover:border-emerald-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-emerald-200 dark:hover:border-emerald-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <Banknote className="w-4 h-4 text-emerald-500" />
-    EMI Calculator
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+      <Banknote className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      EMI Calculator
+    </span>
   </Link>
 
+  {/* SIP Calculator */}
   <Link
     href="/calculators/sip"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-violet-50 text-violet-700 border border-violet-100
-    hover:bg-violet-100 hover:border-violet-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-violet-200 dark:hover:border-violet-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <TrendingUp className="w-4 h-4 text-violet-500" />
-    SIP Calculator
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
+      <TrendingUp className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      SIP Calculator
+    </span>
   </Link>
 
+  {/* Bill Split */}
   <Link
     href="/calculators/split"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-orange-50 text-orange-700 border border-orange-100
-    hover:bg-orange-100 hover:border-orange-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-orange-200 dark:hover:border-orange-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <Receipt className="w-4 h-4 text-orange-500" />
-    Bill Split
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform">
+      <Users className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      Bill Splitter
+    </span>
   </Link>
 
+  {/* GST Calculator */}
   <Link
     href="/calculators/gst"
-    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-    bg-sky-50 text-sky-700 border border-sky-100
-    hover:bg-sky-100 hover:border-sky-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-sky-200 dark:hover:border-sky-900/50 hover:-translate-y-1 transition-all duration-300"
   >
-    <ReceiptText className="w-4 h-4 text-sky-500" />
-    GST Calculator
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform">
+      <Receipt className="w-6 h-6" />
+    </div>
+    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+      GST Calculator
+    </span>
   </Link>
+  
 </div>
 
       {/* --- CATEGORY 1: PRIMARY SUITE --- */}
