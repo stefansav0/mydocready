@@ -18,6 +18,10 @@ import { blog as freeOnlinePhotoResizers } from '@/lib/blogs/free-online-photo-r
 import { blog as photoSizeForJobPortals } from '@/lib/blogs/reduce-photo-size-for-job-portals';
 import { blog as onlineVsOfflinePhotoStudios } from '@/lib/blogs/online-vs-offline-photo-studios';
 import { blog as writeAtsResume } from '@/lib/blogs/write-an-ats-resume';
+import { blog as babyPassportPhotoGuide } from '@/lib/blogs/how-to-take-baby-passport-photo-at-home';
+import {blog as whatToWearForPassportIdPhotos} from '@/lib/blogs/what-to-wear-for-passport-id-photos';
+import { blog as resizeSignatureForOfficialDocuments } from '@/lib/blogs/resize-signature-for-official-documents';
+import { blog as howToMasterAnySlideMaker } from '@/lib/blogs/how-to-master-any-slide-maker';
 
 export const blogContent = {
     "resize-photos-by-kb": resizePhotosByKb,
@@ -39,5 +43,9 @@ export const blogContent = {
     "free-online-photo-resizers": freeOnlinePhotoResizers,
     "reduce-photo-size-for-job-portals": photoSizeForJobPortals,
     "online-vs-offline-photo-studios": onlineVsOfflinePhotoStudios,
-    "write-an-ats-resume": writeAtsResume
+    "write-an-ats-resume": writeAtsResume,
+    "how-to-take-baby-passport-photo-at-home": babyPassportPhotoGuide,
+    "what-to-wear-for-passport-id-photos": whatToWearForPassportIdPhotos,
+    "resize-signature-for-official-documents": resizeSignatureForOfficialDocuments,
+    "how-to-master-any-slide-maker": howToMasterAnySlideMaker
 };

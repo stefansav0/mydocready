@@ -8,7 +8,8 @@ import {
   Percent,
   CheckCircle2,
   Users,
-  Scale
+  Scale,
+  Calendar
 } from 'lucide-react';
 
 export default function CalculatorsLandingPage() {
@@ -93,6 +94,16 @@ export default function CalculatorsLandingPage() {
       bgColor: 'bg-pink-100',
       borderColor: 'hover:border-pink-300'
     },
+    {
+      id: 'age',
+      title: 'Age Calculator',
+      description: 'Calculate age, years remaining, and more with our simple and accurate tool.',
+      href: '/calculators/age',
+      icon: Calendar,
+      color: 'text-green-600',
+      bgColor: 'bg-green-100',
+      borderColor: 'hover:border-green-300'
+    }
   ];
 
   return (

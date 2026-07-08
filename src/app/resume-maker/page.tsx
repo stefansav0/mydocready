@@ -132,63 +132,123 @@ export default function LandingPage() {
       </div>
 
       {/* RIGHT */}
-
       <div className="relative">
+        {/* Dark App Shell mimicking the screenshot */}
+        <div className="bg-[#1e293b] rounded-3xl shadow-2xl border border-slate-700 overflow-hidden flex flex-col h-[600px]">
+          
+          
 
-        <div className="bg-white rounded-3xl shadow-2xl border overflow-hidden">
+          {/* Resume Canvas Area */}
+          <div className="flex-1 p-6 flex justify-center items-start overflow-hidden bg-[#1e293b]">
+            
+            {/* The Resume Page (Scaled down to fit) */}
+            <div className="bg-white w-full max-w-[420px] aspect-[1/1.414] shadow-lg flex text-[9px] leading-relaxed overflow-hidden">
+              
+              {/* Left Column (Blue-Gray) */}
+              <div className="w-[35%] bg-[#dce4eb] p-4 flex flex-col gap-4 text-slate-800">
+                
+                {/* Photo Area */}
+                <div className="w-14 h-14 rounded-full border-2 border-white mx-auto flex items-center justify-center text-slate-400 bg-slate-200 mt-2">
+                  Photo
+                </div>
 
-          <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
+                {/* Education */}
+                <div>
+                  <h4 className="font-bold border-b border-slate-800/20 pb-1 mb-2 text-[10px] uppercase text-slate-900 tracking-wider">Education</h4>
+                  <div className="font-bold leading-tight">Bachelor of Arts - Political Science & History</div>
+                  <div className="font-semibold mt-1">university name</div>
+                  <div className="text-[7.5px] text-slate-500 mb-1">completed year | city, country</div>
+                  <div className="text-[7.5px] leading-tight">Studied subjects including History, Political Science, Sociology, Hindi, and English. Developed strong communication, analytical, and research skills.</div>
+                </div>
 
-            <div className="font-bold">
+                {/* Skills */}
+                <div>
+                  <h4 className="font-bold border-b border-slate-800/20 pb-1 mb-2 text-[10px] uppercase text-slate-900 tracking-wider">Skills</h4>
+                  <ul className="list-disc pl-3 text-[8px] space-y-0.5">
+                    <li>Team Management</li>
+                    <li>Communication Skills</li>
+                    <li>Customer Relationship Mgt</li>
+                    <li>Problem Solving</li>
+                    <li>Time Management</li>
+                    <li>Leadership</li>
+                    <li>Microsoft Office</li>
+                  </ul>
+                </div>
 
-              Resume Preview
+                {/* Languages */}
+                <div>
+                  <h4 className="font-bold border-b border-slate-800/20 pb-1 mb-2 text-[10px] uppercase text-slate-900 tracking-wider">Languages</h4>
+                  <ul className="list-disc pl-3 text-[8px] space-y-0.5">
+                    <li>Hindi (Native)</li>
+                    <li>English (Professional)</li>
+                  </ul>
+                </div>
 
-            </div>
-
-            <Download className="w-5 h-5" />
-
-          </div>
-
-          <div className="p-8">
-
-            <div className="flex items-center gap-4 mb-8">
-
-              <div className="w-16 h-16 rounded-full bg-blue-100"></div>
-
-              <div>
-
-                <div className="h-4 w-40 bg-slate-900 rounded mb-3"></div>
-
-                <div className="h-3 w-28 bg-slate-300 rounded"></div>
-
+                {/* Interests */}
+                <div>
+                  <h4 className="font-bold border-b border-slate-800/20 pb-1 mb-2 text-[10px] uppercase text-slate-900 tracking-wider">Interests</h4>
+                  <ul className="list-disc pl-3 text-[8px] space-y-0.5">
+                    <li>Tech Blogging</li>
+                    <li>Travelling & Photography</li>
+                    <li>Open Source Contribution</li>
+                  </ul>
+                </div>
               </div>
 
-            </div>
-
-            <div className="space-y-5">
-
-              {[1,2,3,4,5].map((item)=>(
-                <div key={item}>
-
-                  <div className="h-3 w-28 bg-blue-600 rounded mb-3"></div>
-
-                  <div className="space-y-2">
-
-                    <div className="h-2 bg-slate-200 rounded"></div>
-
-                    <div className="h-2 bg-slate-200 rounded w-5/6"></div>
-
-                    <div className="h-2 bg-slate-200 rounded w-4/6"></div>
-
-                  </div>
-
+              {/* Right Column (White) */}
+              <div className="w-[65%] bg-white p-5 flex flex-col gap-4">
+                
+                {/* Header */}
+                <div>
+                  <h1 className="text-2xl font-black text-[#1a2b49] mb-1 uppercase tracking-tight">USER NAME</h1>
+                  <div className="text-[8px] text-slate-600 font-medium">Your address goes here, city, country</div>
+                  <div className="text-[8px] text-slate-600 font-medium">your phone number</div>
+                  <div className="text-[8px] text-slate-600 font-medium">your email address</div>
                 </div>
-              ))}
 
+                {/* Profile */}
+                <div>
+                  <h4 className="font-bold text-[10px] uppercase mb-1 text-[#1a2b49] tracking-wider">Profile</h4>
+                  <p className="text-[8px] text-slate-700 leading-relaxed">Results-driven professional with experience in operations and client management. Skilled in team coordination, problem-solving, and maintaining strong customer relationships. Seeking to contribute my expertise and grow within a dynamic organization.</p>
+                </div>
+
+                {/* Experience */}
+                <div>
+                  <h4 className="font-bold text-[10px] uppercase mb-2 text-[#1a2b49] tracking-wider">Experience</h4>
+                  
+                  <div className="flex justify-between items-start font-bold text-[9px] text-slate-900">
+                    <span>manager</span>
+                    <span className="text-[7px] text-slate-500 font-normal uppercase">Jan 2022 - Present</span>
+                  </div>
+                  <div className="text-[8px] font-bold text-slate-700 mb-1">Company Name | delhi, india</div>
+                  
+                  <ul className="list-disc pl-3.5 text-[8px] text-slate-700 space-y-0.5 leading-relaxed">
+                    <li>Managed daily operations and ensured smooth workflow across departments.</li>
+                    <li>Coordinated with clients, vendors, and internal teams to meet business requirements.</li>
+                    <li>Monitored service quality and resolved customer issues in a timely manner.</li>
+                    <li>Supervised team members, assigned tasks, and tracked performance.</li>
+                    <li>Prepared operational reports and maintained accurate records.</li>
+                  </ul>
+                </div>
+
+                {/* Certifications */}
+                <div>
+                  <h4 className="font-bold text-[10px] uppercase mb-1 text-[#1a2b49] tracking-wider">Certifications</h4>
+                  <ul className="list-disc pl-3.5 text-[8px] text-slate-700 space-y-0.5">
+                    <li>Certified Operations Associate (COA)</li>
+                    <li>Advanced Business Communication Course</li>
+                  </ul>
+                </div>
+
+                {/* Declaration */}
+                <div>
+                  <h4 className="font-bold text-[10px] uppercase mb-1 text-[#1a2b49] tracking-wider">Declaration</h4>
+                  <p className="text-[8px] text-slate-700 italic">I hereby declare that the information provided above is true.</p>
+                </div>
+
+              </div>
             </div>
-
           </div>
-
         </div>
 
         {/* Floating Card */}

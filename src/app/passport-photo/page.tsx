@@ -2,7 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import { fileToImageBitmap, drawCover, downloadBlob } from "@/utils/image";
-import { UploadCloud, Image as ImageIcon, Eraser, Download, Move, ZoomIn, CheckCircle2, Type, PaintBucket } from "lucide-react";
+import { 
+  UploadCloud, 
+  Image as ImageIcon, 
+  Eraser, 
+  Download, 
+  Move, 
+  ZoomIn, 
+  Type, 
+  PaintBucket,
+  ShieldCheck,
+  Lightbulb,
+  Camera,
+  CheckCircle2
+} from "lucide-react";
 import * as removeBg from "@imgly/background-removal";
 
 const OUT_W = 413;
@@ -93,7 +106,7 @@ export default function PassportPhotoPage() {
   const handleDownload = () => {
     if (!canvasRef.current) return;
     
-    // Fill transparent background with white before downloading to ensure standard JPG formatting
+    // Fill transparent background with white before downloading
     const downloadCanvas = document.createElement('canvas');
     downloadCanvas.width = OUT_W;
     downloadCanvas.height = OUT_H;
@@ -110,7 +123,7 @@ export default function PassportPhotoPage() {
           if (blob) downloadBlob(blob, `passport_${name || "photo"}.jpg`);
         },
         "image/jpeg",
-        0.98 // High quality
+        0.98
       );
     }
   };
@@ -120,12 +133,17 @@ export default function PassportPhotoPage() {
     setLoadingBg(true);
     setError(null);
     try {
-      const resultBlob = await removeBg.removeBackground(file);
+      // Optimized for speed
+      const config: removeBg.Config = {
+        model: "isnet",
+        output: { format: "image/png", quality: 1 }
+      };
+
+      const resultBlob = await removeBg.removeBackground(file, config);
       const resultFile = new File([resultBlob], file.name, { type: resultBlob.type });
       const bmp = await fileToImageBitmap(resultFile);
 
       setImg(bmp);
-      // Auto-set background to white after removal for standard passport look
       setBg("white"); 
     } catch (err) {
       console.error("Background removal error:", err);
@@ -135,14 +153,12 @@ export default function PassportPhotoPage() {
     }
   };
 
-  // Mouse/Touch events for panning
   function startDrag(clientX: number, clientY: number) {
     dragging.current = true;
     lastPos.current = { x: clientX, y: clientY };
   }
   function moveDrag(clientX: number, clientY: number) {
     if (!dragging.current) return;
-    // Adjust panning speed based on zoom level
     const dx = (clientX - lastPos.current.x) / zoom;
     const dy = (clientY - lastPos.current.y) / zoom;
     lastPos.current = { x: clientX, y: clientY };
@@ -153,46 +169,30 @@ export default function PassportPhotoPage() {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] text-gray-800 font-sans pb-20">
+      
       {/* Header Section */}
-      <div className="bg-white border-b border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
-            Create Perfect <span className="text-blue-600">Passport Photos</span>
+      <div className="bg-white border-b border-gray-200 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-6">
+            Create Professional <span className="text-blue-600">Passport Photos</span> Instantly
           </h1>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-            100% Free. No API keys needed. Everything happens securely right in your browser.
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto mb-8">
+            Stop paying for photo booths. Upload a selfie, let our AI remove the background, and download a print-ready 35×45mm photo for free.
           </p>
-        </div>
-      </div>
-
-      {/* How it Works Guide */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl mb-4">1</div>
-            <h3 className="font-semibold text-lg mb-2">Upload Photo</h3>
-            <p className="text-gray-500 text-sm">Choose a clear, front-facing photo. Good lighting works best.</p>
-          </div>
-          <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-xl mb-4">2</div>
-            <h3 className="font-semibold text-lg mb-2">Erase & Adjust</h3>
-            <p className="text-gray-500 text-sm">Click 'Remove Background', pick a color, and zoom to fit.</p>
-          </div>
-          <div className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center font-bold text-xl mb-4">3</div>
-            <h3 className="font-semibold text-lg mb-2">Download Print</h3>
-            <p className="text-gray-500 text-sm">Get your standard 35×45mm high-resolution JPG instantly.</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-gray-600">
+            <span className="flex items-center gap-1.5"><ShieldCheck size={18} className="text-green-500"/> 100% Private (Runs Locally)</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={18} className="text-blue-500"/> AI Auto-Erase</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={18} className="text-purple-500"/> Free Forever</span>
           </div>
         </div>
       </div>
 
       {/* Main App Interface */}
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-gray-200">
           
-          {/* LEFT: Canvas Preview (The Hero) */}
+          {/* LEFT: Canvas Preview */}
           <div className="lg:w-1/2 bg-gray-50 flex flex-col items-center justify-center p-8 border-b lg:border-b-0 lg:border-r border-gray-200 relative min-h-[500px]">
-            {/* Checkerboard pattern for transparent preview */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
                  style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
             
@@ -209,7 +209,6 @@ export default function PassportPhotoPage() {
               </label>
             ) : (
               <div className="relative group flex flex-col items-center w-full">
-                {/* Responsive Canvas Container */}
                 <div 
                   className="relative cursor-move shadow-2xl rounded-sm overflow-hidden ring-4 ring-white transition-transform active:scale-[0.98] w-full max-w-[300px] sm:max-w-[350px] aspect-[413/531]"
                   onMouseDown={(e) => startDrag(e.clientX, e.clientY)}
@@ -226,9 +225,9 @@ export default function PassportPhotoPage() {
                   />
                   
                   {loadingBg && (
-                    <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center z-10">
+                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
                       <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
-                      <p className="font-semibold text-blue-800 animate-pulse">Running AI Model...</p>
+                      <p className="font-semibold text-blue-800 animate-pulse">Removing Background...</p>
                     </div>
                   )}
                 </div>
@@ -248,7 +247,6 @@ export default function PassportPhotoPage() {
               </div>
             )}
 
-            {/* AI Background Removal */}
             <div>
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <Eraser size={14} /> 1. Magic Erase
@@ -260,77 +258,48 @@ export default function PassportPhotoPage() {
                 className="w-full relative px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-2xl hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-300 disabled:to-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 text-lg"
               >
                 <ImageIcon size={22} />
-                {loadingBg ? "Removing Background..." : "Remove Background"}
+                {loadingBg ? "Processing..." : "Remove Background"}
               </button>
             </div>
 
-            {/* Colors */}
             <div className={`transition-opacity ${!img ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <PaintBucket size={14} /> 2. Background Color
               </h3>
               <div className="grid grid-cols-3 gap-3">
-                <button
-                  onClick={() => setBg("white")}
-                  className={`py-3 rounded-xl border-2 font-medium transition-all ${bg === 'white' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
-                >
-                  White
-                </button>
-                <button
-                  onClick={() => setBg("blue")}
-                  className={`py-3 rounded-xl border-2 font-medium transition-all ${bg === 'blue' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
-                >
-                  Blue
-                </button>
-                <button
-                  onClick={() => setBg("transparent")}
-                  className={`py-3 rounded-xl border-2 font-medium text-sm transition-all ${bg === 'transparent' ? 'border-purple-600 bg-purple-50 text-purple-700' : 'border-gray-200 hover:border-gray-300 bg-white'}`}
-                >
-                  Transparent
-                </button>
+                <button onClick={() => setBg("white")} className={`py-3 rounded-xl border-2 font-medium transition-all ${bg === 'white' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>White</button>
+                <button onClick={() => setBg("blue")} className={`py-3 rounded-xl border-2 font-medium transition-all ${bg === 'blue' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>Blue</button>
+                <button onClick={() => setBg("transparent")} className={`py-3 rounded-xl border-2 font-medium text-sm transition-all ${bg === 'transparent' ? 'border-purple-600 bg-purple-50 text-purple-700' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>Transparent</button>
               </div>
             </div>
 
-            {/* Adjustments */}
             <div className={`transition-opacity ${!img ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                <ZoomIn size={14} /> 3. Adjust Zoom
+                <ZoomIn size={14} /> 3. Adjust Fit
               </h3>
               <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
                 <input
-                  type="range"
-                  min={0.5} max={3} step={0.01}
-                  value={zoom}
+                  type="range" min={0.5} max={3} step={0.01} value={zoom}
                   onChange={(e) => setZoom(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
                 <div className="flex justify-between text-xs text-gray-400 font-medium mt-2">
-                  <span>Smaller</span>
-                  <span>Larger</span>
+                  <span>Zoom Out</span>
+                  <span>Zoom In</span>
                 </div>
               </div>
             </div>
 
-            {/* Overlays */}
             <div className={`transition-opacity ${!img ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                <Type size={14} /> 4. Details (Optional)
+                <Type size={14} /> 4. Add Details (If Required)
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <input
-                  type="text" placeholder="Print Name" value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-shadow outline-none"
-                />
-                <input
-                  type="date" value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-shadow outline-none"
-                />
+                <input type="text" placeholder="Print Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 p-3 outline-none" />
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 p-3 outline-none" />
               </div>
             </div>
 
-            {/* Download */}
             <div className="pt-4 border-t border-gray-100 mt-auto">
               <button
                 type="button"
@@ -339,13 +308,89 @@ export default function PassportPhotoPage() {
                 className="w-full px-6 py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-lg shadow-md"
               >
                 <Download size={20} />
-                Download Final Photo
+                Download Standard JPG
               </button>
             </div>
 
           </div>
         </div>
       </div>
+
+      {/* --- NEW VALUE CONTENT SECTION --- */}
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          
+          {/* Left Column: Guidelines */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-yellow-100 text-yellow-600 rounded-xl"><Camera size={24} /></div>
+              <h2 className="text-2xl font-bold text-gray-900">How to Take a Perfect Photo</h2>
+            </div>
+            <p className="text-gray-600 mb-6">
+              To ensure your passport or visa application isn't rejected, follow these government-standard guidelines before uploading your photo.
+            </p>
+            
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                <CheckCircle2 className="text-green-500 mt-0.5 shrink-0" size={20} />
+                <div>
+                  <strong className="block text-gray-900">Face the Light</strong>
+                  <span className="text-gray-500 text-sm">Stand facing a window during the day. Avoid harsh shadows across your face or harsh flash lighting.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                <CheckCircle2 className="text-green-500 mt-0.5 shrink-0" size={20} />
+                <div>
+                  <strong className="block text-gray-900">Neutral Expression</strong>
+                  <span className="text-gray-500 text-sm">Keep your mouth closed and eyes open. Look directly into the camera lens, not at the screen.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                <CheckCircle2 className="text-green-500 mt-0.5 shrink-0" size={20} />
+                <div>
+                  <strong className="block text-gray-900">Remove Accessories</strong>
+                  <span className="text-gray-500 text-sm">Take off glasses, hats, and large jewelry. Both ears and your hairline should be clearly visible.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Right Column: How it works & Privacy */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-blue-100 text-blue-600 rounded-xl"><Lightbulb size={24} /></div>
+              <h2 className="text-2xl font-bold text-gray-900">How Our Technology Works</h2>
+            </div>
+            
+            <div className="prose prose-blue text-gray-600">
+              <p>
+                We use an advanced <strong>WebAssembly (WASM) AI model</strong> to process your image. Traditionally, tools like this force you to upload your photo to a remote server, process it there, and download it back.
+              </p>
+              
+              <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">Your Privacy is Guaranteed</h3>
+              <p>
+                Because our AI runs entirely inside your web browser, <strong>your photo never leaves your device</strong>. We have no databases, no servers holding your face, and no tracking. Once you close the tab, your photo is gone forever.
+              </p>
+
+              <div className="mt-8 bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                <h3 className="text-base font-bold text-gray-900 mb-4">Frequently Asked Questions</h3>
+                <dl className="space-y-4">
+                  <div>
+                    <dt className="font-semibold text-gray-800">What size is the downloaded photo?</dt>
+                    <dd className="text-sm text-gray-500 mt-1">The photo downloads exactly at 413x531 pixels, which perfectly matches the standard 35x45mm passport size when printed at 300 DPI.</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-gray-800">Why did the background removal fail?</dt>
+                    <dd className="text-sm text-gray-500 mt-1">Our AI needs to distinguish you from the background. Try taking a photo against a plain wall (not heavily textured) with good lighting.</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 }
