@@ -13,9 +13,12 @@ import {
   BookOpen,
   Wand2,
   Briefcase,
+  Banknote,
   MonitorPlay,
   RefreshCcw,
   Search,
+  Receipt,
+  ReceiptText,
   ShieldCheck,
   Zap,
   Globe,
@@ -26,6 +29,7 @@ import {
   Wrench,
   Smartphone,
   Sparkles,
+  TrendingUp,
 } from "lucide-react";
 
 // Master list of tools for the search functionality
@@ -63,101 +67,227 @@ export default function HomePage() {
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-indigo-200 selection:text-indigo-900">
       
       {/* --- HERO SECTION --- */}
-      <section className="relative overflow-hidden bg-white border-b border-slate-200 pt-20 pb-16 lg:pt-32 lg:pb-24">
-        {/* Subtle Background Decoration */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        <div className="absolute left-1/2 top-0 -z-10 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-indigo-400 opacity-15 blur-[120px]"></div>
-        
-        <div className="relative max-w-5xl mx-auto px-4 text-center flex-1 flex flex-col items-center justify-center">
-          
-          
+<section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 border-b border-slate-100 pt-20 pb-20 lg:pt-28 lg:pb-28">
 
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15]">
-            Your Complete Digital <br className="hidden md:block" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600">
-              Workspace & Toolkit
-            </span>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed">
-            MyDocReady is your all-in-one platform to build professional resumes, edit photos, design presentations, convert files, and format official documents — instantly, securely, and completely free.
-          </p>
+  {/* Background Grid */}
+  <div className="absolute inset-0 bg-[linear-gradient(to_right,#94a3b810_1px,transparent_1px),linear-gradient(to_bottom,#94a3b810_1px,transparent_1px)] bg-[size:36px_36px]" />
 
-          {/* DYNAMIC SEARCH SECTION */}
-          <div className="w-full max-w-2xl mx-auto mb-8 relative z-20">
-            <div className="relative flex items-center">
-              <Search className="absolute left-5 text-slate-400 w-6 h-6" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search tools (e.g., Resume Builder, Passport Photo...)"
-                className="w-full rounded-full bg-white border border-slate-300 py-4 pl-14 pr-6 text-lg shadow-sm focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
-              />
+  {/* Blur Decorations */}
+  <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[650px] h-[650px] rounded-full bg-indigo-200/40 blur-[120px]" />
+  <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-sky-200/30 blur-[120px]" />
+  <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-violet-200/30 blur-[140px]" />
+
+  <div className="relative max-w-6xl mx-auto px-6 text-center">
+
+    {/* Small Badge */}
+    
+
+    {/* Heading */}
+    <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-tight">
+
+      Everything You Need
+
+      <br />
+
+      <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-violet-600 bg-clip-text text-transparent">
+        In One Smart Workspace
+      </span>
+
+    </h1>
+
+    {/* Description */}
+    <p className="mt-8 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-8">
+      Create resumes, edit passport photos, resize signatures, convert PDFs,
+      calculate EMI & SIP, build presentations, and use dozens of free online
+      tools—all in one secure platform.
+    </p>
+
+    {/* Search */}
+    <div className="mt-12 w-full max-w-2xl mx-auto relative">
+
+      <div className="relative rounded-2xl bg-white/90 backdrop-blur-xl shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
+
+        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-indigo-500 w-6 h-6" />
+
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search 50+ tools (Resume Builder, Passport Photo, EMI Calculator...)"
+          className="w-full bg-transparent py-5 pl-16 pr-6 text-lg outline-none placeholder:text-slate-400"
+        />
+
+      </div>
+
+      {/* Dropdown */}
+      {searchQuery && (
+        <div className="absolute w-full mt-3 rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden z-50">
+
+          {filteredTools.length > 0 ? (
+
+            <ul className="max-h-80 overflow-y-auto py-2">
+
+              {filteredTools.map((tool) => (
+                <li key={tool.name}>
+                  <Link
+                    href={tool.link}
+                    className="flex justify-between items-center px-6 py-4 hover:bg-indigo-50 transition"
+                  >
+                    <span className="font-medium text-slate-700">
+                      {tool.name}
+                    </span>
+
+                    <span className="rounded-full bg-indigo-50 text-indigo-600 px-3 py-1 text-xs font-semibold">
+                      {tool.category}
+                    </span>
+
+                  </Link>
+                </li>
+              ))}
+
+            </ul>
+
+          ) : (
+
+            <div className="py-8 text-slate-500">
+              No tools found.
             </div>
 
-            <div className="flex flex-wrap justify-center gap-3 mt-6">
-              <Link href="/passport-photo" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all">
-                <ImageIcon className="w-4 h-4 text-slate-400" />
-                Make Passport Photo
-              </Link>
-              <Link href="/resize" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all">
-                <ImageIcon className="w-4 h-4 text-slate-400" />
-                Resize Photo KB
-              </Link>
-              <Link href="/resize-signature" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all">
-                <ImageIcon className="w-4 h-4 text-slate-400" />
-                Resize Signature KB
-              </Link>
-              <Link href="/calculators/age" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all">
-                <Calculator className="w-4 h-4 text-slate-400" />
-                AGE Calculator
-              </Link>
-              <Link href="/resume-maker" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all">
-                <Briefcase className="w-4 h-4 text-slate-400" />
-                Resume Builder
-              </Link>
-              <Link href="/presentation-maker" className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all">
-                <Globe className="w-4 h-4 text-slate-400" />
-                Presentation Maker
-              </Link>
-            </div>
-            {/* --------------------------------------- */}
+          )}
 
-            {/* Search Dropdown Results */}
-            {searchQuery && (
-              <div className="absolute w-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                {filteredTools.length > 0 ? (
-                  <ul className="max-h-72 overflow-y-auto py-2">
-                    {filteredTools.map((tool) => (
-                      <li key={tool.name}>
-                        <Link 
-                          href={tool.link}
-                          className="flex items-center justify-between px-6 py-3 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
-                        >
-                          <span className="font-medium text-slate-700">{tool.name}</span>
-                          <span className="text-xs font-semibold bg-slate-100 px-2 py-1 rounded text-slate-500">{tool.category}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="px-6 py-8 text-center text-slate-500">
-                    No tools found matching "{searchQuery}". Try a different keyword!
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto relative z-10">
-            <a href="#primary-tools" className="inline-flex justify-center items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 transition-all active:scale-95 text-lg">
-              Explore All Tools
-              <ArrowRight className="w-5 h-5" />
-            </a>
-          </div>
         </div>
-      </section>
+      )}
+
+    </div>
+
+    {/* CTA */}
+    <div className="mt-10">
+
+      <a
+        href="#primary-tools"
+        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-8 py-4 text-white font-semibold shadow-lg shadow-indigo-200 hover:shadow-xl hover:scale-105 transition-all"
+      >
+        Explore All Tools
+
+        <ArrowRight className="w-5 h-5" />
+
+      </a>
+
+    </div>
+
+    
+
+  </div>
+
+</section>
+
+      <div className="flex flex-wrap justify-center gap-3 mt-6">
+  <Link
+    href="/passport-photo"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-blue-50 text-blue-700 border border-blue-100
+    hover:bg-blue-100 hover:border-blue-200 hover:shadow-md hover:-translate-y-0.5
+    transition-all duration-200"
+  >
+    <ImageIcon className="w-4 h-4 text-blue-500" />
+    Make Passport Photo
+  </Link>
+
+  <Link
+    href="/resize"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-green-50 text-green-700 border border-green-100
+    hover:bg-green-100 hover:border-green-200 hover:shadow-md hover:-translate-y-0.5
+    transition-all duration-200"
+  >
+    <ImageIcon className="w-4 h-4 text-green-500" />
+    Resize Photo KB
+  </Link>
+
+  <Link
+    href="/resize-signature"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-purple-50 text-purple-700 border border-purple-100
+    hover:bg-purple-100 hover:border-purple-200 hover:shadow-md hover:-translate-y-0.5
+    transition-all duration-200"
+  >
+    <ImageIcon className="w-4 h-4 text-purple-500" />
+    Resize Signature KB
+  </Link>
+
+  <Link
+    href="/calculators/age"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-amber-50 text-amber-700 border border-amber-100
+    hover:bg-amber-100 hover:border-amber-200 hover:shadow-md hover:-translate-y-0.5
+    transition-all duration-200"
+  >
+    <Calculator className="w-4 h-4 text-amber-500" />
+    AGE Calculator
+  </Link>
+
+  <Link
+    href="/resume-maker"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-rose-50 text-rose-700 border border-rose-100
+    hover:bg-rose-100 hover:border-rose-200 hover:shadow-md hover:-translate-y-0.5
+    transition-all duration-200"
+  >
+    <Briefcase className="w-4 h-4 text-rose-500" />
+    Resume Builder
+  </Link>
+
+  <Link
+    href="/presentation-maker"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-cyan-50 text-cyan-700 border border-cyan-100
+    hover:bg-cyan-100 hover:border-cyan-200 hover:shadow-md hover:-translate-y-0.5
+    transition-all duration-200"
+  >
+    <Globe className="w-4 h-4 text-cyan-500" />
+    Presentation Maker
+  </Link>
+
+  <Link
+    href="/calculators/emi"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-emerald-50 text-emerald-700 border border-emerald-100
+    hover:bg-emerald-100 hover:border-emerald-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+  >
+    <Banknote className="w-4 h-4 text-emerald-500" />
+    EMI Calculator
+  </Link>
+
+  <Link
+    href="/calculators/sip"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-violet-50 text-violet-700 border border-violet-100
+    hover:bg-violet-100 hover:border-violet-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+  >
+    <TrendingUp className="w-4 h-4 text-violet-500" />
+    SIP Calculator
+  </Link>
+
+  <Link
+    href="/calculators/split"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-orange-50 text-orange-700 border border-orange-100
+    hover:bg-orange-100 hover:border-orange-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+  >
+    <Receipt className="w-4 h-4 text-orange-500" />
+    Bill Split
+  </Link>
+
+  <Link
+    href="/calculators/gst"
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+    bg-sky-50 text-sky-700 border border-sky-100
+    hover:bg-sky-100 hover:border-sky-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+  >
+    <ReceiptText className="w-4 h-4 text-sky-500" />
+    GST Calculator
+  </Link>
+</div>
 
       {/* --- CATEGORY 1: PRIMARY SUITE --- */}
       <section id="primary-tools" className="max-w-7xl mx-auto px-4 pt-20 pb-10 scroll-mt-10">

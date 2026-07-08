@@ -7,15 +7,14 @@ import Script from "next/script";
 
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-
-
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DocReady Photo – Resize by KB, Passport Maker, Aadhaar/PAN",
+  title: "DocReady Photo – Resize by KB, Passport Maker",
   description:
-    "Instantly resize photos to exact KB, create passport-size photos with white/blue background, and get document-ready outputs for Aadhaar, PAN, Passport, RRB, SSC, NEET.",
+    "Instantly resize photos to exact KB, create passport-size photos with white/blue background, and get document-ready outputs.",
   manifest: "/manifest.json",
   metadataBase: new URL("https://mydocready.com"),
   icons: {
@@ -28,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "DocReady Photo",
     description:
-      "Resize photos by KB, make passport size photos, Aadhaar & PAN ready instantly.",
+      "Resize photos by KB, make passport size photos, and get document-ready outputs instantly.",
     url: "https://mydocready.com",
     siteName: "MyDocReady",
     images: [{ url: "/logo.png" }],
@@ -71,9 +70,17 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        <NavBar />
-        {children}
-        <Footer />
+        {/* ✅ FIX: NavBar, children, and Footer are now WRAPPED inside the Provider */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NavBar />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
