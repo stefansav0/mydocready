@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas-pro";
 import { Eye, Download, X, Plus, Trash2 } from "lucide-react";
 
 // ============================================
@@ -119,6 +117,10 @@ export default function ResumeMakerClassic() {
 
     setIsDownloading(true);
     try {
+      const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+        import("jspdf"),
+        import("html2canvas-pro"),
+      ]);
       // Improved html2canvas settings for 1:1 PDF match
       const canvas = await html2canvas(input, {
         scale: 2,

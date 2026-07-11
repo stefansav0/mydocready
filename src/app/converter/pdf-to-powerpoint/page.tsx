@@ -6,6 +6,7 @@ import {
   Settings, CheckCircle2, DownloadCloud, Loader2, X, Plus
 } from 'lucide-react';
 import Link from 'next/link';
+import PdfToPowerPointContent from "@/components/PdfToPowerPointContent";
 
 type ConvertMode = 'slides-as-images' | 'editable-text';
 type AppState = 'upload' | 'settings' | 'converting' | 'success';
@@ -345,6 +346,7 @@ export default function PdfToPptxPro() {
             </div>
           </div>
         )}
+        <PdfToPowerPointContent />
 
       </main>
 

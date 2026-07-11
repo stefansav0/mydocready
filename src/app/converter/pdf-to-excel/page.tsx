@@ -6,6 +6,7 @@ import {
   Settings, CheckCircle2, DownloadCloud, Loader2, X, Plus
 } from 'lucide-react';
 import Link from 'next/link';
+import PdfToExcelContent from "@/components/PdfToExcelContent";
 
 type ParsingMode = 'auto-tables' | 'text-columns';
 type AppState = 'upload' | 'settings' | 'converting' | 'success';
@@ -203,6 +204,8 @@ export default function PdfToExcelPro() {
         </Link>
       </header>
 
+      
+
       <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
         
         {/* ================= STATE 1: UPLOAD ================= */}
@@ -354,6 +357,8 @@ export default function PdfToExcelPro() {
             <p className="text-right text-sm font-bold text-gray-400 mt-2">{percentComplete}%</p>
           </div>
         )}
+
+        <PdfToExcelContent />
 
         {/* ================= STATE 4: SUCCESS ================= */}
         {appState === 'success' && (

@@ -6,6 +6,7 @@ import {
   Settings, CheckCircle2, DownloadCloud, Loader2, X, Plus, Trash2, Maximize
 } from 'lucide-react';
 import Link from 'next/link';
+import JpgToPdfContent from "@/components/JpgToPdfContent";
 
 type OrientationMode = 'portrait' | 'landscape';
 type PageSizeMode = 'a4' | 'letter';
@@ -407,6 +408,7 @@ export default function JpgToPdfPro() {
             </div>
           </div>
         )}
+        <JpgToPdfContent />
 
       </main>
 

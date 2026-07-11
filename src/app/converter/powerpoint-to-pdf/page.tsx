@@ -6,6 +6,7 @@ import {
   Settings, CheckCircle2, DownloadCloud, Loader2, X, Plus
 } from 'lucide-react';
 import Link from 'next/link';
+import PptToPdfContent from "@/components/PptToPdfContent";
 
 type OrientationMode = 'landscape' | 'portrait';
 type AppState = 'upload' | 'settings' | 'converting' | 'success';
@@ -359,6 +360,7 @@ export default function PptxToPdfPro() {
             </div>
           </div>
         )}
+        <PptToPdfContent />
 
       </main>
 

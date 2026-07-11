@@ -1,14 +1,21 @@
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
+import {
+  createSessionToken,
+  SESSION_COOKIE_NAME,
+  sessionCookieOptions,
+} from "@/lib/session";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { email, password } = body;
+    const email = body.email?.trim().toLowerCase();
+    const password = body.password;
 
     if (!email || !password) {
-      return Response.json(
+      return NextResponse.json(
         {
           error: "Missing email or password",
         },
@@ -18,18 +25,17 @@ export async function POST(req: Request) {
       );
     }
 
+    // Connect MongoDB
     const client = await clientPromise;
-
     const db = client.db("myapp");
 
-    const user = await db
-      .collection("users")
-      .findOne({ email });
+    // Find user
+    const user = await db.collection("users").findOne({ email });
 
     if (!user) {
-      return Response.json(
+      return NextResponse.json(
         {
-          error: "Invalid credentials",
+          error: "Invalid email or password",
         },
         {
           status: 401,
@@ -37,16 +43,30 @@ export async function POST(req: Request) {
       );
     }
 
-    const isPasswordValid =
-      await bcrypt.compare(
-        password,
-        user.password
+    // Check stored password
+    if (!user.password) {
+      console.error("User has no password field:", user);
+
+      return NextResponse.json(
+        {
+          error: "Account is not configured correctly.",
+        },
+        {
+          status: 500,
+        }
       );
+    }
+
+    // Compare password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isPasswordValid) {
-      return Response.json(
+      return NextResponse.json(
         {
-          error: "Invalid credentials",
+          error: "Invalid email or password",
         },
         {
           status: 401,
@@ -54,17 +74,35 @@ export async function POST(req: Request) {
       );
     }
 
-    return Response.json({
+    // Create session
+    const token = createSessionToken(user.email);
+
+    const response = NextResponse.json({
       success: true,
       user: {
-        id: user._id,
+        id: user._id.toString(),
         email: user.email,
+        name: user.name || "",
       },
     });
+
+    response.cookies.set(
+      SESSION_COOKIE_NAME,
+      token,
+      sessionCookieOptions
+    );
+
+    return response;
   } catch (error) {
-    return Response.json(
+    // PRINT THE REAL ERROR
+    console.error("========== SIGNIN ERROR ==========");
+    console.error(error);
+    console.error("==================================");
+
+    return NextResponse.json(
       {
-        error: "Internal server error",
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown Error",
       },
       {
         status: 500,

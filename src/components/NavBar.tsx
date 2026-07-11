@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+
 interface UserProfile {
   name?: string;
   email: string;
@@ -47,6 +48,20 @@ export default function NavBar() {
     onScroll();
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      setToolsDropdownOpen(false);
+      setResizeDropdownOpen(false);
+      setCalcDropdownOpen(false);
+      setProfileDropdownOpen(false);
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
   // 2. Safely extracts logged in profile sessions after client-side hydration completes
@@ -146,11 +161,12 @@ export default function NavBar() {
         </Link>
 
         {/* Desktop Navigation links */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
           
           {/* Converters Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
+              type="button"
               onClick={() => {
                 setToolsDropdownOpen(!toolsDropdownOpen);
                 setResizeDropdownOpen(false);
@@ -159,13 +175,16 @@ export default function NavBar() {
               className={`flex items-center gap-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors outline-none ${
                 toolsDropdownOpen ? "text-indigo-600 bg-indigo-50/50" : "text-muted-foreground hover:text-foreground"
               }`}
+              aria-expanded={toolsDropdownOpen}
+              aria-controls="converter-menu"
+              aria-haspopup="menu"
             >
               <span>Converters</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${toolsDropdownOpen ? "rotate-180 text-indigo-600" : ""}`} />
             </button>
 
             {toolsDropdownOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[500px] bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 grid grid-cols-2 gap-1.5 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+              <div id="converter-menu" className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[500px] bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 grid grid-cols-2 gap-1.5 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
                 {converterTools.map((tool, idx) => (
                   <Link
                     key={idx}
@@ -195,6 +214,7 @@ export default function NavBar() {
           {/* Resize Dropdown */}
           <div className="relative" ref={resizeDropdownRef}>
             <button
+              type="button"
               onClick={() => {
                 setResizeDropdownOpen(!resizeDropdownOpen);
                 setToolsDropdownOpen(false);
@@ -205,6 +225,9 @@ export default function NavBar() {
                   ? "text-indigo-600 bg-indigo-50/50"
                   : "text-muted-foreground hover:text-foreground"
               }`}
+              aria-expanded={resizeDropdownOpen}
+              aria-controls="resize-menu"
+              aria-haspopup="menu"
             >
               Resize
               <ChevronDown
@@ -214,7 +237,7 @@ export default function NavBar() {
             </button>
 
             {resizeDropdownOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div id="resize-menu" className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 {resizeTools.map((tool, idx) => (
                   <Link
                     key={idx}
@@ -235,6 +258,7 @@ export default function NavBar() {
           {/* Calculators Dropdown */}
           <div className="relative" ref={calcDropdownRef}>
             <button
+              type="button"
               onClick={() => {
                 setCalcDropdownOpen(!calcDropdownOpen);
                 setToolsDropdownOpen(false);
@@ -243,13 +267,16 @@ export default function NavBar() {
               className={`flex items-center gap-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors outline-none ${
                 calcDropdownOpen ? "text-indigo-600 bg-indigo-50/50" : "text-muted-foreground hover:text-foreground"
               }`}
+              aria-expanded={calcDropdownOpen}
+              aria-controls="calculator-menu"
+              aria-haspopup="menu"
             >
               <span>Calculators</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${calcDropdownOpen ? "rotate-180 text-indigo-600" : ""}`} />
             </button>
 
             {calcDropdownOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[450px] bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+              <div id="calculator-menu" className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[450px] bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
                 <div className="grid grid-cols-2 gap-1.5 mb-2">
                   {calculatorTools.map((calc, idx) => (
                     <Link
@@ -293,6 +320,7 @@ export default function NavBar() {
 
         {/* Desktop Interface Conditional Control Actions */}
         <div className="hidden lg:flex items-center gap-3">
+          
           {!user ? (
             <>
               <Link
@@ -308,12 +336,16 @@ export default function NavBar() {
           ) : (
             <div className="relative" ref={profileRef}>
               <button
+                type="button"
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 className="flex items-center gap-2 p-1.5 pr-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors outline-none shadow-sm"
+                aria-expanded={profileDropdownOpen}
+                aria-controls="profile-menu"
+                aria-haspopup="menu"
               >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-xs flex items-center justify-center shadow-inner">
                   {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
+                    <img src={user.avatarUrl} alt={`${user.name || "User"} profile photo`} className="w-full h-full rounded-full object-cover" />
                   ) : (
                     (user.name || user.email || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
                   )}
@@ -325,7 +357,7 @@ export default function NavBar() {
               </button>
 
               {profileDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-64 bg-white border border-slate-200 shadow-2xl rounded-2xl p-2 flex flex-col animate-in fade-in slide-in-from-top-2 duration-150 z-50">
+                <div id="profile-menu" className="absolute right-0 mt-3 w-64 bg-white border border-slate-200 shadow-2xl rounded-2xl p-2 flex flex-col animate-in fade-in slide-in-from-top-2 duration-150 z-50">
                   <div className="p-3 border-b border-slate-100 mb-1">
                     <p className="text-xs font-black text-slate-800 truncate">{user.name || "User"}</p>
                     <p className="text-[11px] font-medium text-slate-400 truncate">{user.email}</p>
@@ -353,6 +385,7 @@ export default function NavBar() {
           onClick={toggleMenu}
           aria-label={menuOpen ? "Close Menu" : "Open Menu"}
           aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
           type="button"
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -362,7 +395,7 @@ export default function NavBar() {
       {/* Mobile Modal Dropdown Action Drawer */}
       {menuOpen && (
         <div id="mobile-menu" className="lg:hidden bg-white dark:bg-slate-950 border-t border-border shadow-inner max-h-[85vh] overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-300 pb-8 z-50">
-          <nav className="flex flex-col gap-1 p-4">
+          <nav className="flex flex-col gap-1 p-4" aria-label="Mobile navigation">
             
             {user && (
               <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 flex items-center gap-3 border border-slate-100 dark:border-slate-800 mb-3 mx-1">
@@ -381,8 +414,11 @@ export default function NavBar() {
             {/* 1. Mobile Converters Accordion */}
             <div className="border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden mx-1 mb-2">
               <button 
+                type="button"
                 onClick={() => setMobileConverterOpen(!mobileConverterOpen)}
                 className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors ${mobileConverterOpen ? 'bg-indigo-50 text-indigo-700' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
+                aria-expanded={mobileConverterOpen}
+                aria-controls="mobile-converter-menu"
               >
                 <div className="flex items-center gap-2">
                   <Shuffle size={16} className={mobileConverterOpen ? "text-indigo-600" : "text-slate-400"} />
@@ -392,7 +428,7 @@ export default function NavBar() {
               </button>
               
               {mobileConverterOpen && (
-                <div className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
+                <div id="mobile-converter-menu" className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
                   {converterTools.map((tool, idx) => (
                     <Link
                       key={idx}
@@ -420,8 +456,11 @@ export default function NavBar() {
             {/* 2. Mobile Resize Accordion */}
             <div className="border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden mx-1 mb-2">
               <button 
+                type="button"
                 onClick={() => setMobileResizeOpen(!mobileResizeOpen)}
                 className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors ${mobileResizeOpen ? 'bg-indigo-50 text-indigo-700' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
+                aria-expanded={mobileResizeOpen}
+                aria-controls="mobile-resize-menu"
               >
                 <div className="flex items-center gap-2">
                   <Crop size={16} className={mobileResizeOpen ? "text-indigo-600" : "text-slate-400"} />
@@ -431,7 +470,7 @@ export default function NavBar() {
               </button>
               
               {mobileResizeOpen && (
-                <div className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
+                <div id="mobile-resize-menu" className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
                   {resizeTools.map((tool, idx) => (
                     <Link
                       key={idx}
@@ -452,8 +491,11 @@ export default function NavBar() {
             {/* 3. Mobile Calculators Accordion */}
             <div className="border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden mx-1 mb-2">
               <button 
+                type="button"
                 onClick={() => setMobileCalcOpen(!mobileCalcOpen)}
                 className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors ${mobileCalcOpen ? 'bg-indigo-50 text-indigo-700' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
+                aria-expanded={mobileCalcOpen}
+                aria-controls="mobile-calculator-menu"
               >
                 <div className="flex items-center gap-2">
                   <Calculator size={16} className={mobileCalcOpen ? "text-indigo-600" : "text-slate-400"} />
@@ -463,7 +505,7 @@ export default function NavBar() {
               </button>
               
               {mobileCalcOpen && (
-                <div className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
+                <div id="mobile-calculator-menu" className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
                   {calculatorTools.map((calc, idx) => (
                     <Link
                       key={idx}
@@ -524,6 +566,7 @@ export default function NavBar() {
                     My Account Dashboard
                   </Link>
                   <button 
+                    type="button"
                     onClick={handleSignOut}
                     className="w-full text-left text-sm font-black text-red-600 px-3 py-3 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 rounded-xl transition-colors flex items-center justify-between mt-2"
                   >

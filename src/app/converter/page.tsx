@@ -7,6 +7,7 @@ import {
   Presentation, Layout, Image as ImageIcon, FileImage, 
   ShieldCheck, ArrowRight, Lock, Zap, CheckCircle2, HelpCircle
 } from 'lucide-react';
+import ConverterHubSeoContent from "@/components/ConverterHubSeoContent";
 
 export default function ConverterHub() {
   const tools = [
@@ -118,7 +119,7 @@ export default function ConverterHub() {
       {/* --- SEO EDUCATIONAL CONTENT SECTION --- */}
       <section className="bg-white border-t border-gray-200 py-24">
         <div className="max-w-6xl mx-auto px-6">
-          
+          <ConverterHubSeoContent />
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6">
               Why Convert Your Documents?

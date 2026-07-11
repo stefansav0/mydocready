@@ -16,7 +16,7 @@ import {
   Camera,
   CheckCircle2
 } from "lucide-react";
-import * as removeBg from "@imgly/background-removal";
+import type { Config } from "@imgly/background-removal";
 
 const OUT_W = 413;
 const OUT_H = 531;
@@ -133,13 +133,14 @@ export default function PassportPhotoPage() {
     setLoadingBg(true);
     setError(null);
     try {
-      // Optimized for speed
-      const config: removeBg.Config = {
+      // Load the large AI model only after the visitor explicitly requests it.
+      const { removeBackground } = await import("@imgly/background-removal");
+      const config: Config = {
         model: "isnet",
         output: { format: "image/png", quality: 1 }
       };
 
-      const resultBlob = await removeBg.removeBackground(file, config);
+      const resultBlob = await removeBackground(file, config);
       const resultFile = new File([resultBlob], file.name, { type: resultBlob.type });
       const bmp = await fileToImageBitmap(resultFile);
 

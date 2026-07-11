@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { 
   Upload, 
   Image as ImageIcon, 
@@ -58,8 +59,56 @@ const TOOL_DIRECTORY = [
   { name: "Percentage Converter", link: "/calculators/percentage", category: "Utility" },
   { name: "Split Calculator", link: "/calculators/split", category: "Utility" },
   { name: "Tax Calculator", link: "/calculators/tax", category: "Utility" },
-  { name: "Currency Converter", link: "/calculators/currency", category: "Utility" },
 ];
+
+const HOME_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mydocready.com/#organization",
+      name: "MyDocReady",
+      url: "https://mydocready.com",
+      logo: "https://mydocready.com/logo.png",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mydocready.com/#website",
+      url: "https://mydocready.com",
+      name: "MyDocReady",
+      publisher: { "@id": "https://mydocready.com/#organization" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Is MyDocReady free to use?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Many MyDocReady document and image tools are available free of charge. Check each tool page for the latest feature details.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do I need to create an account?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Most tools can be used without creating an account. Any feature that requires sign-in is identified before use.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I use MyDocReady on mobile devices?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. MyDocReady is designed to work on current smartphones, tablets, laptops, and desktop browsers.",
+          },
+        },
+      ],
+    },
+  ],
+};
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,6 +120,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-indigo-200 selection:text-indigo-900">
+      <JsonLd data={HOME_JSON_LD} />
       
       {/* --- HERO SECTION --- */}
 <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 border-b border-slate-100 pt-20 pb-20 lg:pt-28 lg:pb-28">
@@ -111,23 +161,30 @@ export default function HomePage() {
     {/* Search */}
     <div className="mt-12 w-full max-w-2xl mx-auto relative">
 
+      <label htmlFor="tool-search" className="sr-only">
+        Search MyDocReady tools
+      </label>
+
       <div className="relative rounded-2xl bg-white/90 backdrop-blur-xl shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
 
         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-indigo-500 w-6 h-6" />
 
         <input
+          id="tool-search"
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search 50+ tools (Resume Builder, Passport Photo, EMI Calculator...)"
           className="w-full bg-transparent py-5 pl-16 pr-6 text-lg outline-none placeholder:text-slate-400"
+          aria-controls={searchQuery ? "tool-search-results" : undefined}
+          aria-autocomplete="list"
         />
 
       </div>
 
       {/* Dropdown */}
       {searchQuery && (
-        <div className="absolute w-full mt-3 rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden z-50">
+        <div id="tool-search-results" className="absolute w-full mt-3 rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden z-50" role="status" aria-live="polite">
 
           {filteredTools.length > 0 ? (
 
@@ -188,6 +245,8 @@ export default function HomePage() {
 </section>
 
      {/* --- PREMIUM APP-BOX QUICK LINKS --- */}
+<section className="max-w-7xl mx-auto px-4 sm:px-6" aria-labelledby="quick-tools-heading">
+  <h2 id="quick-tools-heading" className="sr-only">Popular tools</h2>
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full">
   
   {/* Passport Photo */}
@@ -321,6 +380,7 @@ export default function HomePage() {
   </Link>
   
 </div>
+</section>
 
       {/* --- CATEGORY 1: PRIMARY SUITE --- */}
       <section id="primary-tools" className="max-w-7xl mx-auto px-4 pt-20 pb-10 scroll-mt-10">
@@ -755,7 +815,7 @@ export default function HomePage() {
             </Link>
 
             {/* Guide 2 */}
-            <Link href="/blog/common-mistakes-in-id-photos" className="group flex flex-col bg-gray-50 rounded-3xl p-8 border border-gray-100 hover:border-indigo-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <Link href="/blog/common-mistakes-document-photos" className="group flex flex-col bg-gray-50 rounded-3xl p-8 border border-gray-100 hover:border-indigo-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors">Common Mistakes in ID Photos</h3>
               <p className="text-gray-600 leading-relaxed mb-8 flex-1">Learn what to avoid when submitting applications.</p>
               <div className="flex items-center text-sm font-bold text-indigo-600">

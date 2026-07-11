@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas-pro";
 import { Eye, Download, X, UploadCloud, Plus, Trash2 } from "lucide-react";
 
 // ============================================
@@ -103,6 +101,10 @@ export default function ResumeMakerRowGrid() {
 
     setIsDownloading(true);
     try {
+      const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+        import("jspdf"),
+        import("html2canvas-pro"),
+      ]);
       const canvas = await html2canvas(input, {
         scale: 2, 
         useCORS: true,

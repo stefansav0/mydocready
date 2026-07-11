@@ -34,7 +34,7 @@ export const exportPDF = async (
 
       format: [794, 1123] as [number, number],
 
-      orientation: "portrait",
+      orientation: "portrait" as const,
     },
   };
 

@@ -1,202 +1,165 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+
+type UserSession = {
+  email: string;
+  name?: string;
+};
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null);
-
+  const [user, setUser] = useState<UserSession | null>(null);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("user_session");
+    if (!storedUser) return;
 
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      setUser(parsed);
-      setName(parsed.name || "");
+    try {
+      const parsed = JSON.parse(storedUser) as UserSession;
+      if (parsed.email) {
+        setUser(parsed);
+        setName(parsed.name || "");
+      }
+    } catch {
+      localStorage.removeItem("user_session");
     }
   }, []);
 
-  if (!user) {
-    return (
-      <div className="p-6">
-        No active session.{" "}
-        <a href="/signin" className="text-blue-600">
-          Sign in
-        </a>
-      </div>
-    );
-  }
-
-  // UPDATE NAME
   const handleUpdate = async () => {
     setLoading(true);
     setMessage("");
 
     try {
-      const res = await fetch("/api/profile/update", {
+      const response = await fetch("/api/profile/update", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user.email,
-          name,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
       });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not update your profile.");
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error);
-
-      setMessage("Profile updated successfully");
-
-      // update localStorage
-      const updatedUser = { ...user, name };
-      localStorage.setItem(
-        "user",
-        JSON.stringify(updatedUser)
-      );
+      const updatedUser = { ...user!, name };
+      localStorage.setItem("user_session", JSON.stringify(updatedUser));
       setUser(updatedUser);
-    } catch (err: any) {
-      setMessage(err.message || "Error updating profile");
+      setMessage("Profile updated successfully.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not update your profile.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  // CHANGE PASSWORD
   const handleChangePassword = async () => {
     setLoading(true);
     setMessage("");
 
     try {
-      const res = await fetch(
-        "/api/profile/change-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: user.email,
-            password,
-          }),
-        }
-      );
+      const response = await fetch("/api/profile/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not change your password.");
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error);
-
-      setMessage("Password updated successfully");
       setPassword("");
-    } catch (err: any) {
-      setMessage(err.message || "Error changing password");
+      setMessage("Password updated successfully.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not change your password.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  const handleDeleteAccount = async () => {
-    const confirmed = confirm(
-      "Are you sure you want to delete your account?"
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-xl p-6 text-slate-900 dark:text-slate-100">
+        <h1 className="text-2xl font-bold">My Profile</h1>
+        <p className="mt-3 text-slate-600 dark:text-slate-300">
+          Your session could not be loaded. Please <Link href="/signin" className="font-semibold text-blue-600 underline">sign in</Link> again.
+        </p>
+      </div>
     );
-
-    if (!confirmed) return;
-
-    setMessage("Account deletion not implemented yet");
-  };
+  }
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        👤 My Profile
-      </h1>
+    <div className="mx-auto max-w-xl p-6 text-slate-900 dark:text-slate-100">
+      <h1 className="mb-6 text-2xl font-bold">My Profile</h1>
 
       {message && (
-        <div className="mb-4 text-sm text-blue-600">
+        <p className="mb-4 text-sm text-blue-600" role="status" aria-live="polite">
           {message}
-        </div>
+        </p>
       )}
 
-      {/* NAME */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          Full Name
-        </label>
+      <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <div>
+          <label htmlFor="profile-name" className="mb-1 block text-sm font-medium">Full name</label>
+          <input
+            id="profile-name"
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            className="w-full rounded border px-3 py-2"
+            autoComplete="name"
+            maxLength={80}
+          />
+        </div>
 
-        <input
-          type="text"
-          value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
-          className="w-full px-3 py-2 border rounded"
-        />
+        <div>
+          <label htmlFor="profile-email" className="mb-1 block text-sm font-medium">Email</label>
+          <input
+            id="profile-email"
+            type="email"
+            value={user.email}
+            readOnly
+            className="w-full rounded border bg-gray-100 px-3 py-2 text-gray-500"
+            autoComplete="email"
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={handleUpdate}
+          disabled={loading}
+          className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Save changes
+        </button>
       </div>
 
-      {/* EMAIL */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          Email
-        </label>
+      <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900" aria-labelledby="password-heading">
+        <h2 id="password-heading" className="text-lg font-bold">Change password</h2>
+        <div className="mt-4">
+          <label htmlFor="profile-password" className="mb-1 block text-sm font-medium">New password</label>
+          <input
+            id="profile-password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="w-full rounded border px-3 py-2"
+            autoComplete="new-password"
+            minLength={8}
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleChangePassword}
+          disabled={loading || password.length < 8}
+          className="mt-4 rounded border border-blue-600 px-4 py-2 text-sm font-semibold text-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Change password
+        </button>
+      </section>
 
-        <input
-          type="email"
-          value={user.email}
-          readOnly
-          className="w-full px-3 py-2 border rounded bg-gray-100 text-gray-500"
-        />
-      </div>
-
-      <button
-        onClick={handleUpdate}
-        disabled={loading}
-        className="bg-blue-600 text-white text-sm px-4 py-2 rounded mr-2"
-      >
-        Save Changes
-      </button>
-
-      <hr className="my-6" />
-
-      {/* PASSWORD */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          New Password
-        </label>
-
-        <input
-          type="password"
-          value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
-
-      <button
-        onClick={handleChangePassword}
-        disabled={loading || !password}
-        className="border border-blue-600 text-blue-600 text-sm px-4 py-2 rounded"
-      >
-        Change Password
-      </button>
-
-      <hr className="my-6" />
-
-      {/* DELETE */}
-      <button
-        onClick={handleDeleteAccount}
-        className="text-red-600 text-sm"
-      >
-        🗑️ Delete Account
-      </button>
+      <p className="mt-6 text-sm text-slate-600 dark:text-slate-300">
+        Need help with account data? <Link className="font-semibold text-blue-600 underline" href="/contact">Contact support</Link>.
+      </p>
     </div>
   );
 }

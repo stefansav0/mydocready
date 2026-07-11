@@ -8,6 +8,7 @@ import {
 import Link from 'next/link';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import PdfToJpgContent from "@/components/PdfToJpgContent";
 
 type ConversionMode = 'pages' | 'extract';
 type AppState = 'upload' | 'settings' | 'converting' | 'success';
@@ -332,6 +333,7 @@ export default function PdfToJpgPro() {
             </div>
           </div>
         )}
+        <PdfToJpgContent />
 
       </main>
 

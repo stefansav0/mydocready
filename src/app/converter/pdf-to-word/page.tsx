@@ -6,6 +6,7 @@ import {
   Settings, CheckCircle2, DownloadCloud, Loader2, X, Plus
 } from 'lucide-react';
 import Link from 'next/link';
+import PdfToWordContent from "@/components/PdfToWordContent";
 
 // Import docx and file-saver safely (they handle SSR better or are called client-side)
 import { Document, Packer, Paragraph, TextRun, PageBreak } from 'docx';
@@ -322,6 +323,7 @@ export default function PdfToWordPro() {
             </div>
           </div>
         )}
+        <PdfToWordContent />
 
       </main>
 

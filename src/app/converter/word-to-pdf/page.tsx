@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import * as mammoth from 'mammoth';
+import WordToPdfContent from "@/components/WordToPdfContent";
 
 type PageSize = 'a4' | 'letter';
 type PageLayout = 'paginated' | 'single';
@@ -389,6 +390,7 @@ export default function WordToPdfPro() {
             </div>
           </div>
         )}
+        <WordToPdfContent />
       </main>
 
       {/* Animations */}

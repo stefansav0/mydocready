@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
-
 @variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  
-  /* Custom fonts if you want to define, or remove if unused */
-  /* --font-sans: 'Geist Sans', Arial, Helvetica, sans-serif; */
-  /* --font-mono: 'Geist Mono', monospace; */
+  --foreground: #0f172a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #020617;
+  --foreground: #e2e8f0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif; /* Or var(--font-sans) if you customize */
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid #4f46e5;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 0.5rem;
+  background: #312e81;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Palette fallbacks make legacy pages readable in dark mode while their components migrate. */
+.dark :is(.bg-white, .bg-gray-50, .bg-slate-50) {
+  background-color: #0f172a;
+}
+
+.dark :is(.bg-gray-100, .bg-slate-100) {
+  background-color: #1e293b;
+}
+
+.dark :is(.text-gray-900, .text-gray-800, .text-slate-900, .text-slate-800) {
+  color: #f8fafc;
+}
+
+.dark :is(.text-gray-700, .text-gray-600, .text-gray-500, .text-slate-700, .text-slate-600, .text-slate-500) {
+  color: #cbd5e1;
+}
+
+.dark :is(.border-gray-100, .border-gray-200, .border-slate-100, .border-slate-200) {
+  border-color: #334155;
+}
+
+.dark input:not([type="range"]),
+.dark textarea,
+.dark select {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

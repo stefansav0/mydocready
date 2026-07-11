@@ -1,17 +1,23 @@
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
+import { getSessionFromRequest } from "@/lib/session";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { email, password } = body;
+    const { password } = body;
+    const session = getSessionFromRequest(req);
 
-    if (!email || !password) {
+    if (!session) {
       return Response.json(
-        { error: "Email and password required" },
-        { status: 400 }
+        { error: "You must sign in to change a password." },
+        { status: 401 }
       );
+    }
+
+    if (typeof password !== "string" || password.length < 8) {
+      return Response.json({ error: "Use a password with at least 8 characters." }, { status: 400 });
     }
 
     const client = await clientPromise;
@@ -20,7 +26,7 @@ export async function POST(req: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await db.collection("users").updateOne(
-      { email },
+      { email: session.email },
       {
         $set: {
           password: hashedPassword,

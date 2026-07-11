@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { fileToImageBitmap } from "@/utils/image";
-import { jsPDF } from "jspdf";
 import { 
   UploadCloud, 
   FileText, 
@@ -49,6 +48,7 @@ export default function InsertDocPage() {
     setIsBusy(true);
 
     try {
+      const { jsPDF } = await import("jspdf");
       // Convert image to base64 for jsPDF
       const dataURL = await new Promise<string>((resolve) => {
         const r = new FileReader();
