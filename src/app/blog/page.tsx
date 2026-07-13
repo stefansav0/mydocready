@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 
 const blogs = [
   {
@@ -147,6 +148,10 @@ const blogs = [
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+  trackEvent("blog_listing_view");
+}, []);
+
   // Filter blogs based on search input
   const filteredBlogs = blogs.filter(
     (blog) =>
@@ -179,7 +184,16 @@ export default function BlogPage() {
               className="block w-full pl-11 pr-4 py-4 border border-gray-200 dark:border-gray-800 rounded-2xl leading-5 bg-white dark:bg-[#1A1A1A] text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-sm"
               placeholder="Search for guides, sizes, tips..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+  const value = e.target.value;
+  setSearchQuery(value);
+
+  if (value.length >= 3) {
+    trackEvent("blog_search", {
+      keyword: value,
+    });
+  }
+}}
             />
           </div>
         </div>
@@ -200,7 +214,18 @@ export default function BlogPage() {
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredBlogs.map((blog) => (
-            <Link href={`/blog/${blog.slug}`} key={blog.id} className="group flex flex-col">
+            <Link
+  href={`/blog/${blog.slug}`}
+  key={blog.id}
+  className="group flex flex-col"
+  onClick={() =>
+    trackEvent("blog_click", {
+      id: blog.id,
+      slug: blog.slug,
+      title: blog.title,
+    })
+  }
+>
               <div className="relative bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col h-full flex-grow">
                 
                 <div className="p-8 flex flex-col flex-grow">

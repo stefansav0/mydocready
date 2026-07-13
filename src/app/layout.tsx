@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SITE } from "@/lib/seo";
+import ViewTracker from "@/components/ViewTracker";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={inter.className}>
+        <ViewTracker />
         {/* Defer non-essential third parties so initial content can render first. */}
         <Script
           strategy="lazyOnload"

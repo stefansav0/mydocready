@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef, ChangeEvent } from "react";
+import { useCallback, useEffect, useState, useRef, ChangeEvent } from "react";
 import {
   compressToTargetKB,
   fileToImageBitmap,
@@ -32,6 +32,7 @@ type ResultState = {
 
 export default function ResizePage() {
   const [file, setFile] = useState<File | null>(null);
+  const [originalURL, setOriginalURL] = useState<string | null>(null);
   const [bitmap, setBitmap] = useState<ImageBitmap | null>(null);
   const [targetKB, setTargetKB] = useState<number>(50);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -46,6 +47,12 @@ export default function ResizePage() {
 
     setFile(selectedFile);
     setResult(null);
+
+    setOriginalURL((currentUrl) => {
+      if (currentUrl) URL.revokeObjectURL(currentUrl);
+      return URL.createObjectURL(selectedFile);
+    });
+
     const bmp = await fileToImageBitmap(selectedFile);
     setBitmap(bmp);
 
@@ -53,8 +60,17 @@ export default function ResizePage() {
     aspectRatio.current = bmp.width / bmp.height;
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (originalURL) URL.revokeObjectURL(originalURL);
+      if (result?.url) URL.revokeObjectURL(result.url);
+    };
+  }, [originalURL, result]);
+
   const handleWidthChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newWidth = Number(e.target.value);
+    if (!Number.isFinite(newWidth) || newWidth <= 0) return;
+
     if (keepAspectRatio && aspectRatio.current) {
       const newHeight = Math.round(newWidth / aspectRatio.current);
       setDimensions({ width: newWidth, height: newHeight });
@@ -65,6 +81,8 @@ export default function ResizePage() {
 
   const handleHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newHeight = Number(e.target.value);
+    if (!Number.isFinite(newHeight) || newHeight <= 0) return;
+
     if (keepAspectRatio && aspectRatio.current) {
       const newWidth = Math.round(newHeight * aspectRatio.current);
       setDimensions({ width: newWidth, height: newHeight });
@@ -173,7 +191,7 @@ export default function ResizePage() {
                   <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
                     <div className="flex-1 space-y-1">
                       <span className="text-xs text-slate-500 font-medium px-1">Width</span>
-                      <Input type="number" value={dimensions.width} onChange={handleWidthChange} className="bg-white border-slate-300"/>
+                      <Input type="number" min={1} value={dimensions.width} onChange={handleWidthChange} className="bg-white border-slate-300"/>
                     </div>
                     <div className="pt-5">
                       <Toggle 
@@ -187,7 +205,7 @@ export default function ResizePage() {
                     </div>
                     <div className="flex-1 space-y-1">
                       <span className="text-xs text-slate-500 font-medium px-1">Height</span>
-                      <Input type="number" value={dimensions.height} onChange={handleHeightChange} className="bg-white border-slate-300"/>
+                      <Input type="number" min={1} value={dimensions.height} onChange={handleHeightChange} className="bg-white border-slate-300"/>
                     </div>
                   </div>
                 </div>
@@ -310,171 +328,178 @@ export default function ResizePage() {
 <article className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12 max-w-5xl mx-auto">
   <section className="mb-12">
     <h2 className="text-3xl font-bold text-slate-900 mb-4">
-      Free Online Image Resizer & Compressor
+      Free Online Image Resizer & Compressor for Worldwide Reach
     </h2>
 
     <p className="text-slate-600 leading-relaxed mb-4">
-      Resize, compress, and optimize your images instantly with our free
-      online Image Resizer & Compressor. Whether you need to reduce an image
-      to <strong>50KB, 100KB, or 200KB</strong>, resize dimensions for social
-      media, optimize website images, or meet document upload requirements,
-      our tool makes the process fast and effortless.
+      Welcome to a browser-based image resizer and compressor for brands, publishers, e-commerce stores, content creators, and international marketers. This tool is designed to help you manage image size, improve page speed, and support better performance across devices.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed mb-4">
+      If you want to reach wider audiences and support better page performance, optimized images are an important improvement. Our free online image compressor helps you resize, compress, and prepare visuals for publishing without sacrificing quality.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed mb-4">
+      With support for precise file size targets like <strong>20KB, 50KB, 100KB, and 200KB</strong>, you can create images optimized for product listings, blog headers, social media posts, email campaigns, and mobile-first websites.
     </p>
 
     <p className="text-slate-600 leading-relaxed">
-      Unlike many online tools, all image processing happens directly in your
-      browser. Your photos are <strong>never uploaded to any server</strong>,
-      ensuring complete privacy, security, and lightning-fast performance.
+      All image processing happens locally in your browser. That means no uploads, no server storage, and total privacy for your photos and business assets.
     </p>
   </section>
 
   <section className="mb-12">
     <h2 className="text-2xl font-bold text-slate-900 mb-6">
-      How to Resize and Compress an Image
-    </h2>
+      Why Image Optimization Matters for Government Documents and Job Applications</h2>
 
-    <div className="grid gap-4 md:grid-cols-3">
-      {[
-        {
-          step: "1",
-          title: "Upload Your Image",
-          desc: "Select or drag and drop your JPG, PNG, JPEG, or WEBP image into the upload area.",
-        },
-        {
-          step: "2",
-          title: "Customize Settings",
-          desc: "Choose image dimensions, quality level, or target file size such as 50KB or 100KB.",
-        },
-        {
-          step: "3",
-          title: "Compress & Download",
-          desc: "Preview your optimized image and download it instantly with a single click.",
-        },
-      ].map((item) => (
-        <div
-          key={item.step}
-          className="bg-slate-50 p-5 rounded-xl border border-slate-100 relative"
-        >
-          <span className="absolute -top-4 -left-4 w-8 h-8 bg-indigo-600 text-white flex items-center justify-center rounded-full font-bold border-4 border-white shadow-sm">
-            {item.step}
-          </span>
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Optimizing photos and scanned documents is important for submitting government forms, job applications, ID photos, exam registrations, and other official paperwork online.
+    </p>
 
-          <h3 className="font-semibold text-slate-800 mb-2 mt-2">
-            {item.title}
-          </h3>
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Proper image size and file weight can help uploads complete successfully and ensure documents display correctly in portals for passports, visas, employment, licenses, and certificates.
+    </p>
 
-          <p className="text-sm text-slate-600">{item.desc}</p>
-        </div>
-      ))}
+    <p className="text-slate-600 leading-relaxed mb-4">
+      This resizer can help you prepare images that meet common upload requirements for government agencies and employers while keeping the content readable.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed">
+      Use the tool to make your documents easier to upload, faster to review, and more consistent across official submission systems.
+    </p>
+  </section>
+
+  <section className="mb-12">
+    <h2 className="text-2xl font-bold text-slate-900 mb-6">
+      How It Works: Resize, Compress, and Optimize</h2>
+
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Step 1: Upload Your Image</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Drag and drop or select a JPG, JPEG, PNG, or WEBP file. The upload zone is built to handle modern image formats so you can optimize photos, icons, banners, and illustrations without any hassle.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Step 2: Choose Dimensions</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Enter the exact width and height you need. The aspect ratio lock keeps your images proportional, which is essential when resizing for responsive web design and professional layouts.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Step 3: Set a Target File Size</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Choose a target like 50KB, 100KB, or 200KB to create lightweight images that still look great. This precision is key for optimizing page speed and meeting upload limits on global platforms.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Step 4: Compress and Preview</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Preview the original and compressed versions side by side, then download the version that best balances quality and performance. This step is perfect for comparing how much file size you can save without losing image clarity.
+        </p>
+      </div>
     </div>
   </section>
 
   <section className="mb-12">
     <h2 className="text-2xl font-bold text-slate-900 mb-6">
-      Why Choose Our Image Compressor?
-    </h2>
+      Benefits for Official Documents and Professional Use</h2>
 
-    <ul className="space-y-5">
-      <li className="flex items-start gap-3">
-        <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-        <div>
-          <h3 className="font-semibold text-slate-800">
-            Compress to Exact File Size
-          </h3>
-          <p className="text-slate-600 text-sm mt-1">
-            Easily reduce image size to 20KB, 50KB, 100KB, 200KB, or any custom
-            size required for job applications, government forms, and online
-            submissions.
-          </p>
-        </div>
-      </li>
+    <div className="grid gap-6 md:grid-cols-2">
+      <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+        <h3 className="font-semibold text-slate-800 mb-3">Faster Upload and Review Experience</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Optimized images reduce page weight and load faster anywhere in the world. This can support search ranking and user retention across international audiences.
+        </p>
+      </div>
 
-      <li className="flex items-start gap-3">
-        <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-        <div>
-          <h3 className="font-semibold text-slate-800">
-            Maintain Aspect Ratio
-          </h3>
-          <p className="text-slate-600 text-sm mt-1">
-            Resize images without stretching or distortion. Lock the aspect
-            ratio and keep your photos looking professional.
-          </p>
-        </div>
-      </li>
+      <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+        <h3 className="font-semibold text-slate-800 mb-3">Better Mobile Experience</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Mobile-first indexing makes fast images essential. Smaller, compressed files help your site perform well on smartphones and tablets in every market.
+        </p>
+      </div>
 
-      <li className="flex items-start gap-3">
-        <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-        <div>
-          <h3 className="font-semibold text-slate-800">
-            100% Private & Secure
-          </h3>
-          <p className="text-slate-600 text-sm mt-1">
-            Your images never leave your device. Everything is processed locally
-            in your browser using modern web technologies.
-          </p>
-        </div>
-      </li>
+      <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+        <h3 className="font-semibold text-slate-800 mb-3">Official Document Compatibility</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Smaller, optimized images can help meet upload requirements for government portals, job application systems, and official document submission platforms.
+        </p>
+      </div>
 
-      <li className="flex items-start gap-3">
-        <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-        <div>
-          <h3 className="font-semibold text-slate-800">
-            Fast Browser-Based Processing
-          </h3>
-          <p className="text-slate-600 text-sm mt-1">
-            No uploads, no waiting, and no server delays. Compress and resize
-            images within seconds.
-          </p>
-        </div>
-      </li>
-
-      <li className="flex items-start gap-3">
-        <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-        <div>
-          <h3 className="font-semibold text-slate-800">
-            Unlimited Free Usage
-          </h3>
-          <p className="text-slate-600 text-sm mt-1">
-            Use the tool as many times as you want without creating an account
-            or paying any fees.
-          </p>
-        </div>
-      </li>
-    </ul>
-  </section>
-
-  <section className="mb-12">
-    <h2 className="text-2xl font-bold text-slate-900 mb-6">
-      Perfect For
-    </h2>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {[
-        "Job Application Photos",
-        "Government Form Uploads",
-        "Website Image Optimization",
-        "Blog & SEO Images",
-        "Social Media Posts",
-        "E-commerce Product Photos",
-        "Email Attachments",
-        "School & College Documents",
-      ].map((item) => (
-        <div
-          key={item}
-          className="bg-slate-50 border border-slate-100 rounded-lg p-4 text-slate-700"
-        >
-          {item}
-        </div>
-      ))}
+      <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+        <h3 className="font-semibold text-slate-800 mb-3">Easier International Accessibility</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Compressed images use less bandwidth and load faster for users in lower-speed internet regions. This makes your content more accessible and user-friendly globally.
+        </p>
+      </div>
     </div>
   </section>
 
   <section className="mb-12">
     <h2 className="text-2xl font-bold text-slate-900 mb-6">
-      Supported Formats
-    </h2>
+      SEO Best Practices for Image Optimization</h2>
 
-    <div className="flex flex-wrap gap-3">
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Use descriptive file names and alt text to help search engines understand your images. Keywords like "fast image compressor", "free image resizer", and "worldwide image optimization" can improve how your visual content appears in search results.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Keep your image dimensions aligned with page design, avoid oversized files, and always preview your compressed image before publishing. This saves bandwidth and improves the browsing experience.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Compress images for online forms and document uploads — reduced file sizes can help ensure faster uploads and clearer display in official systems.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed">
+      Optimized images are one of the easier technical improvements you can make to support worldwide ranking and web monetization.
+    </p>
+  </section>
+
+  <section className="mb-12">
+    <h2 className="text-2xl font-bold text-slate-900 mb-6">
+      Practical Use Cases for Worldwide Growth</h2>
+
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">E-commerce Stores</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Compress product images to improve catalog speed, help shoppers compare items faster, and reduce cart abandonment. Fast product pages are especially important for global buyers.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Blogs and News Websites</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Bloggers and publishers can use optimized visuals to support long-form articles without slowing page load times. This helps content rank better in keyword-rich searches across regions.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Social Media Campaigns</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Compress creative ads and social graphics for fast upload and crisp display. Optimized assets improve ad performance and usability on global platforms.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Email Marketing</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Smaller image file sizes mean emails load faster and are less likely to be clipped. This improves the open and click-through rate for international email campaigns.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section className="mb-12">
+    <h2 className="text-2xl font-bold text-slate-900 mb-6">
+      Supported Formats for Global Image Workflows</h2>
+
+    <div className="flex flex-wrap gap-3 mb-6">
       {["JPG", "JPEG", "PNG", "WEBP"].map((format) => (
         <span
           key={format}
@@ -484,54 +509,76 @@ export default function ResizePage() {
         </span>
       ))}
     </div>
+
+    <p className="text-slate-600 leading-relaxed mb-4">
+      JPG and JPEG are excellent for photographs and detailed visuals. PNG is best for transparent logos, icons, and graphics. WEBP provides the best balance of quality and compression for modern web projects.
+    </p>
+
+    <p className="text-slate-600 leading-relaxed">
+      This tool supports all these popular formats, making it easy to prepare images for websites, ads, emails, and marketing campaigns that need worldwide delivery.
+    </p>
+  </section>
+
+  <section className="mb-12">
+    <h2 className="text-2xl font-bold text-slate-900 mb-6">
+      Frequently Asked Questions About Worldwide Image Optimization</h2>
+
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Is this image compressor free to use?</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Yes, it is completely free to use, with no sign-up required. You can optimize unlimited images directly in your browser.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Can I compress images to exactly 50KB or 100KB?</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Yes. Enter the target file size and the tool will compress your image as close as possible while preserving quality.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Does this tool support high-resolution images?</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Yes, it supports high-resolution photos and allows you to resize them to the appropriate pixel dimensions for your page.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Do I need to upload images to a server?</h3>
+        <p className="text-slate-600 leading-relaxed">
+          No. Everything runs in your browser, so your images stay on your device and are never uploaded to a remote server.
+        </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-slate-800 mb-2">Can optimized images help with government document uploads?</h3>
+        <p className="text-slate-600 leading-relaxed">
+          Optimized images can help reduce file size and improve upload reliability for government forms, job application portals, and official submission systems.
+        </p>
+      </div>
+    </div>
   </section>
 
   <section>
     <h2 className="text-2xl font-bold text-slate-900 mb-6">
-      Frequently Asked Questions
-    </h2>
+      Start Optimizing Images for Global Reach Today</h2>
 
-    <div className="space-y-5">
-      <div>
-        <h3 className="font-semibold text-slate-800 mb-2">
-          Is this image compressor free?
-        </h3>
-        <p className="text-slate-600">
-          Yes, our image compressor is completely free and can be used without
-          registration.
-        </p>
-      </div>
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Useful content paired with optimized visual assets is a practical strategy for reaching worldwide audiences. Use this free image resizer and compressor to make your website faster, more accessible, and more consistent for search engines and document portals.
+    </p>
 
-      <div>
-        <h3 className="font-semibold text-slate-800 mb-2">
-          Can I compress images to 50KB or 100KB?
-        </h3>
-        <p className="text-slate-600">
-          Yes, simply enter your desired target file size and our compression
-          engine will optimize the image accordingly.
-        </p>
-      </div>
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Whether you are preparing images for a global blog, an international e-commerce store, or a content-driven website, this tool helps you deliver visuals that load quickly and keep visitors engaged.
+    </p>
 
-      <div>
-        <h3 className="font-semibold text-slate-800 mb-2">
-          Are my images uploaded to a server?
-        </h3>
-        <p className="text-slate-600">
-          No. All image processing takes place locally in your browser for
-          maximum privacy and security.
-        </p>
-      </div>
+    <p className="text-slate-600 leading-relaxed mb-4">
+      Focus on quality content, responsive design, and optimized images to support better page performance. Fast and lightweight images are a helpful part of that approach.
+    </p>
 
-      <div>
-        <h3 className="font-semibold text-slate-800 mb-2">
-          Will image quality be affected?
-        </h3>
-        <p className="text-slate-600">
-          Our tool maintains the best possible balance between image quality and
-          file size reduction.
-        </p>
-      </div>
-    </div>
+    <p className="text-slate-600 leading-relaxed">
+      Start using the resizer now to prepare images for government document uploads, job applications, and official online forms.</p>
   </section>
 </article>
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createPageMetadata } from "@/lib/seo";
+import PageTracker from "@/components/PageTracker";
 
 export const metadata = createPageMetadata({
   title: "Free Online PDF and Document Converters",
@@ -8,6 +9,22 @@ export const metadata = createPageMetadata({
   path: "/converter",
 });
 
-export default function ConverterLayout({ children }: { children: ReactNode }) {
-  return children;
+export default function ConverterLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <>
+      <PageTracker
+        event="converter_page_view"
+        metadata={{
+          page: "converter",
+          category: "document_tools",
+        }}
+      />
+
+      {children}
+    </>
+  );
 }

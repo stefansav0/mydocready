@@ -13,7 +13,7 @@ export default function ConverterHub() {
   const tools = [
     {
       title: "Word to PDF",
-      description: "Convert your DOC and DOCX files to secure, uneditable PDF documents.",
+      description: "Convert DOC and DOCX files into PDF documents that preserve formatting for sharing or printing.",
       icon: <FileText size={32} className="text-[#1b64da]" />,
       href: "/converter/word-to-pdf",
       color: "bg-blue-50/50 hover:border-[#1b64da]",
@@ -21,7 +21,7 @@ export default function ConverterHub() {
     },
     {
       title: "PDF to Word",
-      description: "Extract text from your PDF and turn it into an editable Word document.",
+      description: "Extract text and structure from PDF documents into editable Word files.",
       icon: <FileType size={32} className="text-[#4f46e5]" />,
       href: "/converter/pdf-to-word",
       color: "bg-indigo-50/50 hover:border-[#4f46e5]",
@@ -29,7 +29,7 @@ export default function ConverterHub() {
     },
     {
       title: "Excel to PDF",
-      description: "Make Excel spreadsheets easy to read by converting them to PDF documents.",
+      description: "Turn Excel spreadsheets into printable PDF pages while keeping table layouts intact.",
       icon: <FileSpreadsheet size={32} className="text-[#107c41]" />,
       href: "/converter/excel-to-pdf",
       color: "bg-emerald-50/50 hover:border-[#107c41]",
@@ -37,7 +37,7 @@ export default function ConverterHub() {
     },
     {
       title: "PDF to Excel",
-      description: "Extract tables from PDF documents directly into clean, editable Excel spreadsheets.",
+      description: "Extract tables and numeric data from PDFs into editable Excel spreadsheets.",
       icon: <Grid size={32} className="text-[#107c41]" />,
       href: "/converter/pdf-to-excel",
       color: "bg-green-50/50 hover:border-[#107c41]",
@@ -45,7 +45,7 @@ export default function ConverterHub() {
     },
     {
       title: "PowerPoint to PDF",
-      description: "Convert your PPTX presentations to PDF format for easy sharing and viewing.",
+      description: "Render PPTX slides as a portable PDF file for review, sharing, or printing.",
       icon: <Presentation size={32} className="text-[#d83b01]" />,
       href: "/converter/powerpoint-to-pdf",
       color: "bg-orange-50/50 hover:border-[#d83b01]",
@@ -53,7 +53,7 @@ export default function ConverterHub() {
     },
     {
       title: "PDF to PowerPoint",
-      description: "Convert your PDF documents into structured, easy-to-edit PowerPoint slides.",
+      description: "Transform PDF pages into editable PowerPoint slide content with structure preserved.",
       icon: <Layout size={32} className="text-[#d83b01]" />,
       href: "/converter/pdf-to-powerpoint",
       color: "bg-amber-50/50 hover:border-[#d83b01]",
@@ -61,7 +61,7 @@ export default function ConverterHub() {
     },
     {
       title: "JPG to PDF",
-      description: "Convert and merge multiple JPG, JPEG, and PNG images into a single PDF.",
+      description: "Combine JPG, JPEG, and PNG images into a single PDF file for document submission or storage.",
       icon: <ImageIcon size={32} className="text-[#e5322d]" />,
       href: "/converter/jpg-to-pdf",
       color: "bg-red-50/50 hover:border-[#e5322d]",
@@ -69,7 +69,7 @@ export default function ConverterHub() {
     },
     {
       title: "PDF to JPG",
-      description: "Extract pages from your PDF and convert them into high-quality JPGs.",
+      description: "Save PDF pages as JPG images for easier sharing, previewing, or publishing online.",
       icon: <FileImage size={32} className="text-[#e5322d]" />,
       href: "/converter/pdf-to-jpg",
       color: "bg-rose-50/50 hover:border-[#e5322d]",
@@ -83,14 +83,13 @@ export default function ConverterHub() {
       {/* --- HERO & GRID SECTION (Tools First) --- */}
       <section className="flex flex-col items-center py-20 px-6">
         <div className="text-center space-y-4 mb-16 max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="inline-flex items-center gap-2 bg-green-100/80 text-green-700 px-5 py-2.5 rounded-full text-sm font-extrabold mb-4 shadow-sm border border-green-200">
-            <ShieldCheck size={20} /> 100% Secure Client-Side Conversion
-          </div>
+          
           <h1 className="text-4xl md:text-5xl font-black text-[#2a2a35] tracking-tight">
-            The Ultimate Universal <br className="hidden md:block" /> Document Converter
+            Document conversion tools for resumes,
+            <br className="hidden md:block" /> forms, and application files
           </h1>
           <p className="text-[#64748b] text-lg md:text-xl font-medium px-4 mt-4">
-            Convert your files instantly. No data is sent to our servers. Everything happens privately, locally, and securely inside your web browser.
+            Transform DOC, PDF, Excel, and image files directly in your browser. Files are processed locally on your device, without requiring a server upload.
           </p>
         </div>
 
@@ -152,10 +151,10 @@ export default function ConverterHub() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">The Privacy of Client-Side Processing</h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Traditional online file converters force you to upload your sensitive files (like tax returns, bank statements, or legal contracts) to a remote cloud server. Once uploaded, your data is processed on their hardware, leaving you vulnerable to data breaches or unauthorized data harvesting.
+                Traditional online file converters often require you to upload sensitive documents—such as tax forms, bank statements, or contracts—to a remote server. After upload, the file is processed on that server, which can introduce additional exposure.
               </p>
               <p className="text-gray-600 leading-relaxed">
-                <strong>MyDocReady changes the paradigm.</strong> We utilize advanced WebAssembly (Wasm) technology to run the conversion algorithms directly inside your web browser. Your files never leave your computer's RAM. We have no databases holding your files, guaranteeing absolute zero-trust privacy.
+                MyDocReady uses WebAssembly (Wasm) technology to run conversion routines inside your browser. The service is designed so that files are processed locally on your device, and the platform does not retain stored copies on remote servers.
               </p>
             </div>
 
@@ -169,18 +168,18 @@ export default function ConverterHub() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="flex flex-col items-center p-4">
               <Zap className="w-10 h-10 text-yellow-400 mb-4" />
-              <h4 className="text-xl font-bold mb-2">Lightning Fast</h4>
-              <p className="text-gray-400">Because there are no server uploads or download queues, conversions happen almost instantly on your local CPU.</p>
+              <h4 className="text-xl font-bold mb-2">Fast local conversion</h4>
+              <p className="text-gray-400">With no server uploads or queued processing, conversions can complete quickly on your device.</p>
             </div>
             <div className="flex flex-col items-center p-4">
               <CheckCircle2 className="w-10 h-10 text-emerald-400 mb-4" />
-              <h4 className="text-xl font-bold mb-2">100% Free Forever</h4>
-              <p className="text-gray-400">No premium paywalls, no daily file limits, and absolutely no watermarks placed on your final documents.</p>
+              <h4 className="text-xl font-bold mb-2">Free core tools</h4>
+              <p className="text-gray-400">Use the main converters without premium paywalls or unexpected watermark restrictions on standard output.</p>
             </div>
             <div className="flex flex-col items-center p-4">
               <Layout className="w-10 h-10 text-blue-400 mb-4" />
-              <h4 className="text-xl font-bold mb-2">Lossless Quality</h4>
-              <p className="text-gray-400">Our converters use high-fidelity algorithms to ensure text remains crisp and images retain their original DPI.</p>
+              <h4 className="text-xl font-bold mb-2">High-fidelity output</h4>
+              <p className="text-gray-400">Conversions are designed to preserve text clarity and image resolution while keeping file formatting consistent.</p>
             </div>
           </div>
         </div>
@@ -203,7 +202,7 @@ export default function ConverterHub() {
           <div className="grid gap-6">
             <FAQItem 
               question="Is there a file size limit for conversions?"
-              answer="Because the conversion happens locally on your device, the file size limit is dictated entirely by your computer or smartphone's available RAM. Modern devices can easily handle converting files upwards of 100MB instantly."
+              answer="Because conversion happens locally on your device, the file size limit depends on your computer or mobile device's available RAM. Many modern devices can handle files above 100MB without issue, while smaller devices may have lower limits."
             />
             <FAQItem 
               question="Will extracting a PDF to Word keep my tables and images intact?"
@@ -215,7 +214,7 @@ export default function ConverterHub() {
             />
             <FAQItem 
               question="Can I use this converter on my mobile phone?"
-              answer="Absolutely. Our architecture is highly responsive. You can easily convert a photo taken on your iPhone into a PDF, or transform a downloaded email attachment from Word to PDF right from your mobile browser."
+              answer="Yes. The interface is designed to work on modern mobile browsers. You can convert a photo taken on an iPhone into a PDF or change a downloaded Word attachment into a PDF from your phone."
             />
           </div>
 

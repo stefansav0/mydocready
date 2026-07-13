@@ -140,22 +140,17 @@ export default function HomePage() {
 
     {/* Heading */}
     <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-tight">
-
-      Everything You Need
-
+      Smart document tools for government forms,
       <br />
-
       <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-violet-600 bg-clip-text text-transparent">
-        In One Smart Workspace
+        job applications, and personal paperwork
       </span>
-
     </h1>
 
     {/* Description */}
     <p className="mt-8 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-8">
-      Create resumes, edit passport photos, resize signatures, convert PDFs,
-      calculate EMI & SIP, build presentations, and use dozens of free online
-      tools—all in one secure platform.
+      Access the tools you need to prepare resumes, passport photos, PDFs,
+      calculators, and application-ready documents—online, private, and fast.
     </p>
 
     {/* Search */}
@@ -174,7 +169,7 @@ export default function HomePage() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search 50+ tools (Resume Builder, Passport Photo, EMI Calculator...)"
+          placeholder="Search 50+ tools for resumes, passport photos, PDFs, calculators..."
           className="w-full bg-transparent py-5 pl-16 pr-6 text-lg outline-none placeholder:text-slate-400"
           aria-controls={searchQuery ? "tool-search-results" : undefined}
           aria-autocomplete="list"
@@ -225,17 +220,13 @@ export default function HomePage() {
 
     {/* CTA */}
     <div className="mt-10">
-
       <a
         href="#primary-tools"
         className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-8 py-4 text-white font-semibold shadow-lg shadow-indigo-200 hover:shadow-xl hover:scale-105 transition-all"
       >
-        Explore All Tools
-
+        Browse tools for applications
         <ArrowRight className="w-5 h-5" />
-
       </a>
-
     </div>
 
     
@@ -247,17 +238,17 @@ export default function HomePage() {
      {/* --- PREMIUM APP-BOX QUICK LINKS --- */}
 <section className="max-w-7xl mx-auto px-4 sm:px-6" aria-labelledby="quick-tools-heading">
   <h2 id="quick-tools-heading" className="sr-only">Popular tools</h2>
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full">
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 w-full">
   
   {/* Passport Photo */}
   <Link
     href="/passport-photo"
-    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-900/50 hover:-translate-y-1 transition-all duration-300"
+    className="group flex items-center gap-4 p-5 w-full min-h-[88px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-900/50 hover:-translate-y-1 transition-all duration-300"
   >
     <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
       <Camera className="w-6 h-6" />
     </div>
-    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+    <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
       Passport Photo
     </span>
   </Link>
@@ -265,12 +256,12 @@ export default function HomePage() {
   {/* Resize Photo */}
   <Link
     href="/resize"
-    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-green-200 dark:hover:border-green-900/50 hover:-translate-y-1 transition-all duration-300"
+    className="group flex items-center gap-4 p-5 w-full min-h-[88px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl hover:shadow-xl hover:border-green-200 dark:hover:border-green-900/50 hover:-translate-y-1 transition-all duration-300"
   >
     <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform">
       <Minimize className="w-6 h-6" />
     </div>
-    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+    <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
       Resize Image
     </span>
   </Link>
@@ -278,12 +269,12 @@ export default function HomePage() {
   {/* Resize Signature */}
   <Link
     href="/resize-signature"
-    className="group flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:shadow-xl hover:border-purple-200 dark:hover:border-purple-900/50 hover:-translate-y-1 transition-all duration-300"
+    className="group flex items-center gap-4 p-5 w-full min-h-[88px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl hover:shadow-xl hover:border-purple-200 dark:hover:border-purple-900/50 hover:-translate-y-1 transition-all duration-300"
   >
     <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
       <PenTool className="w-6 h-6" />
     </div>
-    <span className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-tight">
+    <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
       Resize Signature
     </span>
   </Link>
@@ -385,15 +376,15 @@ export default function HomePage() {
       {/* --- CATEGORY 1: PRIMARY SUITE --- */}
       <section id="primary-tools" className="max-w-7xl mx-auto px-4 pt-20 pb-10 scroll-mt-10">
         <div className="mb-10 text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Essential Career & Image Tools</h2>
-          <p className="text-slate-600 text-lg">Everything you need to land your dream job and prepare official application materials, optimized perfectly for modern standards.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Essential tools for applications and official documents</h2>
+          <p className="text-slate-600 text-lg">Use focused tools to prepare resumes, photos, and paperwork that support government and employment applications with clear, browser-friendly workflows.</p>
         </div>
         
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <FeatureCard
             Icon={Briefcase}
             title="Professional Resume Builder"
-            description="Craft ATS-friendly resumes in minutes with our easy-to-use templates and automated formatting tools."
+            description="Create a clean resume layout, organize work history, and export a printer-friendly PDF for applications."
             link="/resume-maker"
             buttonText="Build My Resume"
             color="emerald"
@@ -401,7 +392,7 @@ export default function HomePage() {
           <FeatureCard
             Icon={ImageIcon}
             title="Passport Photo Maker"
-            description="Instantly crop your photo and change the background to white or blue to meet strict official application guidelines."
+            description="Crop, size, and adjust your photo for passport, visa, and ID application uploads with simple online controls."
             link="/passport-photo"
             buttonText="Create Passport Photo"
             color="violet"
@@ -409,7 +400,7 @@ export default function HomePage() {
           <FeatureCard
             Icon={Upload}
             title="Resize by Exact KB"
-            description="Compress or resize your heavy image files to an exact KB size requirement using smart, lossless optimization."
+            description="Compress and resize images to meet upload limits while preserving readability and file quality."
             link="/resize"
             buttonText="Compress Image"
             color="indigo"
@@ -420,15 +411,15 @@ export default function HomePage() {
       {/* --- CATEGORY 2: CREATIVE & DOCUMENT SUITE --- */}
       <section id="document-tools" className="max-w-7xl mx-auto px-4 pt-10 pb-20 scroll-mt-10">
         <div className="mb-10 text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Creative & Document Utilities</h2>
-          <p className="text-slate-600 text-lg">Powerful in-browser utilities to design, edit, convert, and finalize your digital paperwork without downloading heavy software.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Document workflow for print, submission, and review</h2>
+          <p className="text-slate-600 text-lg">A simple suite for editing files, converting formats, placing photos into documents, and finalizing paperwork before filing.</p>
         </div>
         
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <FeatureCard
             Icon={Wand2}
             title="Studio Image Editor"
-            description="A complete browser-based studio. Color grade, apply presets, retouch skin, and use AI magic to perfect your photos."
+            description="Fine-tune image clarity and color to improve scanned forms, ID photos, and proof documents before upload."
             link="/image-edit"
             buttonText="Launch Editor"
             color="fuchsia"
@@ -436,7 +427,7 @@ export default function HomePage() {
           <FeatureCard
             Icon={MonitorPlay}
             title="Slide & Pitch Maker"
-            description="Generate beautiful presentation slides and professional pitch decks instantly with our intuitive slide editor."
+            description="Build presentation slides, briefings, and visual summaries for interviews, meetings, or training materials."
             link="/presentation-maker"
             buttonText="Create Slides"
             color="amber"
@@ -444,7 +435,7 @@ export default function HomePage() {
           <FeatureCard
             Icon={RefreshCcw}
             title="Universal Converters"
-            description="Seamlessly convert your files between PDF, Word, JPG, and PNG formats without losing any original quality."
+            description="Convert files between PDF, JPG, PNG, and other common formats used by government and employment forms."
             link="/converter"
             buttonText="Convert Files"
             color="rose"
@@ -452,11 +443,163 @@ export default function HomePage() {
           <FeatureCard
             Icon={FileText}
             title="Insert into Document"
-            description="Place your photos securely into a standard A4 PDF layout and download instantly for official physical printing."
+            description="Place your photo into a standard A4 layout and download a ready-to-print document for forms or cover letters."
             link="/insert-doc"
             buttonText="Format A4 Doc"
             color="blue"
           />
+        </div>
+      </section>
+
+      {/* --- DETAILED DOCUMENT READINESS GUIDE --- */}
+      <section className="bg-slate-50 py-24 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+              Prepare your forms, files, and applications with confidence
+            </h2>
+            <p className="mt-6 text-xl text-slate-600 leading-relaxed">
+              MyDocReady is designed to help you manage the full lifecycle of
+              government and employment documents, from draft to final download.
+              Learn how to organize content, format files, and avoid common
+              technical issues before you submit an application.
+            </p>
+          </div>
+
+          <div className="space-y-16">
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                Understand the most common document tasks
+              </h3>
+              <p className="text-slate-600 leading-8 mb-5">
+                Many applications require a mix of PDFs, photos, or supporting
+                documents. Having a clear workflow helps reduce confusion and
+                gives you a consistent way to prepare files before uploading.
+                Focus on the format requested by the organization, the page
+                size, and whether the file should be PDF, JPG, PNG, or another
+                supported type.
+              </p>
+              <p className="text-slate-600 leading-8">
+                MyDocReady provides tools for resume creation, passport and ID
+                photo preparation, file conversion, and PDF editing so you can
+                handle each step in one place. That makes it easier to review
+                your documents, make corrections, and download the files that
+                match the requirements.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                Create application-ready resumes and cover letters
+              </h3>
+              <p className="text-slate-600 leading-8 mb-5">
+                A practical resume is easy to read, contains accurate contact
+                details, and shows your skills in a clear order. Avoid overly
+                complex layouts, unusual fonts, or decorative elements that can
+                be hard to review on a range of devices.
+              </p>
+              <p className="text-slate-600 leading-8">
+                Use the resume builder to organize your professional history,
+                education, and certifications. When an employer or a government
+                service asks for PDF uploads, export your resume as a PDF to
+                preserve its layout and ensure the file opens consistently.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                Prepare passport photos and ID images carefully
+              </h3>
+              <p className="text-slate-600 leading-8 mb-5">
+                Photo requirements vary by country and by the type of document
+                you are applying for. Common criteria include the background
+                color, photo dimensions, head position, and file size. Using
+                the right size and layout helps reduce the risk of a delay.
+              </p>
+              <p className="text-slate-600 leading-8">
+                MyDocReady includes tools to crop, resize, and adjust photos so
+                you can match common passport and ID guidelines without needing
+                specialized editing software. After preparing the image, save a
+                copy for your records and verify the final file dimensions.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                Work with PDF, Word, JPG, and PNG formats
+              </h3>
+              <p className="text-slate-600 leading-8 mb-5">
+                Many organizations accept multiple file types, but official forms
+                often require PDF files because they preserve layout and text
+                placement. If you need to convert a JPG or PNG into a PDF, use
+                a reliable tool that keeps the image quality intact.
+              </p>
+              <p className="text-slate-600 leading-8">
+                Converting documents online can help you transition scanned
+                paperwork into a format that is easier to store and share. Our
+                document utilities are built to keep your files readable and to
+                retain the details that matter.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                Keep your files private and secure
+              </h3>
+              <p className="text-slate-600 leading-8 mb-5">
+                Your documents can contain sensitive and personal information.
+                When you upload files for editing or conversion, review the tool
+                behavior and only share documents when you intend to use the
+                completed output.
+              </p>
+              <p className="text-slate-600 leading-8">
+                Some tools process files directly in your browser, while others
+                may use secure server-side processing. Choose workflows that
+                match your needs and keep copies of your final downloads in a
+                secure location.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                How to use MyDocReady step by step
+              </h3>
+              <ul className="list-disc list-inside text-slate-600 leading-8 space-y-3 mb-5">
+                <li>Start by identifying the exact format required for your form or application.</li>
+                <li>Use the resume builder to create professional summaries and work history pages.</li>
+                <li>Prepare photos with the passport photo maker, ensuring the right size and background.</li>
+                <li>Convert files to the requested format and verify that the file opens correctly.</li>
+                <li>Download completed documents, keep a backup copy, and review them before submission.</li>
+              </ul>
+              <p className="text-slate-600 leading-8">
+                Taking these steps helps you avoid common mistakes like missing
+                attachments, wrong file sizes, or incompatible formats. It also
+                helps you present cleaner, more organized documents whether you
+                are applying for a job, education program, or government service.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10">
+              <h3 className="text-3xl font-bold text-slate-900 mb-5">
+                A checklist for official submissions
+              </h3>
+              <p className="text-slate-600 leading-8 mb-5">
+                A simple readiness checklist can reduce the chance of an
+                incomplete application. Check for the correct file type, verify
+                the photo size, confirm the page orientation, and make sure the
+                document is not password-protected unless explicitly requested.
+              </p>
+              <ul className="list-decimal list-inside text-slate-600 leading-8 space-y-3">
+                <li>Confirm the requested file format and page size.</li>
+                <li>Check that all text is legible and that any scanned pages are clear.</li>
+                <li>Validate photo dimensions and background color for ID images.</li>
+                <li>Save a copy of the completed file for your own records.</li>
+                <li>Review the submission instructions before uploading files.</li>
+              </ul>
+            </article>
+
+          </div>
         </div>
       </section>
 
@@ -473,19 +616,17 @@ export default function HomePage() {
 
     {/* Heading */}
     <div className="text-center max-w-3xl mx-auto mb-16">
-      
-
       <h2 className="text-4xl md:text-5xl font-black leading-tight">
-        Secure, Fast & Reliable
+        Secure, fast, and practical
         <span className="block text-indigo-400">
-          Document Services
+          document services
         </span>
       </h2>
 
       <p className="mt-6 text-lg text-slate-300 leading-relaxed">
-        MyDocReady helps users access government services, download official
-        documents, convert PDFs, and manage important files with complete
-        privacy and ease.
+        MyDocReady helps users prepare government service forms, job application
+        materials, and everyday documents with privacy, clarity, and consistent
+        online workflows.
       </p>
     </div>
 
@@ -499,28 +640,27 @@ export default function HomePage() {
       <Wrench className="w-8 h-8 text-indigo-400" />
     </div>
 
-    <h3 className="text-5xl font-black text-indigo-400">
+    <h3 className="text-4xl sm:text-5xl font-black leading-tight text-indigo-400">
       35+
     </h3>
 
-    <p className="mt-3 text-slate-300 font-medium">
-      Free Document Tools
+    <p className="mt-3 text-slate-300 font-medium whitespace-normal break-words">
+      Document Tools
     </p>
 
   </div>
 
-  {/* Card */}
   <div className="group rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 text-center hover:bg-white/10 hover:-translate-y-2 transition-all duration-300">
 
     <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-emerald-500/15 flex items-center justify-center">
       <Sparkles className="w-8 h-8 text-emerald-400" />
     </div>
 
-    <h3 className="text-5xl font-black text-emerald-400">
+    <h3 className="text-4xl sm:text-5xl font-black leading-tight text-emerald-400">
       Fast
     </h3>
 
-    <p className="mt-3 text-slate-300 font-medium">
+    <p className="mt-3 text-slate-300 font-medium whitespace-normal break-words">
       Easy Processing
     </p>
 
@@ -533,11 +673,11 @@ export default function HomePage() {
       <Smartphone className="w-8 h-8 text-amber-400" />
     </div>
 
-    <h3 className="text-5xl font-black text-amber-400">
+    <h3 className="text-4xl sm:text-5xl font-black leading-tight text-amber-400">
       24/7
     </h3>
 
-    <p className="mt-3 text-slate-300 font-medium">
+    <p className="mt-3 text-slate-300 font-medium whitespace-normal break-words">
       Online Access
     </p>
 
@@ -550,11 +690,11 @@ export default function HomePage() {
       <ShieldCheck className="w-8 h-8 text-rose-400" />
     </div>
 
-    <h3 className="text-5xl font-black text-rose-400">
+    <h3 className="text-4xl sm:text-5xl font-black leading-tight text-rose-400">
       Secure
     </h3>
 
-    <p className="mt-3 text-slate-300 font-medium">
+    <p className="mt-3 text-slate-300 font-medium whitespace-normal break-words">
       Privacy Focused
     </p>
 
@@ -808,7 +948,7 @@ export default function HomePage() {
             {/* Guide 1 */}
             <Link href="/blog/write-an-ats-resume" className="group flex flex-col bg-gray-50 rounded-3xl p-8 border border-gray-100 hover:border-indigo-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors">How to write an ATS Resume</h3>
-              <p className="text-gray-600 leading-relaxed mb-8 flex-1">Get past the robots and secure your interview.</p>
+              <p className="text-gray-600 leading-relaxed mb-8 flex-1">Improve compatibility with applicant tracking systems and present your experience clearly.</p>
               <div className="flex items-center text-sm font-bold text-indigo-600">
                 Read Article <ArrowRight size={18} className="ml-2 group-hover:translate-x-2 transition-transform" />
               </div>
@@ -826,7 +966,7 @@ export default function HomePage() {
             {/* Guide 3 */}
             <Link href="/blog/resize-photos-by-kb" className="group flex flex-col bg-gray-50 rounded-3xl p-8 border border-gray-100 hover:border-indigo-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors">How to Resize by exact KB</h3>
-              <p className="text-gray-600 leading-relaxed mb-8 flex-1">A step-by-step guide to lossless compression.</p>
+              <p className="text-gray-600 leading-relaxed mb-8 flex-1">A step-by-step guide to compressing images while preserving quality for uploads.</p>
               <div className="flex items-center text-sm font-bold text-indigo-600">
                 Read Article <ArrowRight size={18} className="ml-2 group-hover:translate-x-2 transition-transform" />
               </div>
@@ -851,7 +991,7 @@ export default function HomePage() {
             <h2 className="text-4xl font-extrabold text-slate-900">Frequently Asked Questions</h2>
             <p className="text-xl text-slate-600 mt-4 max-w-2xl leading-relaxed">
   Find answers to common questions about MyDocReady, including our document tools,
-  privacy practices, supported file formats, and how to get the best results from
+  privacy practices, supported file formats, and how to get the most helpful outcomes from
   our services.
 </p>
           </div>
@@ -871,7 +1011,7 @@ export default function HomePage() {
 />
             <FAQItem
   question="Can I create a professional resume with MyDocReady?"
-  answer="Yes. Our Resume Builder helps you create clean, well-structured resumes suitable for online job applications. We recommend tailoring your resume to each job description for the best results."
+  answer="Yes. Our Resume Builder helps you create clean, well-structured resumes suitable for online job applications. We recommend tailoring your resume to each job description for the most accurate results."
 />
             <FAQItem
   question="Can I create passport-size photos for different applications?"
@@ -891,7 +1031,7 @@ export default function HomePage() {
 />
             <FAQItem
   question="Which web browsers are supported?"
-  answer="For the best experience, we recommend using the latest versions of Google Chrome, Microsoft Edge, Mozilla Firefox, or Safari."
+  answer="For the most reliable experience, we recommend using the latest versions of Google Chrome, Microsoft Edge, Mozilla Firefox, or Safari."
 />
             <FAQItem
   question="How can I contact MyDocReady?"

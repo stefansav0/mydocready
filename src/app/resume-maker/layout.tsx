@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createPageMetadata } from "@/lib/seo";
+import ResumeMakerTracker from "@/components/ResumeMakerTracker";
 
 export const metadata = createPageMetadata({
   title: "Free ATS-Friendly Resume Builder and Templates",
@@ -8,6 +9,15 @@ export const metadata = createPageMetadata({
   path: "/resume-maker",
 });
 
-export default function ResumeMakerLayout({ children }: { children: ReactNode }) {
-  return children;
+export default function ResumeMakerLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <>
+      <ResumeMakerTracker />
+      {children}
+    </>
+  );
 }

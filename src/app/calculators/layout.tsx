@@ -1,13 +1,28 @@
 import type { ReactNode } from "react";
 import { createPageMetadata } from "@/lib/seo";
+import PageTracker from "@/components/PageTracker";
 
 export const metadata = createPageMetadata({
-  title: "Free Financial and Everyday Calculators",
+  title: "Free Online PDF and Document Converters",
   description:
-    "Calculate EMI, SIP returns, fixed-deposit maturity, GST, tax, age, percentages, savings goals, and shared bills with clear results.",
-  path: "/calculators",
+    "Convert Word, Excel, PowerPoint, JPG, and PDF files online with simple, browser-friendly document tools from MyDocReady.",
+  path: "/converter",
 });
 
-export default function CalculatorsLayout({ children }: { children: ReactNode }) {
-  return children;
+export default function ConverterLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <>
+      <PageTracker
+        event="converter_page_view"
+        metadata={{
+          page: "converter",
+        }}
+      />
+      {children}
+    </>
+  );
 }

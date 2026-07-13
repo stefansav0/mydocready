@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import type { Metadata } from "next";
 import { blogContent } from "@/lib/blogData"; 
 import ProgressBar from "@/components/ProgressBar"; // Adjust this path if necessary
+import BlogViewTracker from "@/components/BlogViewTracker";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -42,6 +43,11 @@ export default async function BlogDetailPage({ params }: Props) {
     <>
       {/* Client-side scroll progress bar */}
       <ProgressBar />
+      <BlogViewTracker
+  slug={slug}
+  title={blog.title}
+  category={blog.category}
+/>
 
       <div className="bg-[#FAFAFA] dark:bg-[#111111] min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
         
