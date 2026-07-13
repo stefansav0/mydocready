@@ -1,14 +1,36 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, x-api-key",
+  };
+}
+
+// Handle CORS preflight request
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders(),
+  });
+}
+
 export async function GET(req: Request) {
   try {
     const apiKey = req.headers.get("x-api-key");
 
     if (apiKey !== process.env.ADMIN_API_KEY) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+          headers: corsHeaders(),
+        }
       );
     }
 
@@ -21,11 +43,17 @@ export async function GET(req: Request) {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
 
     // Dashboard Cards
-    const totalEvents = await db.collection("analytics_events").countDocuments();
+    const totalEvents = await db
+      .collection("analytics_events")
+      .countDocuments();
 
-    const todayEvents = await db.collection("analytics_events").countDocuments({
-      createdAt: { $gte: today },
-    });
+    const todayEvents = await db
+      .collection("analytics_events")
+      .countDocuments({
+        createdAt: {
+          $gte: today,
+        },
+      });
 
     const uniqueVisitors = await db
       .collection("analytics_events")
@@ -51,11 +79,15 @@ export async function GET(req: Request) {
         {
           $group: {
             _id: "$page",
-            views: { $sum: 1 },
+            views: {
+              $sum: 1,
+            },
           },
         },
         {
-          $sort: { views: -1 },
+          $sort: {
+            views: -1,
+          },
         },
         {
           $limit: 10,
@@ -97,26 +129,34 @@ export async function GET(req: Request) {
       ])
       .toArray();
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        totalEvents,
-        todayEvents,
-        uniqueVisitors: uniqueVisitors.length,
-        liveVisitors: liveVisitors.length,
-        topPages,
-        topTools,
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          totalEvents,
+          todayEvents,
+          uniqueVisitors: uniqueVisitors.length,
+          liveVisitors: liveVisitors.length,
+          topPages,
+          topTools,
+        },
       },
-    });
+      {
+        headers: corsHeaders(),
+      }
+    );
   } catch (error) {
-    console.error(error);
+    console.error("Dashboard API Error:", error);
 
     return NextResponse.json(
       {
         success: false,
         message: "Server Error",
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: corsHeaders(),
+      }
     );
   }
 }
