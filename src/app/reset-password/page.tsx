@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./ResetPasswordPage.module.css";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialEmail = searchParams.get("email") || "";
@@ -45,10 +45,17 @@ export default function ResetPasswordPage() {
 
     try {
       setIsLoading(true);
+
       const response = await fetch("/api/reset-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          otp,
+          password,
+        }),
       });
 
       const data = await response.json();
@@ -80,6 +87,7 @@ export default function ResetPasswordPage() {
     <div className={styles.container}>
       <div className={styles.formWrapper}>
         <h1 className={styles.title}>Reset Password</h1>
+
         <p className={styles.subtitle}>
           Enter the OTP from your email and choose a new password.
         </p>
@@ -90,6 +98,7 @@ export default function ResetPasswordPage() {
 
           <div className={styles.inputGroup}>
             <label htmlFor="email">Email Address</label>
+
             <input
               id="email"
               type="email"
@@ -104,13 +113,16 @@ export default function ResetPasswordPage() {
 
           <div className={styles.inputGroup}>
             <label htmlFor="otp">OTP</label>
+
             <input
               id="otp"
               type="text"
               inputMode="numeric"
               placeholder="Enter 6-digit code"
               value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              onChange={(e) =>
+                setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+              }
               required
               disabled={isLoading}
               className={styles.input}
@@ -119,6 +131,7 @@ export default function ResetPasswordPage() {
 
           <div className={styles.inputGroup}>
             <label htmlFor="password">New Password</label>
+
             <input
               id="password"
               type="password"
@@ -132,7 +145,10 @@ export default function ResetPasswordPage() {
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="confirmPassword">Confirm New Password</label>
+            <label htmlFor="confirmPassword">
+              Confirm New Password
+            </label>
+
             <input
               id="confirmPassword"
               type="password"
@@ -145,7 +161,11 @@ export default function ResetPasswordPage() {
             />
           </div>
 
-          <button type="submit" disabled={isLoading} className={styles.button}>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={styles.button}
+          >
             {isLoading ? "Updating..." : "Reset Password"}
           </button>
         </form>
@@ -157,5 +177,21 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className={styles.container}>
+          <div className={styles.formWrapper}>
+            <p>Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
