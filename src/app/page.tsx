@@ -153,6 +153,23 @@ export default function HomePage() {
       calculators, and application-ready documents—online, private, and fast.
     </p>
 
+    <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+      <Link
+        href="/tools"
+        className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+      >
+        
+        Browse all tools
+      </Link>
+      <Link
+        href="#primary-tools"
+        className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-indigo-200 hover:text-indigo-600"
+      >
+        
+        Explore featured tools
+      </Link>
+    </div>
+
     {/* Search */}
     <div className="mt-12 w-full max-w-2xl mx-auto relative">
 

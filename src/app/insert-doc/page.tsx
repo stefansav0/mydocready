@@ -313,60 +313,166 @@ export default function InsertDocPage() {
         {/* --- SEO ARTICLE SECTION --- */}
         <article className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12 max-w-4xl mx-auto">
           <section className="mb-10">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Free Printable Passport Photo Maker</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Free Printable Passport Photo Maker for Home Printing</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-  Create perfectly formatted <strong>35×45mm passport-size photos</strong> from any portrait in just a few clicks. Upload your photo, and our free tool automatically converts it into a print-ready passport or visa photo that meets standard size requirements.
-</p>
-
+              If you need a passport photo, visa photo, or a simple ID-style portrait for personal use, a printable layout can make the process much easier. This page gives you a practical way to upload a portrait, choose a layout, and generate an A4 document that can be printed at home or taken to a local photo shop. Whether you are preparing paperwork for travel, school, or a professional application, this guide focuses on making the process clearer, more convenient, and easier to understand.
+            </p>
             <p className="text-slate-600 leading-relaxed">
-              We perfectly size and scale your image onto an A4 PDF document that you can print directly at home or at a local print shop. Because all PDF generation happens securely in your browser, your personal photos are entirely private and are never uploaded to our servers.
+              A good passport-style photo is not only about size. Lighting, face position, background, image clarity, and print quality all matter. Because requirements can differ by country, organization, or application type, it is always wise to confirm the current rules with the relevant authority before final submission. This tool is designed to help you prepare a layout for printing and review, not to replace official instructions.
             </p>
           </section>
 
           <section className="mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">How to Make a Passport Photo PDF</h2>
-            <div className="grid gap-4 md:grid-cols-3">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Why People Use a Passport Photo Layout Tool</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              Many people want to avoid long waits, high prices, or inconvenient visits to a photo studio. A digital photo layout tool offers a straightforward alternative for creating a print-ready document from a portrait already stored on a phone or computer. It can be useful for anyone who wants to produce a few copies for a family record, a travel folder, or a document submission that needs multiple prints.
+            </p>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              The value of a simple layout tool is that it reduces the manual work of resizing and arranging images. Instead of trying to position a portrait correctly on paper by hand, you can upload your image, pick a layout, and download a document that is ready to print. This can save time, reduce mistakes, and make it easier to compare multiple versions before printing.
+            </p>
+            <p className="text-slate-600 leading-relaxed">
+              For people who are preparing documents in a hurry, a printable sheet can also be helpful for reviewing the final output before sending it to a printer. It gives you a way to check the crop, alignment, and spacing before you commit to a physical print.
+            </p>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">What Makes a Good Passport-Style Photo</h2>
+            <div className="grid gap-4 md:grid-cols-2">
               {[
-                { step: "1", title: "Upload Portrait", desc: "Take a clear photo against a plain background and upload it into the tool." },
-                { step: "2", title: "Choose Layout", desc: "Select a single registration form layout, or a grid of 20 photos for bulk printing." },
-                { step: "3", title: "Download PDF", desc: "Click generate to instantly download your perfectly sized A4 printable PDF." }
+                {
+                  title: "Clear face and natural expression",
+                  desc: "A visible face with a neutral or natural expression is usually easier to use than a heavily styled or dramatic pose. The subject should be easy to recognize and not hidden by shadows or accessories."
+                },
+                {
+                  title: "Even lighting",
+                  desc: "Soft daylight or balanced studio lighting helps avoid harsh shadows, glare, and washed-out skin tones. Good lighting makes the final print look cleaner and easier to review."
+                },
+                {
+                  title: "Simple background",
+                  desc: "A plain or lightly textured background is often the safest choice for portrait-based document photos. It helps the face stand out and keeps the image focused on the subject."
+                },
+                {
+                  title: "High image quality",
+                  desc: "A sharp image with enough resolution will print more clearly. Blurry or heavily compressed photos can look worse once they are printed at a small size."
+                }
               ].map((item) => (
-                <div key={item.step} className="bg-slate-50 p-5 rounded-xl border border-slate-100 relative">
-                  <span className="absolute -top-4 -left-4 w-8 h-8 bg-indigo-600 text-white flex items-center justify-center rounded-full font-bold border-4 border-white shadow-sm">
-                    {item.step}
-                  </span>
-                  <h3 className="font-semibold text-slate-800 mb-2 mt-2">{item.title}</h3>
-                  <p className="text-sm text-slate-600">{item.desc}</p>
+                <div key={item.title} className="bg-slate-50 border border-slate-100 rounded-xl p-5">
+                  <h3 className="font-semibold text-slate-800 mb-2">{item.title}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">Features</h2>
-            <ul className="space-y-4">
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">How the Tool Works</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              The workflow is intentionally simple. You begin by uploading a portrait from your device. After the image is selected, you can choose between a single document-style layout or a grid layout for printing multiple copies. When you generate the file, the page produces an A4 PDF that can be opened and printed from a browser, a desktop application, or a local print service.
+            </p>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              This approach is useful if you want to create a print-ready document without needing advanced design software. The layout is built to be straightforward, and the output is intended to be reviewed before printing. It is especially helpful for people who want a quick draft or an easy way to prepare several copies at once.
+            </p>
+            <p className="text-slate-600 leading-relaxed">
+              Because the document is generated in the browser, the upload and processing stay local to your device for the image handling steps. That means your photo is not sent to an external service for the export process, which can be appealing for privacy-conscious users.
+            </p>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Choosing the Right Layout</h2>
+            <div className="space-y-4">
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Single layout for a document or form</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  This option is helpful when you want one photo placed in a document-style arrangement. It is often used for a personal record, a registration form, or a simple printable sheet where you want one portrait to appear clearly and neatly.
+                </p>
+              </div>
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Grid layout for multiple copies</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  The grid option is useful when you need several identical prints at once. It can be practical for families, students, or anyone preparing several documents around the same time. It also helps you review the full sheet before printing.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Printing Tips for Better Results</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              Even a well-prepared design can look different depending on the printer and paper used. A home printer may produce good results for occasional use, while a professional print shop may offer more consistent color and sharper edges. If you are printing at home, it is a good idea to test one page first before printing several copies.
+            </p>
+            <ul className="space-y-3 text-slate-600">
               <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-slate-800">Exact 35x45mm Dimensions</h4>
-                  <p className="text-slate-600 text-sm mt-1">We automatically calculate the DPI and millimeters required to ensure your photo prints at exactly the globally accepted 35mm by 45mm standard.</p>
-                </div>
+                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <span>Use a good-quality paper or photo paper if available, especially if you want the print to look sharper and more polished.</span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-slate-800">Multiple Copies (Print Grid)</h4>
-                  <p className="text-slate-600 text-sm mt-1">Need multiple copies? Select the Print Grid option to automatically arrange up to 20 identical passport photos on a single A4 page with perfect cut-lines.</p>
-                </div>
+                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <span>Check the printer settings to make sure scaling is not unexpectedly altered during the print job.</span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-slate-800">Client-Side Privacy</h4>
-                  <p className="text-slate-600 text-sm mt-1">Unlike other online converters, your photo never leaves your computer. We use jsPDF to build the document entirely within your local browser memory.</p>
-                </div>
+                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <span>Review the output at normal size before cutting or trimming anything, especially if the page will be used for a form or official submission.</span>
               </li>
             </ul>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Common Mistakes to Avoid</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              A few simple mistakes can make a passport-style photo less useful than it should be. The most common issues are poor lighting, facial obstruction, low-resolution photos, and overly busy backgrounds. Photos that are too dark, too bright, or slightly blurry can appear less clear once printed at a small size.
+            </p>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              Another common problem is using a photo that was cropped too tightly. If the image is cut too close to the head or shoulders, the final print may look awkward or incomplete. For this reason, it is usually better to start with a slightly wider image and adjust the crop carefully before generating the PDF.
+            </p>
+            <p className="text-slate-600 leading-relaxed">
+              Accessories, strong shadows, and unusual facial expressions can also make a photo less suitable. If you are unsure what the destination authority expects, it is worth reviewing their current guidance before submitting anything.
+            </p>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Privacy and Local Processing</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              Privacy is an important consideration when working with personal photographs. This page is built around a browser-based workflow, which means the image is handled locally in the session as part of the document generation process. In practical terms, that means your portrait is not sent to a separate server just to create the PDF export.
+            </p>
+            <p className="text-slate-600 leading-relaxed">
+              That said, it is still good practice to only upload images you are comfortable using, and to remove any file from your device if you no longer need it. If you are using a shared or public computer, you may also want to clear your browser download history and temporary files after completing the process.
+            </p>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Can I make a passport photo from any photo?</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">You can use many portrait-style photos, but the final result depends heavily on image quality, lighting, background, and subject positioning. It is best to use a clear image rather than a casual snapshot taken in poor conditions.</p>
+              </div>
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Is this tool suitable for official documents?</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">It can be useful for preparing a printable layout, but official requirements may vary by country or organization. Always verify the current guidelines before submitting a photo for a formal application.</p>
+              </div>
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Can I print multiple copies on one page?</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">Yes, the grid option is designed for that purpose. It can help you organize several copies on a single A4 document for review and printing.</p>
+              </div>
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Do I need special software?</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">No advanced software is required. You can upload your image, select a layout, and download the PDF directly from the page.</p>
+              </div>
+              <div className="border border-slate-200 rounded-xl p-5">
+                <h3 className="font-semibold text-slate-800 mb-2">Will the photo be uploaded to a server?</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">The export workflow is designed to stay local to your browser session, so the image handling remains on your device as part of the document generation process.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Final Thoughts</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              Preparing a passport-style photo does not have to be complicated. With a clear image, a simple layout, and a reliable printing method, you can create a document that is easy to review and print. The most important part is to start with a good portrait and confirm the requirements that matter for your specific case.
+            </p>
+            <p className="text-slate-600 leading-relaxed">
+              Whether you are making one printable copy or several, the goal is the same: to produce a clean, readable layout that is easy to inspect, print, and use. If you need a practical starting point, this page can help you get from an image file to a print-ready document without unnecessary steps.
+            </p>
           </section>
         </article>
 

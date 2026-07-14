@@ -325,10 +325,10 @@ export default function PassportPhotoPage() {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-yellow-100 text-yellow-600 rounded-xl"><Camera size={24} /></div>
-              <h2 className="text-2xl font-bold text-gray-900">How to Take a Perfect Photo</h2>
+              <h2 className="text-2xl font-bold text-gray-900">How to Take a Clean Passport Photo</h2>
             </div>
             <p className="text-gray-600 mb-6">
-              To ensure your passport or visa application isn't rejected, follow these government-standard guidelines before uploading your photo.
+              A passport photo is often judged by more than just your face. Lighting, background, posture, and image quality all affect whether the final file looks clear and appropriate for submission. A simple photo taken with care can save time compared to redoing the process later.
             </p>
             
             <ul className="space-y-4">
@@ -354,23 +354,39 @@ export default function PassportPhotoPage() {
                 </div>
               </li>
             </ul>
+
+            <div className="mt-8 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Why photo quality matters</h3>
+              <p className="text-gray-600 leading-relaxed mb-3">
+                A passport photo needs to be sharp, well lit, and properly framed. Even a small issue like a shadow on the face or a background that is too busy can make an otherwise fine image less useful. Taking a few extra seconds to prepare the scene can make the final edit faster and more reliable.
+              </p>
+              <p className="text-gray-600 leading-relaxed">
+                If the image is blurry, too dark, or poorly cropped, the background removal step may also become less accurate. That is why a straightforward setup is often the best place to start before using any editing tools.
+              </p>
+            </div>
           </div>
 
           {/* Right Column: How it works & Privacy */}
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-blue-100 text-blue-600 rounded-xl"><Lightbulb size={24} /></div>
-              <h2 className="text-2xl font-bold text-gray-900">How Our Technology Works</h2>
+              <h2 className="text-2xl font-bold text-gray-900">How Passport Photo Editing Works</h2>
             </div>
             
             <div className="prose prose-blue text-gray-600">
               <p>
-                We use an advanced <strong>WebAssembly (WASM) AI model</strong> to process your image. Traditionally, tools like this force you to upload your photo to a remote server, process it there, and download it back.
+                A passport photo workflow often involves a few different steps: capturing a photo, removing the background, adjusting the framing, and exporting the final image in the size required by the form. A browser-based editor can help simplify this process by bringing the main tasks into one place.
+              </p>
+              <p>
+                In many cases, the background removal step is the most technical part. The image is analyzed so the subject can be separated from the surrounding scene. After that, the photo can be placed on a plain background, resized to the target dimensions, and exported as a standard image file.
               </p>
               
-              <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">Your Privacy is Guaranteed</h3>
+              <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">Privacy and local processing</h3>
               <p>
-                Because our AI runs entirely inside your web browser, <strong>your photo never leaves your device</strong>. We have no databases, no servers holding your face, and no tracking. Once you close the tab, your photo is gone forever.
+                Because the image processing runs directly in the browser, the photo stays on the device while you work with it. That means the process can be completed without sending the image to an external server. For many people, that is a useful advantage when handling personal photos or image files that should remain private.
+              </p>
+              <p>
+                This approach also makes it easier to keep the workflow simple. You upload the photo, edit it, review the result, and download the final image without having to move through multiple apps or accounts.
               </p>
 
               <div className="mt-8 bg-gray-50 p-6 rounded-2xl border border-gray-200">
@@ -378,17 +394,56 @@ export default function PassportPhotoPage() {
                 <dl className="space-y-4">
                   <div>
                     <dt className="font-semibold text-gray-800">What size is the downloaded photo?</dt>
-                    <dd className="text-sm text-gray-500 mt-1">The photo downloads exactly at 413x531 pixels, which perfectly matches the standard 35x45mm passport size when printed at 300 DPI.</dd>
+                    <dd className="text-sm text-gray-500 mt-1">The output is generated at 413x531 pixels, which is commonly used for a standard 35x45mm print size at 300 DPI.</dd>
                   </div>
                   <div>
                     <dt className="font-semibold text-gray-800">Why did the background removal fail?</dt>
-                    <dd className="text-sm text-gray-500 mt-1">Our AI needs to distinguish you from the background. Try taking a photo against a plain wall (not heavily textured) with good lighting.</dd>
+                    <dd className="text-sm text-gray-500 mt-1">The tool performs best when the subject stands out clearly from the background. A plain wall, better lighting, and a clear face usually help the result appear more accurate.</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-gray-800">Can I use this for visa or ID photos?</dt>
+                    <dd className="text-sm text-gray-500 mt-1">Yes, the editor can help prepare a photo for common document workflows, but the exact rules vary by country, agency, or application type.</dd>
                   </div>
                 </dl>
               </div>
             </div>
           </div>
 
+        </div>
+
+        <div className="mt-16 bg-white rounded-3xl border border-gray-200 shadow-sm p-8 md:p-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Common passport photo mistakes to avoid</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Poor lighting</h3>
+              <p className="text-gray-600 leading-relaxed">A face that is too dark, too bright, or cast in heavy shadows can make the final image look less professional. Natural daylight from a window is usually a more forgiving option than overhead lights or harsh flash.</p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Busy backgrounds</h3>
+              <p className="text-gray-600 leading-relaxed">Backgrounds with clutter, patterns, or strong color can make the subject harder to separate cleanly. A simple backdrop often leads to a cleaner result.</p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Too much camera angle</h3>
+              <p className="text-gray-600 leading-relaxed">If the camera is too high, too low, or tilted, the face may appear uneven. A straight-on angle usually gives the most balanced appearance.</p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Over-editing the result</h3>
+              <p className="text-gray-600 leading-relaxed">Heavy editing can make the photo look unnatural. A light touch is often better when the aim is a clean, natural-looking image that remains easy to recognize.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-16 bg-gray-50 rounded-3xl border border-gray-200 p-8 md:p-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">How to prepare the final photo for upload</h2>
+          <p className="text-gray-600 leading-relaxed mb-6">
+            Once the photo has been edited, it is helpful to review it at full size before saving it. Check the face position, confirm that the background is plain, and make sure the image is not cropped too tightly. A small amount of extra review at this stage can prevent unnecessary rework later.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-6">
+            If you are preparing the image for a form, it is also worth checking the specific instructions provided by the authority or organization. Requirements can differ by country, document type, or submission portal, and even small differences can matter when the image is being reviewed.
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            For most users, the ideal workflow is simple: capture a clear image, remove the background, adjust the framing, and export a clean result that is easy to upload. That keeps the process practical while still producing a photo that looks polished and ready to use.
+          </p>
         </div>
       </div>
 

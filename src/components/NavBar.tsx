@@ -7,7 +7,7 @@ import {
   FileImage, Grid, Presentation, FileSpreadsheet, Sparkles, 
   LogIn, User, LogOut, FolderHeart, ShieldAlert,
   Calculator, Landmark, PiggyBank, TrendingUp, Receipt, Target, Percent,
-  Crop, PenTool, FilePlus, Shuffle
+  Crop, PenTool, FilePlus, Shuffle, BookOpen, Wrench
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -26,12 +26,16 @@ export default function NavBar() {
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const [resizeDropdownOpen, setResizeDropdownOpen] = useState(false);
   const [calcDropdownOpen, setCalcDropdownOpen] = useState(false);
+  const [allToolsDropdownOpen, setAllToolsDropdownOpen] = useState(false);
+  const [signInDropdownOpen, setSignInDropdownOpen] = useState(false);
+  const [getStartedDropdownOpen, setGetStartedDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   
   // Mobile Dropdown States (Accordions)
   const [mobileConverterOpen, setMobileConverterOpen] = useState(false);
   const [mobileResizeOpen, setMobileResizeOpen] = useState(false);
   const [mobileCalcOpen, setMobileCalcOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
 
   // Track authenticated user data layer cleanly
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -40,6 +44,9 @@ export default function NavBar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const resizeDropdownRef = useRef<HTMLDivElement>(null);
   const calcDropdownRef = useRef<HTMLDivElement>(null);
+  const allToolsDropdownRef = useRef<HTMLDivElement>(null);
+  const signInRef = useRef<HTMLDivElement>(null);
+  const getStartedRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
   // 1. Monitors page scrolling coordinates
@@ -57,6 +64,9 @@ export default function NavBar() {
       setToolsDropdownOpen(false);
       setResizeDropdownOpen(false);
       setCalcDropdownOpen(false);
+      setAllToolsDropdownOpen(false);
+      setSignInDropdownOpen(false);
+      setGetStartedDropdownOpen(false);
       setProfileDropdownOpen(false);
     };
 
@@ -90,6 +100,15 @@ export default function NavBar() {
       if (calcDropdownRef.current && !calcDropdownRef.current.contains(target)) {
         setCalcDropdownOpen(false);
       }
+      if (allToolsDropdownRef.current && !allToolsDropdownRef.current.contains(target)) {
+        setAllToolsDropdownOpen(false);
+      }
+      if (signInRef.current && !signInRef.current.contains(target)) {
+        setSignInDropdownOpen(false);
+      }
+      if (getStartedRef.current && !getStartedRef.current.contains(target)) {
+        setGetStartedDropdownOpen(false);
+      }
       if (profileRef.current && !profileRef.current.contains(target)) {
         setProfileDropdownOpen(false);
       }
@@ -105,6 +124,10 @@ export default function NavBar() {
     setMobileConverterOpen(false);
     setMobileResizeOpen(false);
     setMobileCalcOpen(false);
+    setMobileToolsOpen(false);
+    setAllToolsDropdownOpen(false);
+    setSignInDropdownOpen(false);
+    setGetStartedDropdownOpen(false);
   };
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -146,6 +169,13 @@ export default function NavBar() {
     { name: "Percentage", href: "/calculators/percentage", icon: <Percent size={16} className="text-pink-600" /> },
   ];
 
+  const featuredTools = [
+    { name: "All Tools", href: "/tools", icon: <Wrench size={16} className="text-indigo-600" /> },
+    { name: "Passport Photo", href: "/passport-photo", icon: <FileImage size={16} className="text-rose-500" /> },
+    { name: "Resume Builder", href: "/resume-maker", icon: <FileText size={16} className="text-blue-500" /> },
+    { name: "Presentation Maker", href: "/presentation-maker", icon: <Presentation size={16} className="text-amber-500" /> },
+  ];
+
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-all duration-300 ${
@@ -163,6 +193,8 @@ export default function NavBar() {
         {/* Desktop Navigation links */}
         <nav className="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
           
+          
+
           {/* Converters Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
@@ -316,6 +348,66 @@ export default function NavBar() {
           <Link href="/resume-maker" className="text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
             Resume
           </Link>
+
+          {/* Move All Tools next to Blog */}
+          <div className="relative" ref={allToolsDropdownRef}>
+            <button
+              type="button"
+              onClick={() => {
+                setAllToolsDropdownOpen(!allToolsDropdownOpen);
+                setToolsDropdownOpen(false);
+                setResizeDropdownOpen(false);
+                setCalcDropdownOpen(false);
+              }}
+              className={`flex items-center gap-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors outline-none ${
+                allToolsDropdownOpen ? "text-indigo-600 bg-indigo-50/50" : "text-muted-foreground hover:text-foreground"
+              }`}
+              aria-expanded={allToolsDropdownOpen}
+              aria-controls="all-tools-menu"
+              aria-haspopup="menu"
+            >
+              <span>All Tools</span>
+              <ChevronDown size={14} className={`transition-transform duration-200 ${allToolsDropdownOpen ? "rotate-180 text-indigo-600" : ""}`} />
+            </button>
+
+            {allToolsDropdownOpen && (
+              <div id="all-tools-menu" className="absolute top-full right-0 mt-3 w-[520px] bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Popular</p>
+                    <div className="space-y-1">
+                      {featuredTools.map((tool, idx) => (
+                        <Link
+                          key={idx}
+                          href={tool.href}
+                          onClick={() => setAllToolsDropdownOpen(false)}
+                          className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600"
+                        >
+                          <div className="rounded-lg bg-slate-50 p-2">{tool.icon}</div>
+                          {tool.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Quick Links</p>
+                    <div className="space-y-1">
+                      <Link href="/tools" onClick={() => setAllToolsDropdownOpen(false)} className="block px-3 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-700">Browse all tools</Link>
+                      <Link href="/converter" onClick={() => setAllToolsDropdownOpen(false)} className="block px-3 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-700">Converters</Link>
+                      <Link href="/resize" onClick={() => setAllToolsDropdownOpen(false)} className="block px-3 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-700">Resize & Edit</Link>
+                      <Link href="/calculators" onClick={() => setAllToolsDropdownOpen(false)} className="block px-3 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-700">Calculators</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <Link href="/blog" className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg transition-colors">
+            <BookOpen size={15} />
+            Blog
+          </Link>
         </nav>
 
         {/* Desktop Interface Conditional Control Actions */}
@@ -323,15 +415,52 @@ export default function NavBar() {
           
           {!user ? (
             <>
-              <Link
-                href="/signin"
-                className="text-sm font-bold text-muted-foreground hover:text-foreground flex items-center gap-1.5 px-3 py-2 transition-colors"
-              >
-                <LogIn size={16} /> Sign In
-              </Link>
-              <Button asChild className="rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-100 transition-all">
-                <Link href="/signup">Get Started</Link>
-              </Button>
+              <div className="relative" ref={signInRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSignInDropdownOpen(!signInDropdownOpen);
+                    setGetStartedDropdownOpen(false);
+                  }}
+                  className={`flex items-center gap-1.5 text-sm font-bold px-3 py-2 rounded-lg transition-colors ${signInDropdownOpen ? 'text-indigo-600 bg-indigo-50/50' : 'text-muted-foreground hover:text-foreground'}`}
+                  aria-expanded={signInDropdownOpen}
+                  aria-controls="signin-menu"
+                >
+                  <LogIn size={16} />
+                  <span>Sign In</span>
+                  <ChevronDown size={12} className={`transition-transform ${signInDropdownOpen ? 'rotate-180 text-indigo-600' : ''}`} />
+                </button>
+
+                {signInDropdownOpen && (
+                  <div id="signin-menu" className="absolute right-0 mt-3 w-56 bg-white border border-slate-200 shadow-2xl rounded-2xl p-2 z-50">
+                    <Link href="/signin" onClick={() => setSignInDropdownOpen(false)} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Sign in to your account</Link>
+                    <Link href="/forgot-password" onClick={() => setSignInDropdownOpen(false)} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Forgot password</Link>
+                    <Link href="/signup" onClick={() => setSignInDropdownOpen(false)} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Create account</Link>
+                  </div>
+                )}
+              </div>
+
+              <div className="relative" ref={getStartedRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGetStartedDropdownOpen(!getStartedDropdownOpen);
+                    setSignInDropdownOpen(false);
+                  }}
+                  className="rounded-xl font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-100 transition-all px-4 py-2"
+                  aria-expanded={getStartedDropdownOpen}
+                  aria-controls="getstarted-menu"
+                >
+                  Get Started
+                </button>
+
+                {getStartedDropdownOpen && (
+                  <div id="getstarted-menu" className="absolute right-0 mt-3 w-56 bg-white border border-slate-200 shadow-2xl rounded-2xl p-2 z-50">
+                    <Link href="/signup" onClick={() => setGetStartedDropdownOpen(false)} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Create a free account</Link>
+                    <Link href="/tools" onClick={() => setGetStartedDropdownOpen(false)} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg">Explore tools</Link>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <div className="relative" ref={profileRef}>
@@ -531,6 +660,43 @@ export default function NavBar() {
             </div>
 
             {/* Standard Links */}
+            <div className="border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden mx-1 mb-2">
+              <button
+                type="button"
+                onClick={() => setMobileToolsOpen(!mobileToolsOpen)}
+                className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors ${mobileToolsOpen ? 'bg-indigo-50 text-indigo-700' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
+                aria-expanded={mobileToolsOpen}
+                aria-controls="mobile-tools-menu"
+              >
+                <div className="flex items-center gap-2">
+                  <Wrench size={16} className={mobileToolsOpen ? "text-indigo-600" : "text-slate-400"} />
+                  All Tools
+                </div>
+                <ChevronDown size={16} className={`transition-transform duration-200 ${mobileToolsOpen ? "rotate-180 text-indigo-600" : "text-slate-400"}`} />
+              </button>
+
+              {mobileToolsOpen && (
+                <div id="mobile-tools-menu" className="bg-slate-50/50 p-3 grid grid-cols-2 gap-2 border-t border-slate-100">
+                  <Link href="/tools" onClick={closeMenu} className="flex flex-col items-center justify-center text-center gap-2 p-3 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+                    <div className="bg-slate-50 p-2 rounded-full"><Wrench size={15} className="text-indigo-600" /></div>
+                    <span className="text-[11px] font-bold text-slate-700 leading-tight">Browse All Tools</span>
+                  </Link>
+                  <Link href="/converter" onClick={closeMenu} className="flex flex-col items-center justify-center text-center gap-2 p-3 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+                    <div className="bg-slate-50 p-2 rounded-full"><FileText size={15} className="text-blue-500" /></div>
+                    <span className="text-[11px] font-bold text-slate-700 leading-tight">Converters</span>
+                  </Link>
+                  <Link href="/resize" onClick={closeMenu} className="flex flex-col items-center justify-center text-center gap-2 p-3 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+                    <div className="bg-slate-50 p-2 rounded-full"><Crop size={15} className="text-teal-500" /></div>
+                    <span className="text-[11px] font-bold text-slate-700 leading-tight">Resize</span>
+                  </Link>
+                  <Link href="/calculators" onClick={closeMenu} className="flex flex-col items-center justify-center text-center gap-2 p-3 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+                    <div className="bg-slate-50 p-2 rounded-full"><Calculator size={15} className="text-orange-600" /></div>
+                    <span className="text-[11px] font-bold text-slate-700 leading-tight">Calculators</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <Link href="/passport-photo" className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 px-3 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-all mx-1" onClick={closeMenu}>
               Passport Document Creator
             </Link>
