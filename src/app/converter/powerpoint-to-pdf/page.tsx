@@ -178,16 +178,9 @@ export default function PptxToPdfPro() {
   return (
     <div className="min-h-screen bg-[#fff9f6] font-sans flex flex-col selection:bg-orange-200">
       
-      {/* Navbar */}
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between z-10 relative">
-        <Link href="/" className="flex items-center gap-2 text-gray-800 hover:text-orange-600 transition-colors font-bold text-lg">
-          <Presentation className="text-[#d83b01]" size={28} />
-          <span>ConvertHub<span className="text-[#d83b01]">PRO</span></span>
-        </Link>
-        <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
-          <ArrowLeft size={16} /> Back to Tools
-        </Link>
-      </header>
+     <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
+               <ArrowLeft size={16} /> Back to Tools
+             </Link>
 
       <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
         

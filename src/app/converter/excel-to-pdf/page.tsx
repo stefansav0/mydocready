@@ -190,13 +190,7 @@ export default function ExcelToPdfPro() {
   return (
     <div className="min-h-screen bg-[#f3f6f3] font-sans flex flex-col selection:bg-emerald-200">
       
-      {/* Navbar */}
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between z-10 relative">
-        <Link href="/" className="flex items-center gap-2 text-gray-800 hover:text-emerald-600 transition-colors font-bold text-lg">
-          <FileText className="text-[#107c41]" size={28} />
-          <span>ConvertHub<span className="text-[#107c41]">PRO</span></span>
-        </Link>
-      </header>
+      
 
       <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-5xl mx-auto">
         

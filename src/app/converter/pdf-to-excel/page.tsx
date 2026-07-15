@@ -193,16 +193,9 @@ export default function PdfToExcelPro() {
   return (
     <div className="min-h-screen bg-[#f3f6f3] font-sans flex flex-col selection:bg-emerald-200">
       
-      {/* Navbar */}
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between z-10 relative">
-        <Link href="/" className="flex items-center gap-2 text-gray-800 hover:text-emerald-600 transition-colors font-bold text-lg">
-          <FileSpreadsheet className="text-[#107c41]" size={28} />
-          <span>ConvertHub<span className="text-[#107c41]">PRO</span></span>
-        </Link>
-        <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
-          <ArrowLeft size={16} /> Back to Tools
-        </Link>
-      </header>
+      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
+                <ArrowLeft size={16} /> Back to Tools
+              </Link>
 
       
 

@@ -179,16 +179,9 @@ export default function JpgToPdfPro() {
   return (
     <div className="min-h-screen bg-[#fff5f5] font-sans flex flex-col selection:bg-red-100">
       
-      {/* Navbar */}
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between z-10 relative">
-        <Link href="/" className="flex items-center gap-2 text-gray-800 hover:text-red-600 transition-colors font-bold text-lg">
-          <ImageIcon className="text-[#e5322d]" size={28} />
-          <span>ConvertHub<span className="text-[#e5322d]">PRO</span></span>
-        </Link>
-        <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
+      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
           <ArrowLeft size={16} /> Back to Tools
         </Link>
-      </header>
 
       <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
         

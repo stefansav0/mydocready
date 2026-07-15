@@ -214,16 +214,9 @@ export default function WordToPdfPro() {
         <div ref={hiddenContentRef}></div>
       </div>
 
-      {/* Header */}
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between z-10 relative">
-        <Link href="/" className="flex items-center gap-2 text-gray-800 hover:text-blue-600 transition-colors font-bold text-lg">
-          <FileText size={28} className="text-[#1b64da]" />
-          <span>ConvertHub<span className="text-[#1b64da]">PRO</span></span>
-        </Link>
-        <Link href="/" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
-          <ArrowLeft size={16} /> Back to Tools
-        </Link>
-      </header>
+      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
+                <ArrowLeft size={16} /> Back to Tools
+              </Link>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
