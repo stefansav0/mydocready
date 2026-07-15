@@ -38,6 +38,7 @@ import {
   Sparkles,
   TrendingUp,
 } from "lucide-react";
+import HeroSection from "@/components/HeroSection";
 
 // Master list of tools for the search functionality
 const TOOL_DIRECTORY = [
@@ -123,134 +124,7 @@ export default function HomePage() {
       <JsonLd data={HOME_JSON_LD} />
       
       {/* --- HERO SECTION --- */}
-<section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-blue-50/40 border-b border-slate-100 pt-20 pb-20 lg:pt-28 lg:pb-28">
-
-  {/* Background Grid */}
-  <div className="absolute inset-0 bg-[linear-gradient(to_right,#94a3b810_1px,transparent_1px),linear-gradient(to_bottom,#94a3b810_1px,transparent_1px)] bg-[size:36px_36px]" />
-
-  {/* Blur Decorations */}
-  <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[650px] h-[650px] rounded-full bg-indigo-200/40 blur-[120px]" />
-  <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-sky-200/30 blur-[120px]" />
-  <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-violet-200/30 blur-[140px]" />
-
-  <div className="relative max-w-6xl mx-auto px-6 text-center">
-
-    {/* Small Badge */}
-    
-
-    {/* Heading */}
-    <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-tight">
-      Smart document tools for government forms,
-      <br />
-      <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-violet-600 bg-clip-text text-transparent">
-        job applications, and personal paperwork
-      </span>
-    </h1>
-
-    {/* Description */}
-    <p className="mt-8 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-8">
-      Access the tools you need to prepare resumes, passport photos, PDFs,
-      calculators, and application-ready documents—online, private, and fast.
-    </p>
-
-    <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-      <Link
-        href="/tools"
-        className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
-      >
-        
-        Browse all tools
-      </Link>
-      <Link
-        href="#primary-tools"
-        className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-indigo-200 hover:text-indigo-600"
-      >
-        
-        Explore featured tools
-      </Link>
-    </div>
-
-    {/* Search */}
-    <div className="mt-12 w-full max-w-2xl mx-auto relative">
-
-      <label htmlFor="tool-search" className="sr-only">
-        Search MyDocReady tools
-      </label>
-
-      <div className="relative rounded-2xl bg-white/90 backdrop-blur-xl shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
-
-        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-indigo-500 w-6 h-6" />
-
-        <input
-          id="tool-search"
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search 50+ tools for resumes, passport photos, PDFs, calculators..."
-          className="w-full bg-transparent py-5 pl-16 pr-6 text-lg outline-none placeholder:text-slate-400"
-          aria-controls={searchQuery ? "tool-search-results" : undefined}
-          aria-autocomplete="list"
-        />
-
-      </div>
-
-      {/* Dropdown */}
-      {searchQuery && (
-        <div id="tool-search-results" className="absolute w-full mt-3 rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden z-50" role="status" aria-live="polite">
-
-          {filteredTools.length > 0 ? (
-
-            <ul className="max-h-80 overflow-y-auto py-2">
-
-              {filteredTools.map((tool) => (
-                <li key={tool.name}>
-                  <Link
-                    href={tool.link}
-                    className="flex justify-between items-center px-6 py-4 hover:bg-indigo-50 transition"
-                  >
-                    <span className="font-medium text-slate-700">
-                      {tool.name}
-                    </span>
-
-                    <span className="rounded-full bg-indigo-50 text-indigo-600 px-3 py-1 text-xs font-semibold">
-                      {tool.category}
-                    </span>
-
-                  </Link>
-                </li>
-              ))}
-
-            </ul>
-
-          ) : (
-
-            <div className="py-8 text-slate-500">
-              No tools found.
-            </div>
-
-          )}
-
-        </div>
-      )}
-
-    </div>
-
-    {/* CTA */}
-    <div className="mt-10">
-      <a
-        href="#primary-tools"
-        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-8 py-4 text-white font-semibold shadow-lg shadow-indigo-200 hover:shadow-xl hover:scale-105 transition-all"
-      >
-        Browse tools for applications
-        <ArrowRight className="w-5 h-5" />
-      </a>
-    </div>
-
-    
-
-  </div>
-
-</section>
+<HeroSection />
 
      {/* --- PREMIUM APP-BOX QUICK LINKS --- */}
 <section className="max-w-7xl mx-auto px-4 sm:px-6" aria-labelledby="quick-tools-heading">
