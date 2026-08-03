@@ -1,28 +1,37 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI!;
+// FIX: Append 'as string' to reassure TypeScript it won't be undefined
+const uri = process.env.MONGODB_URI as string; 
 
 if (!uri) {
-  throw new Error("Please add MONGODB_URI to .env.local");
+  throw new Error("MONGODB_URI must be configured.");
 }
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
 
 declare global {
-  var _mongoClientPromise: Promise<MongoClient>;
+  var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-if (process.env.NODE_ENV === "development") {
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri);
-    global._mongoClientPromise = client.connect();
+let productionClientPromise: Promise<MongoClient> | undefined;
+
+function connectToMongo() {
+  if (process.env.NODE_ENV === "development") {
+    if (!global._mongoClientPromise) {
+      global._mongoClientPromise = new MongoClient(uri).connect();
+    }
+
+    return global._mongoClientPromise;
   }
 
-  clientPromise = global._mongoClientPromise;
-} else {
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
+  if (!productionClientPromise) {
+    productionClientPromise = new MongoClient(uri).connect();
+  }
+
+  return productionClientPromise;
 }
+
+/** Establishes a MongoDB connection only when a route actually awaits it. */
+const clientPromise: PromiseLike<MongoClient> = {
+  then: (onfulfilled, onrejected) => connectToMongo().then(onfulfilled, onrejected),
+};
 
 export default clientPromise;

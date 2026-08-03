@@ -1,20 +1,21 @@
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { getDatabaseName } from "@/lib/database";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email, otp, password } = body;
 
-    if (!email || !otp || !password) {
+    if (typeof email !== "string" || typeof otp !== "string" || !password) {
       return NextResponse.json(
         { error: "Email, OTP, and password are required." },
         { status: 400 }
       );
     }
 
-    if (typeof password !== "string" || password.length < 8) {
+    if (!/^\S+@\S+\.\S+$/.test(email) || !/^\d{6}$/.test(otp) || typeof password !== "string" || password.length < 8) {
       return NextResponse.json(
         { error: "Password must be at least 8 characters long." },
         { status: 400 }
@@ -22,9 +23,9 @@ export async function POST(req: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("myapp");
+    const db = client.db(getDatabaseName());
 
-    const user = await db.collection("users").findOne({ email: email.toLowerCase() });
+    const user = await db.collection("users").findOne({ email: email.trim().toLowerCase() });
 
     if (!user || !user.passwordResetOtpHash || !user.passwordResetOtpExpiresAt) {
       return NextResponse.json(

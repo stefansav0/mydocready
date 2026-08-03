@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://mydocready.com
+Host: https://www.mydocready.com
 
 # Sitemaps
-Sitemap: https://mydocready.com/sitemap.xml
+Sitemap: https://www.mydocready.com/sitemap.xml

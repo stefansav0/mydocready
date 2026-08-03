@@ -10,7 +10,8 @@ export function ThemeToggle() {
 
   // Wait until mounted to avoid hydration mismatch
   React.useEffect(() => {
-    setMounted(true);
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   if (!mounted) {

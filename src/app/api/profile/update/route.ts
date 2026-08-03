@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import { getSessionFromRequest } from "@/lib/session";
+import { getDatabaseName } from "@/lib/database";
 
 export async function POST(req: Request) {
   try {
@@ -20,13 +21,13 @@ export async function POST(req: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("myapp");
+    const db = client.db(getDatabaseName());
 
     const result = await db.collection("users").updateOne(
       { email: session.email },
       {
         $set: {
-          name,
+          name: name.trim(),
           updatedAt: new Date(),
         },
       }

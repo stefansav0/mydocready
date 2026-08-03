@@ -167,11 +167,11 @@ export default function PdfToJpgPro() {
                 <ArrowLeft size={16} /> Back to Tools
               </Link>
 
-      <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
+      <main className="flex-1 flex flex-col items-stretch justify-start p-4 w-full">
         
         {/* ================= STATE 1: UPLOAD ================= */}
         {appState === 'upload' && (
-          <div className="text-center w-full max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="text-center w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h1 className="text-4xl md:text-5xl font-black text-[#33333b] mb-4 tracking-tight">PDF to JPG</h1>
             <p className="text-[#707079] text-lg md:text-xl mb-10">
               Convert each PDF page into a JPG or extract all images contained in a PDF.

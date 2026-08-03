@@ -1,7 +1,7 @@
 export default function PdfToJpgContent() {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20">
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 md:p-12">
+    <section className="w-full px-4 py-16 sm:px-6 lg:px-8">
+      <div className="w-full p-6 sm:p-8 lg:p-10">
 
         <h2 className="text-4xl font-black text-gray-900 mb-6">
           PDF to JPG Converter – Convert PDF Pages into High-Quality JPG Images Online

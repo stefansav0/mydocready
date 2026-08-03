@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -8,8 +7,6 @@ import NavBar from "@/components/NavBar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SITE } from "@/lib/seo";
 import ViewTracker from "@/components/ViewTracker";
-
-const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +17,6 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   manifest: "/manifest.json",
   metadataBase: new URL(SITE.url),
-  alternates: { canonical: "/" },
   keywords: [
     "PDF converter",
     "passport photo maker",
@@ -79,7 +75,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className={inter.className}>
+      <body className="antialiased">
         <ViewTracker />
         {/* Defer non-essential third parties so initial content can render first. */}
         <Script

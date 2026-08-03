@@ -48,6 +48,13 @@ const tools = [
     icon: FileType,
   },
   {
+    title: "Document Scanner",
+    description: "Scan receipts, forms, and papers with automatic cleanup and PDF export.",
+    href: "/scan-document",
+    category: "Documents",
+    icon: ScanLine,
+  },
+  {
     title: "File Converters",
     description: "Convert Word, PDF, Excel, JPG, and PowerPoint files in one place.",
     href: "/converter",

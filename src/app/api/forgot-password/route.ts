@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import clientPromise from "@/lib/mongodb";
+import { getDatabaseName } from "@/lib/database";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const email = body.email?.trim().toLowerCase();
 
-    if (!email) {
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       return NextResponse.json(
         { error: "Please enter your email address." },
         { status: 400 }
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("myapp");
+    const db = client.db(getDatabaseName());
 
     const user = await db.collection("users").findOne({ email });
 
@@ -74,6 +75,10 @@ export async function POST(req: Request) {
       });
     } catch (mailError) {
       console.error("Forgot password email sending failed:", mailError);
+      return NextResponse.json(
+        { error: "We could not send the reset email. Please try again later." },
+        { status: 503 }
+      );
     }
 
     return NextResponse.json(

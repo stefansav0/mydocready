@@ -2,10 +2,11 @@
 
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/analytics";
+import type { AnalyticsMetadata } from "@/lib/analytics";
 
 interface Props {
   event: string;
-  metadata?: Record<string, any>;
+  metadata?: AnalyticsMetadata;
 }
 
 export default function PageTracker({
@@ -14,7 +15,7 @@ export default function PageTracker({
 }: Props) {
   useEffect(() => {
     trackEvent(event, metadata);
-  }, []);
+  }, [event, metadata]);
 
   return null;
 }

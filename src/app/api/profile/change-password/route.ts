@@ -1,6 +1,7 @@
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
 import { getSessionFromRequest } from "@/lib/session";
+import { getDatabaseName } from "@/lib/database";
 
 export async function POST(req: Request) {
   try {
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("myapp");
+    const db = client.db(getDatabaseName());
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

@@ -12,11 +12,22 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get("file");
 
-    if (!file || !(file instanceof Blob)) {
+    if (!(file instanceof File)) {
       return NextResponse.json(
         { error: "Please upload a DOCX file" },
         { status: 400 }
       );
+    }
+
+    const isDocx =
+      file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+      file.name.toLowerCase().endsWith(".docx");
+    if (!isDocx) {
+      return NextResponse.json({ error: "Only DOCX files are supported." }, { status: 400 });
+    }
+
+    if (file.size === 0 || file.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: "Choose a DOCX file smaller than 10 MB." }, { status: 400 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -31,6 +42,7 @@ export async function POST(req: NextRequest) {
       <html>
       <head>
         <meta charset="utf-8" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'" />
         <title>Converted PDF</title>
         <style>
           body {

@@ -193,11 +193,7 @@ export default function ResumeMakerClassic() {
   // ============================================
   // AUTO-SPACE FILLING CLASSIC RESUME PREVIEW
   // ============================================
-  const ResumePreviewContent = ({
-    innerRef,
-  }: {
-    innerRef?: React.RefObject<HTMLDivElement | null>;
-  }) => (
+  const renderResumePreview = (innerRef?: React.RefObject<HTMLDivElement | null>) => (
     <div
       ref={innerRef}
       className="w-[800px] h-[1131px] bg-[#ffffff] text-[#000000] shadow-2xl p-10 flex flex-col overflow-hidden shrink-0"
@@ -369,7 +365,7 @@ export default function ResumeMakerClassic() {
     <div className="min-h-screen bg-slate-950 text-white selection:bg-indigo-500/30 overflow-x-hidden relative">
       {/* HIDDEN PRINT TARGET (Moved to fixed top-left with negative z-index to prevent html2canvas cutoffs) */}
       <div className="fixed top-0 left-[-9999px] -z-50 pointer-events-none">
-        <ResumePreviewContent innerRef={resumeRef} />
+        {renderResumePreview(resumeRef)}
       </div>
 
       {/* HEADER */}
@@ -734,7 +730,7 @@ export default function ResumeMakerClassic() {
         {/* RIGHT DESKTOP CANVAS VIEW */}
         <div className="hidden lg:flex lg:col-span-7 bg-slate-800 rounded-2xl overflow-auto border border-slate-700 relative items-start justify-center p-8 custom-scrollbar">
           <div className="origin-top scale-[0.6] xl:scale-[0.75] 2xl:scale-[0.85] transition-transform duration-300 flex justify-center">
-            <ResumePreviewContent />
+            {renderResumePreview()}
           </div>
         </div>
       </div>
@@ -773,7 +769,7 @@ export default function ResumeMakerClassic() {
           </div>
           <div className="flex-1 overflow-auto p-4 flex justify-center bg-slate-800 custom-scrollbar">
             <div className="origin-top scale-[0.4] sm:scale-[0.6] transition-transform">
-              <ResumePreviewContent />
+              {renderResumePreview()}
             </div>
           </div>
         </div>

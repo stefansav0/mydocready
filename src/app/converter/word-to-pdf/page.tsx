@@ -18,6 +18,28 @@ interface ProgressState {
   status: string;
 }
 
+function sanitizeDocumentHtml(html: string) {
+  const documentFragment = new DOMParser().parseFromString(html, "text/html");
+  documentFragment.querySelectorAll("script, style, iframe, object, embed, link, meta, base").forEach((element) => {
+    element.remove();
+  });
+
+  documentFragment.querySelectorAll("*").forEach((element) => {
+    for (const attribute of Array.from(element.attributes)) {
+      const name = attribute.name.toLowerCase();
+      const value = attribute.value.trim();
+      const isSafeLink = name === "href" && /^(https?:|mailto:|#)/i.test(value);
+      const isSafeImage = name === "src" && value.startsWith("data:image/");
+
+      if (name.startsWith("on") || name === "style" || ((name === "href" || name === "src") && !isSafeLink && !isSafeImage)) {
+        element.removeAttribute(attribute.name);
+      }
+    }
+  });
+
+  return documentFragment.body.innerHTML;
+}
+
 export default function WordToPdfPro() {
   const [file, setFile] = useState<File | null>(null);
   const [appState, setAppState] = useState<AppState>('upload');
@@ -53,12 +75,15 @@ export default function WordToPdfPro() {
   };
 
   const validateAndSetFile = (file: File) => {
-    const validTypes = [
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-      'application/msword' // .doc
-    ];
-    if (!validTypes.includes(file.type) && !file.name.endsWith('.docx') && !file.name.endsWith('.doc')) {
-      setError("Please upload a valid Word document (.docx or .doc).");
+    const isDocx =
+      file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      file.name.toLowerCase().endsWith('.docx');
+    if (!isDocx) {
+      setError("Please upload a valid DOCX document.");
+      return;
+    }
+    if (file.size === 0 || file.size > 10 * 1024 * 1024) {
+      setError("Please upload a DOCX file smaller than 10 MB.");
       return;
     }
     setError(null);
@@ -87,7 +112,7 @@ export default function WordToPdfPro() {
       const result = await mammoth.convertToHtml({ 
         arrayBuffer
       });
-      const htmlContent = result.value;
+      const htmlContent = sanitizeDocumentHtml(result.value);
 
       if (!htmlContent) throw new Error("Could not extract content from document.");
 
@@ -197,9 +222,9 @@ export default function WordToPdfPro() {
       setProgress({ current: 100, total: 100, status: 'Completed' });
       setAppState('success');
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || 'Failed to process document.');
+      setError(err instanceof Error ? err.message : 'Failed to process document.');
       setAppState('settings');
     }
   };
@@ -214,16 +239,16 @@ export default function WordToPdfPro() {
         <div ref={hiddenContentRef}></div>
       </div>
 
-      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
+      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1 mb-4">
                 <ArrowLeft size={16} /> Back to Tools
               </Link>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
+      <main className="flex-1 flex flex-col items-stretch justify-start p-4 w-full">
         {appState === 'upload' && (
-          <div className="text-center w-full max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-black text-[#2a2a35] mb-4 tracking-tight">Word to PDF</h1>
-            <p className="text-[#64748b] text-lg md:text-xl mb-10">
+          <div className="text-center w-full">
+            <h1 className="text-4xl sm:text-5xl font-black text-[#2a2a35] mb-4 tracking-tight">Word to PDF</h1>
+            <p className="text-[#475569] text-lg sm:text-xl mb-10">
               Make DOC and DOCX files easy to read by converting them to PDF.
             </p>
             {/* Drag & Drop */}
@@ -231,14 +256,14 @@ export default function WordToPdfPro() {
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              className={`relative border-4 border-dashed rounded-3xl p-16 md:p-24 transition-all duration-300 flex flex-col items-center justify-center bg-white ${
+              className={`relative border-4 border-dashed rounded-3xl p-10 sm:p-16 transition-all duration-300 flex flex-col items-center justify-center bg-white ${
                 isDragging ? 'border-[#1b64da] bg-blue-50/50 scale-[1.02] shadow-2xl' : 'border-gray-200 hover:border-blue-300 hover:shadow-xl'
               }`}
             >
               <input 
                 type="file" 
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                accept=".docx,.doc" 
+                accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
                 onChange={handleFileSelect} 
                 title="Upload Word Document"
               />
@@ -248,7 +273,7 @@ export default function WordToPdfPro() {
               <button className="bg-[#1b64da] hover:bg-[#1554bb] text-white text-2xl font-bold py-5 px-10 rounded-xl shadow-lg transition-transform hover:-translate-y-1 z-20 pointer-events-none">
                 Select Word file
               </button>
-              <p className="text-gray-400 font-medium mt-6">or drop Word documents here</p>
+              <p className="text-gray-400 font-medium mt-6">or drop a DOCX document here (up to 10 MB)</p>
               {error && (
                 <div className="absolute bottom-6 bg-red-100 text-red-600 px-4 py-2 rounded-lg font-bold text-sm z-20">
                   {error}
@@ -259,26 +284,25 @@ export default function WordToPdfPro() {
         )}
 
         {appState === 'settings' && file && (
-          <div className="w-full flex flex-col lg:flex-row gap-8">
+          <div className="w-full flex flex-col gap-8">
             {/* File Info */}
-            <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-200 p-8 flex flex-col items-center justify-center min-h-[400px] relative group">
+            <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col items-start justify-start min-h-[320px] relative group">
               <button onClick={resetApp} className="absolute top-4 right-4 p-2 bg-gray-100 text-gray-500 rounded-full hover:bg-blue-100 hover:text-blue-600 transition-colors z-10">
                 <X size={20} />
               </button>
-              <div className="w-40 h-52 bg-white shadow-md border border-gray-200 flex flex-col relative group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="flex-1 flex items-center justify-center bg-blue-50 border-b border-gray-100 text-[#1b64da]">
+              <div className="w-full sm:w-72 h-auto bg-white shadow-md border border-gray-200 flex flex-col relative group-hover:-translate-y-2 transition-transform duration-300">
+                <div className="flex-1 flex items-center justify-center bg-blue-50 border-b border-gray-100 text-[#1b64da] p-6">
                   <FileText size={48} strokeWidth={1.5} />
                 </div>
-                <div className="h-12 bg-white p-2 text-center overflow-hidden">
-                  <p className="text-[10px] font-bold text-gray-800 truncate">{file.name}</p>
-                  <p className="text-[10px] text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                <div className="bg-white p-4 text-left">
+                  <p className="text-sm font-bold text-gray-800 truncate">{file.name}</p>
+                  <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                 </div>
               </div>
             </div>
 
             {/* Conversion Options */}
-            <div className="w-full lg:w-[400px] bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-col overflow-hidden">
-              <div className="bg-gray-50 p-6 border-b border-gray-200 flex items-center gap-3">
+            <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-col overflow-hidden">              <div className="bg-gray-50 p-6 border-b border-gray-200 flex items-center gap-3">
                 <Settings className="text-gray-500" size={24} />
                 <h2 className="text-xl font-bold text-gray-800">Conversion Options</h2>
               </div>
@@ -343,9 +367,9 @@ export default function WordToPdfPro() {
         )}
 
         {appState === 'converting' && (
-          <div className="w-full max-w-xl bg-white p-12 rounded-3xl shadow-xl border border-gray-100 text-center">
+          <div className="w-full max-w-2xl bg-white p-10 sm:p-12 rounded-3xl shadow-xl border border-gray-100 text-center">
             <Loader2 className="w-16 h-16 text-[#1b64da] animate-spin mx-auto mb-6" />
-            <h2 className="text-2xl font-black text-gray-800 mb-2">Converting Document</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-800 mb-2">Converting Document</h2>
             <p className="text-gray-500 font-medium mb-8">{progress.status}</p>
             {/* Progress Bar */}
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
@@ -361,12 +385,12 @@ export default function WordToPdfPro() {
         )}
 
         {appState === 'success' && (
-          <div className="w-full max-w-2xl text-center">
+          <div className="w-full max-w-2xl text-center px-4 sm:px-0">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-green-100 text-green-500 rounded-full mb-6">
               <CheckCircle2 size={48} strokeWidth={2.5} />
             </div>
-            <h2 className="text-4xl font-black text-[#2a2a35] mb-4">Task Complete!</h2>
-            <p className="text-[#64748b] text-xl mb-10">Your Word document has been converted to a PDF.</p>
+            <h2 className="text-4xl sm:text-5xl font-black text-[#2a2a35] mb-4">Task Complete!</h2>
+            <p className="text-[#475569] text-lg sm:text-xl mb-10">Your Word document has been converted to a PDF.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={resetApp}
@@ -383,7 +407,9 @@ export default function WordToPdfPro() {
             </div>
           </div>
         )}
-        <WordToPdfContent />
+        <div className="w-full">
+          <WordToPdfContent />
+        </div>
       </main>
 
       {/* Animations */}

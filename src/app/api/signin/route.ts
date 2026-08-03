@@ -6,15 +6,16 @@ import {
   SESSION_COOKIE_NAME,
   sessionCookieOptions,
 } from "@/lib/session";
+import { getDatabaseName } from "@/lib/database";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const email = body.email?.trim().toLowerCase();
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
     const password = body.password;
 
-    if (!email || !password) {
+    if (!email || typeof password !== "string") {
       return NextResponse.json(
         {
           error: "Missing email or password",
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
 
     // Connect MongoDB
     const client = await clientPromise;
-    const db = client.db("myapp");
+    const db = client.db(getDatabaseName());
 
     // Find user
     const user = await db.collection("users").findOne({ email });
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
 
     // Check stored password
     if (!user.password) {
-      console.error("User has no password field:", user);
+      console.error("User record is missing a password hash.");
 
       return NextResponse.json(
         {
@@ -102,7 +103,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown Error",
+        error: "Unable to sign in right now.",
       },
       {
         status: 500,

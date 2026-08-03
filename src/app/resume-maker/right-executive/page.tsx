@@ -141,7 +141,7 @@ export default function ResumeMakerModern() {
   // ============================================
   // DYNAMIC UNIQUE MODERN PREVIEW COMPONENT
   // ============================================
-  const ResumePreviewContent = ({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | null> }) => (
+  const renderResumePreview = (innerRef?: React.RefObject<HTMLDivElement | null>) => (
     <div
       ref={innerRef}
       className="w-[800px] h-[1131px] bg-[#ffffff] text-[#1e293b] shadow-2xl flex flex-col overflow-hidden shrink-0 font-sans"
@@ -287,7 +287,7 @@ export default function ResumeMakerModern() {
       
       {/* HIDDEN PRINT TARGET ENGINE OVERLAYS */}
       <div className="absolute top-[-9999px] left-[-9999px]">
-        <ResumePreviewContent innerRef={resumeRef} />
+        {renderResumePreview(resumeRef)}
       </div>
       
       {/* STICKY APPLICATION NAVIGATION BAR */}
@@ -439,7 +439,7 @@ export default function ResumeMakerModern() {
         {/* RIGHT DESKTOP INTERACTIVE DISPLAY CANVAS */}
         <div className="hidden lg:flex lg:col-span-7 bg-slate-800 rounded-2xl overflow-auto border border-slate-700 relative items-start justify-center p-8 custom-scrollbar">
           <div className="origin-top scale-[0.6] xl:scale-[0.8] 2xl:scale-[0.9] transition-transform duration-300 flex justify-center">
-            <ResumePreviewContent />
+            {renderResumePreview()}
           </div>
         </div>
       </div>
@@ -463,7 +463,7 @@ export default function ResumeMakerModern() {
           </div>
           <div className="flex-1 overflow-auto p-4 flex justify-center bg-slate-800 custom-scrollbar">
             <div className="origin-top scale-[0.4] sm:scale-[0.6] transition-transform">
-              <ResumePreviewContent />
+              {renderResumePreview()}
             </div>
           </div>
         </div>

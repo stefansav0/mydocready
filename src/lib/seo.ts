@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const SITE = {
   name: "MyDocReady",
-  url: "https://mydocready.com",
+  url: "https://www.mydocready.com",
   description:
     "Free, privacy-focused tools to create resumes, prepare passport photos, resize images, convert documents, and calculate everyday finances.",
   locale: "en_IN",

@@ -134,9 +134,10 @@ export default function LandingPage() {
       {/* RIGHT */}
       <div className="relative">
         {/* Dark App Shell mimicking the screenshot */}
-        <div className="bg-[#1e293b] rounded-3xl shadow-2xl border border-slate-700 overflow-hidden flex flex-col h-[600px]">
-          
-          
+        <div className="relative bg-[#1e293b] rounded-3xl shadow-2xl border border-slate-700 overflow-hidden flex flex-col h-[600px]">
+          <div className="absolute left-4 top-4 rounded-full bg-white/95 text-slate-700 text-[10px] font-semibold uppercase tracking-[0.16em] px-3 py-2 shadow-sm">
+            Resume preview
+          </div>
 
           {/* Resume Canvas Area */}
           <div className="flex-1 p-6 flex justify-center items-start overflow-hidden bg-[#1e293b]">
@@ -200,10 +201,10 @@ export default function LandingPage() {
                 
                 {/* Header */}
                 <div>
-                  <h1 className="text-2xl font-black text-[#1a2b49] mb-1 uppercase tracking-tight">USER NAME</h1>
-                  <div className="text-[8px] text-slate-600 font-medium">Your address goes here, city, country</div>
-                  <div className="text-[8px] text-slate-600 font-medium">your phone number</div>
-                  <div className="text-[8px] text-slate-600 font-medium">your email address</div>
+                  <h1 className="text-2xl font-black text-[#1a2b49] mb-1 uppercase tracking-tight">Jane Doe</h1>
+                  <div className="text-[8px] text-slate-600 font-medium">123 Main Street, City, Country</div>
+                  <div className="text-[8px] text-slate-600 font-medium">(123) 456-7890</div>
+                  <div className="text-[8px] text-slate-600 font-medium">jane.doe@example.com</div>
                 </div>
 
                 {/* Profile */}
@@ -242,8 +243,8 @@ export default function LandingPage() {
 
                 {/* Declaration */}
                 <div>
-                  <h4 className="font-bold text-[10px] uppercase mb-1 text-[#1a2b49] tracking-wider">Declaration</h4>
-                  <p className="text-[8px] text-slate-700 italic">I hereby declare that the information provided above is true.</p>
+                  <h4 className="font-bold text-[10px] uppercase mb-1 text-[#1a2b49] tracking-wider">Note</h4>
+                  <p className="text-[8px] text-slate-700 italic">This sample resume layout is for illustration only.</p>
                 </div>
 
               </div>
@@ -251,33 +252,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Floating Card */}
 
-        <div className="absolute -bottom-8 -left-8 bg-white shadow-xl rounded-2xl p-5 hidden lg:flex items-center gap-4">
-
-          <div className="bg-green-100 p-3 rounded-full">
-
-            <CheckCircle2 className="text-green-600" />
-
-          </div>
-
-          <div>
-
-            <p className="font-bold">
-
-              ATS Score
-
-            </p>
-
-            <p className="text-green-600 font-bold text-xl">
-
-              98%
-
-            </p>
-
-          </div>
-
-        </div>
 
       </div>
 

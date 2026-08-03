@@ -1,14 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Bypasses static type checking blockers during production compilation
-  typescript: {
-    ignoreBuildErrors: true,
+  // Required to support TypeScript 7.x in Next.js 16
+  experimental: {
+    useTypeScriptCli: true,
   },
   
-  // NOTE: The 'eslint' object block has been removed because it is deprecated 
-  // and no longer supported or required in newer Next.js builds.
-
   // Universal fallback overrides for client-side compilation engines
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {

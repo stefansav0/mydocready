@@ -130,7 +130,7 @@ export default function PptxToPdfPro() {
         // Extract text from <a:t> XML nodes using regex
         const textMatches = slideXml.match(/<a:t>(.*?)<\/a:t>/g) || [];
         
-        let cursorY = 30;
+        const cursorY = 30;
         doc.setFontSize(14);
         doc.setTextColor(40, 40, 40);
 
@@ -182,11 +182,11 @@ export default function PptxToPdfPro() {
                <ArrowLeft size={16} /> Back to Tools
              </Link>
 
-      <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
+      <main className="flex-1 flex flex-col items-stretch justify-start p-4 w-full">
         
         {/* ================= STATE 1: UPLOAD ================= */}
         {appState === 'upload' && (
-          <div className="text-center w-full max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="text-center w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h1 className="text-4xl md:text-5xl font-black text-[#3b2a24] mb-4 tracking-tight">PowerPoint to PDF</h1>
             <p className="text-[#6e5d56] text-lg md:text-xl mb-10">
               Convert your PPTX presentations to PDF format for easy sharing and viewing.

@@ -1,14 +1,14 @@
 export default function ConverterHubSeoContent() {
   return (
     <section className="bg-white py-24 border-t">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
 
         <div className="text-center mb-16">
           <h2 className="text-4xl font-black text-gray-900 mb-6">
             Free Online Document Converter for PDF, Word, Excel, PowerPoint & Images
           </h2>
 
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-9">
+          <p className="text-xl text-gray-600 max-w-5xl mx-auto leading-9">
             MyDocReady provides a complete collection of free online document
             conversion tools that help individuals, students, businesses,
             teachers, freelancers, accountants, and professionals convert files

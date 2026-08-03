@@ -52,7 +52,7 @@ export default function PresentationMakerPro() {
     if (!containerRef.current) return;
     
     const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         const { width, height } = entry.contentRect;
         const padding = 24; 
         const availableW = width - padding;
@@ -133,11 +133,11 @@ export default function PresentationMakerPro() {
   const pxToInches = (px: number, isWidth: boolean) => (px / (isWidth ? CANVAS_W : CANVAS_H)) * (isWidth ? 10 : 5.625);
 
   const exportPPT = () => {
-    let pres = new pptxgen();
+    const pres = new pptxgen();
     pres.layout = "LAYOUT_16x9";
 
     slides.forEach(s => {
-      let slide = pres.addSlide();
+      const slide = pres.addSlide();
       slide.background = { color: s.bgColor.replace('#', '') };
       
       s.elements.forEach(el => {

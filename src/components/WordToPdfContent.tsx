@@ -1,9 +1,9 @@
 export default function WordToPdfContent() {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20">
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 md:p-12">
+    <section className="w-full px-4 py-16 sm:px-6 lg:px-8">
+      <div className="w-full p-6 sm:p-8 lg:p-10">
 
-        <h2 className="text-4xl font-black text-gray-900 mb-6">
+        <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-6">
           Word to PDF Converter – Convert DOC & DOCX Files into Professional PDF Documents
         </h2>
 
@@ -36,9 +36,9 @@ export default function WordToPdfContent() {
           smartphones, tablets, and web browsers.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
 
-          <div className="border rounded-2xl p-6">
+          <div className="rounded-2xl p-6 bg-slate-50 border border-slate-200">
             <h4 className="font-bold text-xl mb-3">
               Preserve Formatting
             </h4>
@@ -158,7 +158,7 @@ export default function WordToPdfContent() {
           Perfect For
         </h3>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
 
           {[
             "Students",
@@ -176,7 +176,7 @@ export default function WordToPdfContent() {
           ].map((item) => (
             <div
               key={item}
-              className="bg-blue-50 rounded-xl p-5 text-center font-semibold"
+              className="rounded-xl p-5 bg-slate-50 border border-slate-200 text-center font-semibold text-sm sm:text-base"
             >
               {item}
             </div>
@@ -188,7 +188,7 @@ export default function WordToPdfContent() {
           Benefits of PDF Documents
         </h3>
 
-        <ul className="space-y-4 list-disc pl-8 text-gray-700 leading-8 mb-12">
+        <ul className="space-y-4 list-disc pl-6 text-gray-700 leading-8 mb-12">
 
           <li>Professional appearance</li>
           <li>Preserved formatting</li>

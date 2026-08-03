@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import emailjs from "emailjs-com";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -10,31 +9,35 @@ export default function ContactPage() {
     const [status, setStatus] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const sendEmail = (e: React.FormEvent) => {
+    const sendEmail = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.current) return;
 
         setIsSubmitting(true);
         setStatus("");
 
-        emailjs
-            .sendForm(
-                "service_k56j3jf",         // Your EmailJS Service ID
-                "template_3roa5gu",        // Your Template ID
-                form.current,
-                "k6DDU13l0OXD-Xs35"        // Your Public Key (User ID)
-            )
-            .then(() => {
-                setStatus("success");
-                form.current?.reset();
-            })
-            .catch((error) => {
-                console.error(error);
-                setStatus("error");
-            })
-            .finally(() => {
-                setIsSubmitting(false);
+        try {
+            const formData = new FormData(form.current);
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: formData.get("name"),
+                    email: formData.get("email"),
+                    message: formData.get("message"),
+                }),
             });
+
+            if (!response.ok) throw new Error("Contact request failed");
+
+            setStatus("success");
+            form.current.reset();
+        } catch (error) {
+            console.error("Contact form submission failed:", error);
+            setStatus("error");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -73,6 +76,8 @@ export default function ContactPage() {
                             placeholder="John Doe"
                             className="w-full bg-gray-50 border border-gray-200 text-gray-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                             required
+                            autoComplete="name"
+                            maxLength={80}
                         />
                     </div>
                     
@@ -87,6 +92,8 @@ export default function ContactPage() {
                             placeholder="john@example.com"
                             className="w-full bg-gray-50 border border-gray-200 text-gray-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                             required
+                            autoComplete="email"
+                            maxLength={254}
                         />
                     </div>
                     
@@ -100,6 +107,7 @@ export default function ContactPage() {
                             placeholder="How can we help you today?"
                             className="w-full bg-gray-50 border border-gray-200 text-gray-900 px-4 py-3 rounded-xl min-h-[150px] resize-y focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                             required
+                            maxLength={5000}
                         />
                     </div>
                     
@@ -115,12 +123,12 @@ export default function ContactPage() {
 
                     {/* Status Messages */}
                     {status === "success" && (
-                        <div className="p-4 bg-green-50 text-green-800 border border-green-200 rounded-xl text-sm font-medium mt-4">
+                        <div role="status" aria-live="polite" className="p-4 bg-green-50 text-green-800 border border-green-200 rounded-xl text-sm font-medium mt-4">
                             ✅ Your message has been sent successfully! We will be in touch soon.
                         </div>
                     )}
                     {status === "error" && (
-                        <div className="p-4 bg-red-50 text-red-800 border border-red-200 rounded-xl text-sm font-medium mt-4">
+                        <div role="alert" className="p-4 bg-red-50 text-red-800 border border-red-200 rounded-xl text-sm font-medium mt-4">
                             ❌ Failed to send message. Please check your internet connection and try again.
                         </div>
                     )}

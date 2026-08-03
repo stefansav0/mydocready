@@ -1,10 +1,19 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://mydocready.com', 
+  siteUrl: 'https://www.mydocready.com', 
   generateRobotsTxt: true,           
   changefreq: 'daily',                
   priority: 0.7,                     
   sitemapSize: 5000,                 
-  exclude: ['/admin/**', '/secret'],  
+  exclude: [
+    '/admin/**',
+    '/api/**',
+    '/secret',
+    '/profile',
+    '/signin',
+    '/signup',
+    '/forgot-password',
+    '/reset-password',
+  ],
  
 };

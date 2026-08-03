@@ -92,7 +92,7 @@ export default function AddPageNumbersPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8 font-sans">
+    <div className="w-full px-4 py-10 sm:px-6 lg:px-8 font-sans">
       <h1 className="text-3xl font-bold mb-6">Add Page Numbers</h1>
       
       <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-gray-200">

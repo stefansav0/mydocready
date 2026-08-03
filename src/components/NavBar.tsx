@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { 
   Menu, X, ChevronDown, FileText, Image as ImageIcon, 
-  Grid, Presentation, FileSpreadsheet, LogIn, User, LogOut, 
+  Grid, Presentation, FileSpreadsheet, LogIn, LogOut, 
   Crop, PenTool, FilePlus, BookOpen, Wrench,
   Search, Calendar
 } from "lucide-react";
@@ -50,7 +50,12 @@ export default function NavBar() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user_session");
     if (storedUser) {
-      try { setUser(JSON.parse(storedUser)); } catch (e) { console.error(e); }
+      try {
+        const storedProfile = JSON.parse(storedUser) as UserProfile;
+        queueMicrotask(() => setUser(storedProfile));
+      } catch {
+        localStorage.removeItem("user_session");
+      }
     }
   }, []);
 
@@ -69,7 +74,8 @@ export default function NavBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    await fetch("/api/signout", { method: "POST" }).catch(() => undefined);
     localStorage.removeItem("user_session");
     setUser(null);
     setProfileDropdownOpen(false);
@@ -105,7 +111,7 @@ export default function NavBar() {
       {!scrolled && (
         <div className="hidden md:flex items-center justify-between border-b border-gray-200 dark:border-slate-800 px-4 lg:px-8 py-1.5 text-[11px] text-gray-600 dark:text-gray-400 w-full max-w-[1600px]">
           <div className="flex items-center gap-4">
-            <span className="font-bold text-red-600 uppercase tracking-widest text-[10px]">EDITION: GLOBAL</span>
+            <span className="font-bold text-blue-600 uppercase tracking-widest text-[10px]">FREE ACCESS</span>
             <span className="flex items-center gap-1.5"><Calendar size={12} className="text-gray-400" /> {currentDateTime}</span>
           </div>
           <div className="flex items-center gap-4 font-medium text-[11px]">
@@ -133,23 +139,20 @@ export default function NavBar() {
           </Link>
           {!scrolled && (
             <span className="hidden lg:block text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-400 mt-2">
-              Your Daily Document Utility
+              Free document tools, ready anytime
             </span>
           )}
-        </div>
 
-        {/* Right Side: Account Actions Profile Controllers */}
-        <div className="flex items-center gap-4" ref={profileRef}>
           <button className="text-gray-600 dark:text-gray-300 hover:text-red-600 transition-colors hidden sm:block">
             <Search size={20} strokeWidth={2.5} />
           </button>
 
           {!user ? (
             <Link href="/signin" className="bg-black hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5">
-              <LogIn size={14} /> SIGN IN
+              <LogIn size={14} /> SIGN IN FREE
             </Link>
           ) : (
-            <div className="relative">
+            <div className="relative" ref={profileRef}>
               <button 
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 className="flex items-center gap-2 border border-gray-300 dark:border-slate-800 px-2 py-1 font-bold bg-gray-50 dark:bg-slate-900"
@@ -219,6 +222,15 @@ export default function NavBar() {
             <Link href="/passport-photo" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
               PASSPORT PHOTO
             </Link>
+            <Link href="/scan-document" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
+              SCAN DOCS
+            </Link>
+            <Link href="/id-card-scan" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
+              ID SCAN
+            </Link>
+            <Link href="/image-to-text" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
+              IMG → TEXT
+            </Link>
             <Link href="/resume-maker" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
               RESUME BUILDER
             </Link>
@@ -226,7 +238,7 @@ export default function NavBar() {
 
           {/* Right Floating Quick Action */}
           <Link href="/tools" className="text-[11px] font-extrabold text-white bg-blue-600 hover:bg-red-700 px-3 py-1.5 uppercase tracking-widest rounded-sm transition-colors">
-            TOOLS
+            FREE TOOLS
           </Link>
         </div>
 
@@ -278,7 +290,7 @@ export default function NavBar() {
                   <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">Discover optimized practices to instantly generate dynamic passports and formatted business presentations securely online.</p>
                 </div>
                 <Link href="/tools" onClick={() => setActiveMegaMenu(null)} className="text-xs font-bold text-red-600 hover:text-red-700 mt-4 flex items-center gap-1 group">
-                  Browse All 40+ Utilities <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  Browse All Free Utilities <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
               </div>
 
@@ -291,7 +303,7 @@ export default function NavBar() {
       {menuOpen && (
         <div className="lg:hidden w-full bg-white dark:bg-slate-950 border-t border-gray-200 dark:border-slate-800 p-5 max-h-[80vh] overflow-y-auto space-y-6 shadow-inner absolute left-0 right-0 z-40">
           <div>
-            <h3 className="text-xs font-black uppercase tracking-widest text-red-600 border-b-2 border-gray-100 dark:border-slate-800 pb-2 mb-3">File Converters</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-red-600 border-b-2 border-gray-100 dark:border-slate-800 pb-2 mb-3">Free Converters</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {sections.converters.map((item, idx) => (
                 <Link key={idx} href={item.href} onClick={() => setMenuOpen(false)} className="text-[13px] font-semibold py-2.5 px-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-100 dark:border-slate-800 text-gray-800 dark:text-gray-200 block truncate hover:border-red-200 hover:bg-red-50 transition-colors">
@@ -302,7 +314,7 @@ export default function NavBar() {
           </div>
 
           <div>
-            <h3 className="text-xs font-black uppercase tracking-widest text-red-600 border-b-2 border-gray-100 dark:border-slate-800 pb-2 mb-3">Resize & Customization</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-red-600 border-b-2 border-gray-100 dark:border-slate-800 pb-2 mb-3">Resize & Edit</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {sections.editing.map((item, idx) => (
                 <Link key={idx} href={item.href} onClick={() => setMenuOpen(false)} className="text-[13px] font-semibold py-2.5 px-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-100 dark:border-slate-800 text-gray-800 dark:text-gray-200 block truncate hover:border-red-200 hover:bg-red-50 transition-colors">

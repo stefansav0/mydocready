@@ -1,7 +1,6 @@
-export async function trackEvent(
-  event: string,
-  metadata: Record<string, any> = {}
-) {
+export type AnalyticsMetadata = Record<string, unknown>;
+
+export async function trackEvent(event: string, metadata: AnalyticsMetadata = {}) {
   if (typeof window === "undefined") return;
 
   const SESSION_KEY = "mdr_session_id";
@@ -28,7 +27,5 @@ export async function trackEvent(
       }),
       keepalive: true,
     });
-  } catch (error) {
-    console.error("Analytics Error:", error);
-  }
+  } catch {}
 }

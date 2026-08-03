@@ -143,14 +143,14 @@ export default function PdfToWordPro() {
   return (
     <div className="min-h-screen bg-[#f3f0ec] font-sans flex flex-col selection:bg-indigo-200">
       
-      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1">
+      <Link href="/converter" className="text-gray-500 hover:text-gray-900 text-sm font-semibold flex items-center gap-1 mb-4">
                 <ArrowLeft size={16} /> Back to Tools
               </Link>
-      <main className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-6xl mx-auto">
+      <main className="flex-1 flex flex-col items-stretch justify-start p-4 w-full">
         
         {/* ================= STATE 1: UPLOAD ================= */}
         {appState === 'upload' && (
-          <div className="text-center w-full max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="text-center w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h1 className="text-4xl md:text-5xl font-black text-[#2a2a35] mb-4 tracking-tight">PDF to Word</h1>
             <p className="text-[#64748b] text-lg md:text-xl mb-10">
               Extract text from your PDF and turn it into an editable Word document.
@@ -315,7 +315,9 @@ export default function PdfToWordPro() {
             </div>
           </div>
         )}
-        <PdfToWordContent />
+        <div className="w-full">
+          <PdfToWordContent />
+        </div>
 
       </main>
 

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { SITE } from "@/lib/seo";
 import { 
   Upload, 
   Image as ImageIcon, 
@@ -67,17 +68,17 @@ const HOME_JSON_LD = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://mydocready.com/#organization",
-      name: "MyDocReady",
-      url: "https://mydocready.com",
-      logo: "https://mydocready.com/logo.png",
+      "@id": `${SITE.url}/#organization`,
+      name: SITE.name,
+      url: SITE.url,
+      logo: `${SITE.url}/logo.png`,
     },
     {
       "@type": "WebSite",
-      "@id": "https://mydocready.com/#website",
-      url: "https://mydocready.com",
-      name: "MyDocReady",
-      publisher: { "@id": "https://mydocready.com/#organization" },
+      "@id": `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      publisher: { "@id": `${SITE.url}/#organization` },
     },
     {
       "@type": "FAQPage",
@@ -154,6 +155,53 @@ export default function HomePage() {
     </div>
     <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
       Resize Image
+    </span>
+  </Link>
+
+  {/* Document Scanner */}
+  <Link
+    href="/scan-document"
+    className="group flex items-center gap-4 p-5 w-full min-h-[88px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl hover:shadow-xl hover:border-indigo-200 dark:hover:border-indigo-900/50 hover:-translate-y-1 transition-all duration-300"
+  >
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10M7 11h10M7 15h10M4 7h.01M4 11h.01M4 15h.01" />
+      </svg>
+    </div>
+    <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
+      Document Scanner
+    </span>
+  </Link>
+
+  {/* ID Card Scanner */}
+  <Link
+    href="/id-card-scan"
+    className="group flex items-center gap-4 p-5 w-full min-h-[88px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl hover:shadow-xl hover:border-indigo-200 dark:hover:border-indigo-900/50 hover:-translate-y-1 transition-all duration-300"
+  >
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <circle cx="8.5" cy="11.5" r="1.5" />
+      </svg>
+    </div>
+    <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
+      ID Card Scanner
+    </span>
+  </Link>
+
+  {/* Image → Text */}
+  <Link
+    href="/image-to-text"
+    className="group flex items-center gap-4 p-5 w-full min-h-[88px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl hover:shadow-xl hover:border-amber-200 dark:hover:border-amber-900/50 hover:-translate-y-1 transition-all duration-300"
+  >
+    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M3 7h18" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="3" y="9" width="18" height="10" rx="2" />
+      </svg>
+    </div>
+    <span className="flex-1 min-w-0 text-base font-semibold text-slate-700 dark:text-slate-200 leading-tight whitespace-normal">
+      Image → Text
     </span>
   </Link>
 
