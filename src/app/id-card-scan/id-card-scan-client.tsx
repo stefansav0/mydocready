@@ -77,6 +77,7 @@ export default function IdCardScanClient() {
   // --- Camera Functions ---
   async function openCamera() {
     try {
+      // First try: High quality, rear camera (good for mobile)
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } } 
       });
@@ -87,8 +88,21 @@ export default function IdCardScanClient() {
       }
       setCameraOpen(true);
     } catch (e) {
-      console.error(e);
-      alert('Could not access camera. Please check permissions.');
+      console.warn("High-res camera request failed, trying fallback...", e);
+      
+      try {
+        // Fallback: Just give me ANY camera you have
+        const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        streamRef.current = fallbackStream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = fallbackStream;
+          await videoRef.current.play();
+        }
+        setCameraOpen(true);
+      } catch (fallbackError) {
+        console.error("Camera completely failed:", fallbackError);
+        alert('Could not access camera. Another app might be using it, or it is disabled in Windows settings.');
+      }
     }
   }
 
