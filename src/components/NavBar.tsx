@@ -84,7 +84,7 @@ export default function NavBar() {
     { name: "PDF to Word", href: "/converter/pdf-to-word", icon: <FileText size={16} /> },
     { name: "Excel to PDF", href: "/converter/excel-to-pdf", icon: <FileSpreadsheet size={16} /> },
     { name: "PDF to Excel", href: "/converter/pdf-to-excel", icon: <Grid size={16} /> },
-    { name: "Calculator", href: "/calculator", icon: <Presentation size={16} /> },
+    { name: "Calculator", href: "/calculators", icon: <Presentation size={16} /> },
     { name: "All Tools", href: "/tools", icon: <FilePlus size={16} /> },
   ];
 
