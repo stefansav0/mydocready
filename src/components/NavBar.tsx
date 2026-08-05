@@ -125,8 +125,8 @@ export default function NavBar() {
               <Link href="/resize" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
                 Resize Photo
               </Link>
-              <Link href="/contact" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
-                CONTACT
+              <Link href="/blog" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+                Blog
               </Link>
               <Link href="/resume-maker" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
                 Resume
@@ -245,7 +245,7 @@ export default function NavBar() {
             <div className="flex flex-col gap-2">
               <Link href="/" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">HOME</Link>
               <Link href="/about" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">ABOUT US</Link>
-              <Link href="/contact" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">CONTACT</Link>
+              <Link href="/blog" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">BLOGS</Link>
               <Link href="/resize" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">Resize Photo</Link>
             </div>
 

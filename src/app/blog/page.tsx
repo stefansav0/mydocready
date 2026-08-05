@@ -6,127 +6,127 @@ import { trackEvent } from "@/lib/analytics";
 
 const blogs = [
   {
-    id: 1,
+    
     title: "How to Resize a Photo to a Specific KB Size",
     description: "Learn simple ways to resize images for forms, applications, and upload limits without losing clarity.",
     slug: "resize-photos-by-kb",
   },
   {
-    id: 2,
+    
     title: "How to Take a Baby Passport Photo at Home",
     description: "A practical guide to preparing a baby or newborn photo that is clear, well-lit, and easier to review before printing.",
     slug: "how-to-take-baby-passport-photo-at-home",
   },
   {
-    id: 3,
+    
     title: "How to Create Passport Size Photos at Home",
     description: "Follow a clear step-by-step approach to create document-ready passport photos with a simple background and proper framing.",
     slug: "create-passport-photos",
   },
   {
-    id: 4,
+    
     title: "Aadhaar and PAN Photo Guidelines for Applicants",
     description: "Understand the common photo requirements for Aadhaar and PAN applications so you can prepare files with more confidence.",
     slug: "aadhaar-pan-photo-guidelines",
   },
   {
-    id: 5,
+    
     title: "Top Tips for a Professional Passport Photo",
     description: "Use these practical tips to improve lighting, posture, and image quality for passport and ID photos.",
     slug: "professional-passport-photo-tips",
   },
   {
-    id: 6,
+    
     title: "Compress Photos Without Losing Quality",
     description: "Learn how to reduce file size for online uploads while keeping the image clear and usable.",
     slug: "digital-photo-compression",
   },
   {
-    id: 7,
+    
     title: "Best Background Colors for ID and Passport Photos",
     description: "Explore the most common background choices and how they affect the final look of document photos.",
     slug: "best-background-colors-id-photos",
   },
   {
-    id: 8,
+    
     title: "How to Take a Clear Selfie for Documents",
     description: "Get helpful advice on framing, lighting, and image quality for selfies used in official or online submissions.",
     slug: "take-perfect-selfie-for-documents",
   },
   {
-    id: 9,
+   
     title: "Free Online Tools for Cropping and Editing ID Photos",
     description: "Compare practical online tools for cropping, resizing, and adjusting document photos before you submit them.",
     slug: "online-photo-editing-tools",
   },
   {
-    id: 10,
+    
     title: "Government Photo Size Guidelines Explained",
     description: "Break down the common size, format, and print requirements that appear in government photo instructions.",
     slug: "government-photo-size-guidelines",
   },
   {
-    id: 11,
+    
     title: "Why Official Photo Submissions Get Rejected",
     description: "Review the most common reasons document photos are rejected and how to avoid them.",
     slug: "why-photos-get-rejected",
   },
   {
-    id: 12,
+    
     title: "DIY Studio Setup for Document Photos at Home",
     description: "Set up a simple home studio with basic lighting and a clean background for clear document-style portraits.",
     slug: "diy-studio-document-photos",
   },
   {
-    id: 13,
+    
     title: "How to Change the Background of an ID Photo Online",
     description: "Learn a practical approach to changing or simplifying the background of a document photo for better presentation.",
     slug: "change-photo-background-online",
   },
   {
-    id: 14,
+    
     title: "Best Lighting for ID Photos at Home",
     description: "Find out how natural light and simple lighting setups can improve the look of your document photos.",
     slug: "best-lighting-id-photos",
   },
   {
-    id: 15,
+    
     title: "Common Mistakes in Document Photos to Avoid",
     description: "Avoid common issues such as poor lighting, awkward framing, and low-resolution images when preparing ID photos.",
     slug: "common-mistakes-document-photos",
   },
   {
-    id: 16,
+    
     title: "How to Make a Photo 35mm x 45mm for Passports and Visas",
     description: "Get a clear explanation of how to prepare a small passport-style image for printing and submission.",
     slug: "make-photos-35x45mm",
   },
   {
-    id: 17,
+    
     title: "Best Free Online Photo Resizers for Documents",
     description: "Explore reliable online tools that make resizing and formatting document photos easier.",
     slug: "free-online-photo-resizers",
   },
   {
-    id: 18,
+    
     title: "How to Reduce Photo Size for Job Portals and Forms",
     description: "Learn practical methods for shrinking image files for job applications and online form uploads.",
     slug: "reduce-photo-size-for-job-portals",
   },
   {
-    id: 19,
+    
     title: "Online vs Offline Photo Studios for Document Photos",
     description: "Compare online tools and traditional studios so you can choose the approach that fits your needs.",
     slug: "online-vs-offline-photo-studios",
   },
   {
-    id: 20,
+    
     title: "What to Wear for Passport and ID Photos",
     description: "Find out which clothing choices help create a neat, simple, and more professional-looking document photo.",
     slug: "what-to-wear-for-passport-id-photos",
   },
   {
-    id: 21,
+    
     title: "How to Resize a Signature for Official Documents",
     description: "A practical guide to resizing and preparing signatures for forms, job portals, and government submissions.",
     slug: "resize-signature-for-official-documents",
@@ -204,11 +204,11 @@ export default function BlogPage() {
           {filteredBlogs.map((blog) => (
             <Link
   href={`/blog/${blog.slug}`}
-  key={blog.id}
+  
   className="group flex flex-col"
   onClick={() =>
     trackEvent("blog_click", {
-      id: blog.id,
+      
       slug: blog.slug,
       title: blog.title,
     })
@@ -217,10 +217,7 @@ export default function BlogPage() {
               <div className="relative bg-white dark:bg-[#1A1A1A] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col h-full flex-grow">
                 
                 <div className="p-8 flex flex-col flex-grow">
-                  {/* Article Number Badge */}
-                  <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400">
-                    <span className="font-bold text-sm text-center w-full">{blog.id}</span>
-                  </div>
+                  
                   
                   <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
                     {blog.title}
