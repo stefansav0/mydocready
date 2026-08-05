@@ -5,9 +5,9 @@ import { useState, useEffect, useRef } from "react";
 import { 
   Menu, X, ChevronDown, FileText, Image as ImageIcon, 
   Grid, Presentation, FileSpreadsheet, LogIn, LogOut, 
-  Crop, PenTool, FilePlus, BookOpen, Wrench,
-  Search, Calendar
+  Crop, PenTool, FilePlus
 } from "lucide-react";
+import Image from "next/image";
 
 interface UserProfile {
   name?: string;
@@ -16,35 +16,15 @@ interface UserProfile {
 }
 
 export default function NavBar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [currentDateTime, setCurrentDateTime] = useState("");
   
-  // Desktop Active Mega-menu states
-  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
+  // Dropdown state for "TOOLS"
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   const [user, setUser] = useState<UserProfile | null>(null);
-  const megaMenuRef = useRef<HTMLDivElement>(null);
+  const toolsRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-
-  // Monitors page scrolling coordinates
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Sync structural publication timestamps 
-  useEffect(() => {
-    const updateTime = () => {
-      const options: Intl.DateTimeFormatOptions = { 
-        weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' 
-      };
-      setCurrentDateTime(new Date().toLocaleDateString("en-US", options));
-    };
-    updateTime();
-  }, []);
 
   // Safely extracts logged in profile sessions
   useEffect(() => {
@@ -59,12 +39,24 @@ export default function NavBar() {
     }
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [menuOpen]);
+
   // Global Outside Event Listeners for Panel Dismissals
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (megaMenuRef.current && !megaMenuRef.current.contains(target)) {
-        setActiveMegaMenu(null);
+      if (toolsRef.current && !toolsRef.current.contains(target)) {
+        setToolsDropdownOpen(false);
       }
       if (profileRef.current && !profileRef.current.contains(target)) {
         setProfileDropdownOpen(false);
@@ -79,260 +71,210 @@ export default function NavBar() {
     localStorage.removeItem("user_session");
     setUser(null);
     setProfileDropdownOpen(false);
+    setMenuOpen(false);
     window.location.href = "/";
   };
 
-  // Content Data Matrices
-  const sections = {
-    converters: [
-      { name: "Word to PDF", href: "/converter/word-to-pdf", icon: <FileText size={14} /> },
-      { name: "PDF to Word", href: "/converter/pdf-to-word", icon: <FileText size={14} /> },
-      { name: "Excel to PDF", href: "/converter/excel-to-pdf", icon: <FileSpreadsheet size={14} /> },
-      { name: "PDF to Excel", href: "/converter/pdf-to-excel", icon: <Grid size={14} /> },
-      { name: "PowerPoint to PDF", href: "/converter/powerpoint-to-pdf", icon: <Presentation size={14} /> },
-      { name: "PDF to PowerPoint", href: "/converter/pdf-to-powerpoint", icon: <Presentation size={14} /> },
-    ],
-    editing: [
-      { name: "Resize Photo", href: "/resize", icon: <Crop size={14} /> },
-      { name: "Resize Signature", href: "/resize-signature", icon: <PenTool size={14} /> },
-      { name: "Insert Document", href: "/insert-doc", icon: <FilePlus size={14} /> },
-    ],
-    creators: [
-      { name: "Passport Photo Maker", href: "/passport-photo", icon: <ImageIcon size={14} /> },
-      { name: "Smart Resume Builder", href: "/resume-maker", icon: <FileText size={14} /> },
-      { name: "Presentation Deck Engine", href: "/presentation-maker", icon: <Presentation size={14} /> },
-    ]
-  };
+  // Content Data Matrices (Combined into one Tools menu to match image)
+  const allTools = [
+    { name: "Resize Photo", href: "/resize", icon: <Crop size={16} /> },
+    { name: "Passport Photo Maker", href: "/passport-photo", icon: <ImageIcon size={16} /> },
+    { name: "Smart Resume Builder", href: "/resume-maker", icon: <FileText size={16} /> },
+    { name: "Word to PDF", href: "/converter/word-to-pdf", icon: <FileText size={16} /> },
+    { name: "PDF to Word", href: "/converter/pdf-to-word", icon: <FileText size={16} /> },
+    { name: "Excel to PDF", href: "/converter/excel-to-pdf", icon: <FileSpreadsheet size={16} /> },
+    { name: "PDF to Excel", href: "/converter/pdf-to-excel", icon: <Grid size={16} /> },
+    { name: "All Tools", href: "/tools", icon: <FilePlus size={16} /> },
+    
+    
+    
+  ];
 
   return (
-    <header className="w-full bg-white text-black dark:bg-slate-950 dark:text-white font-sans antialiased flex flex-col items-center">
-      
-      {/* TIER 1: TOP EDITION & UTILITY BAR */}
-      {!scrolled && (
-        <div className="hidden md:flex items-center justify-between border-b border-gray-200 dark:border-slate-800 px-4 lg:px-8 py-1.5 text-[11px] text-gray-600 dark:text-gray-400 w-full max-w-[1600px]">
-          <div className="flex items-center gap-4">
-            <span className="font-bold text-blue-600 uppercase tracking-widest text-[10px]">FREE ACCESS</span>
-            <span className="flex items-center gap-1.5"><Calendar size={12} className="text-gray-400" /> {currentDateTime}</span>
+    <>
+      {/* 
+        MAIN HEADER 
+        Matches the dark slate/blue background and single-row layout of the image 
+      */}
+      <header className="w-full bg-[#0F52BA] text-white font-sans antialiased relative z-50">
+        <div className="w-full max-w-[1600px] mx-auto flex items-center justify-between px-4 lg:px-8 py-3">
+          
+          {/* Mobile Trigger */}
+          <div className="lg:hidden flex items-center">
+            <button 
+              onClick={() => setMenuOpen(true)}
+              className="p-1.5 hover:bg-white/10 rounded transition-colors focus:outline-none"
+              aria-label="Open menu"
+            >
+              <Menu size={28} />
+            </button>
           </div>
-          <div className="flex items-center gap-4 font-medium text-[11px]">
-            <Link href="/blog" className="hover:text-red-600 flex items-center gap-1.5 transition-colors"><BookOpen size={12} /> Insights</Link>
-            <Link href="/tools" className="hover:text-red-600 flex items-center gap-1.5 transition-colors"><Wrench size={12} /> Directory</Link>
+
+          {/* LOGO & NAVIGATION BLOCK (Left-aligned as in the image) */}
+          <div className="flex items-center flex-1 lg:flex-none justify-center lg:justify-start gap-8">
+            
+            {/* Logo Area */}
+            <Link href="/" className="flex items-center gap-3">
+  <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
+    <Image
+      src="/logo.png"
+      alt="DocReady Logo"
+      width={48}
+      height={48}
+      className="rounded-full object-cover"
+      priority
+    />
+  </div>
+              <span className="font-sans text-xl sm:text-2xl lg:text-3xl font-normal tracking-wide whitespace-nowrap">
+                Mydocready
+              </span>
+            </Link>
+
+            {/* Desktop Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-6 mt-1" aria-label="Main Navigation">
+              <Link href="/" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+                HOME
+              </Link>
+              <Link href="/resize" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+                Resize Photo
+              </Link>
+              <Link href="/contact" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+                CONTACT
+              </Link>
+              <Link href="/resume-maker" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+                Resume
+              </Link>
+
+              {/* Tools Dropdown matching the image */}
+              <div className="relative" ref={toolsRef}>
+                <button
+                  onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
+                  className="text-[15px] hover:text-gray-300 transition-colors uppercase flex items-center gap-1"
+                >
+                  TOOLS <ChevronDown size={16} className={`transition-transform duration-200 ${toolsDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {toolsDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-4 w-64 bg-white text-black shadow-xl rounded-sm py-2 animate-in fade-in slide-in-from-top-2">
+                    {allTools.map((tool, idx) => (
+                      <Link 
+                        key={idx} 
+                        href={tool.href} 
+                        onClick={() => setToolsDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                      >
+                        <span className="text-gray-500">{tool.icon}</span> {tool.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
+
+          {/* Right Side Actions (Auth) - Retained from your code but styled to fit */}
+          <div className="hidden lg:flex justify-end items-center gap-4">
+            {!user ? (
+              <Link href="/signin" className="flex bg-white/10 hover:bg-white/20 text-white px-4 py-2 text-sm uppercase tracking-wider transition-colors items-center gap-2 rounded-sm">
+                <LogIn size={16} /> SIGN IN
+              </Link>
+            ) : (
+              <div className="relative" ref={profileRef}>
+                <button 
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/10 transition-colors rounded-sm"
+                >
+                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                    {user.name?.charAt(0).toUpperCase() || "U"}
+                  </span>
+                  <ChevronDown size={14} />
+                </button>
+
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-48 bg-white text-black shadow-xl rounded-sm z-50 text-left overflow-hidden">
+                    <div className="p-3 border-b border-gray-100 text-sm">
+                      <p className="font-bold truncate">{user.name}</p>
+                      <p className="text-gray-500 text-xs truncate mt-0.5">{user.email}</p>
+                    </div>
+                    <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="block px-4 py-2.5 hover:bg-gray-100 text-sm font-medium">Dashboard</Link>
+                    <button onClick={handleSignOut} className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 text-sm font-bold border-t border-gray-100 flex items-center gap-2">
+                      <LogOut size={16} /> Log Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </header>
 
-      {/* TIER 2: MAIN BRANDING HEADER ROW */}
-      <div className={`transition-all duration-200 px-4 lg:px-8 w-full max-w-[1600px] flex items-center justify-between ${scrolled ? 'py-2' : 'py-5 md:py-7'}`}>
-        
-        {/* Left Side: Mobile Trigger Button */}
-        <button 
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="lg:hidden p-1.5 hover:bg-gray-100 dark:hover:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-md"
-        >
-          {menuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+      {/* MOBILE FULL-SCREEN SLIDE DRAWER (Retained for functionality) */}
+      <div className={`fixed inset-0 z-[60] lg:hidden transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} aria-hidden="true" />
 
-        {/* Center/Left: Editorial News Styling Logo */}
-        <div className="flex flex-col items-center lg:items-start mx-auto lg:mx-0">
-          <Link href="/" className="font-serif text-3xl md:text-5xl font-black tracking-tight border-b border-gray-300 dark:border-gray-700 leading-[0.85] pb-1.5">
-            MYDOC <span className="text-blue-600">READY</span>
-          </Link>
-          {!scrolled && (
-            <span className="hidden lg:block text-[10px] uppercase tracking-[0.15em] font-semibold text-gray-400 mt-2">
-              Free document tools, ready anytime
+        <div className={`absolute inset-y-0 left-0 w-[85vw] max-w-sm bg-[#2b3947] text-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+          <div className="flex items-center justify-between p-5 border-b border-white/10">
+            <span className="font-sans text-xl font-normal tracking-wide">
+              SARKARI RESULT
             </span>
-          )}
+            <button 
+              onClick={() => setMenuOpen(false)} 
+              className="p-2 -mr-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors focus:outline-none"
+            >
+              <X size={20} />
+            </button>
+          </div>
 
-          <button className="text-gray-600 dark:text-gray-300 hover:text-red-600 transition-colors hidden sm:block">
-            <Search size={20} strokeWidth={2.5} />
-          </button>
+          <div className="flex-1 overflow-y-auto p-5 space-y-6">
+            <div className="flex flex-col gap-2">
+              <Link href="/" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">HOME</Link>
+              <Link href="/about" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">ABOUT US</Link>
+              <Link href="/contact" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">CONTACT</Link>
+              <Link href="/typing-test" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">TYPING TEST</Link>
+            </div>
 
-          {!user ? (
-            <Link href="/signin" className="bg-black hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5">
-              <LogIn size={14} /> SIGN IN FREE
-            </Link>
-          ) : (
-            <div className="relative" ref={profileRef}>
-              <button 
-                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                className="flex items-center gap-2 border border-gray-300 dark:border-slate-800 px-2 py-1 font-bold bg-gray-50 dark:bg-slate-900"
-              >
-                <span className="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px]">
-                  {user.name?.charAt(0).toUpperCase() || "U"}
-                </span>
-                <span className="max-w-[80px] truncate text-xs">{user.name || "Account"}</span>
-                <ChevronDown size={14} />
-              </button>
+            <div>
+              <h3 className="text-sm font-bold uppercase text-gray-400 mb-3 border-b border-white/10 pb-2">Tools</h3>
+              <div className="flex flex-col gap-1">
+                {allTools.map((item, idx) => (
+                  <Link key={idx} href={item.href} onClick={() => setMenuOpen(false)} className="flex items-center gap-3 py-2.5 px-3 -mx-3 text-[15px] hover:bg-white/5 rounded-lg transition-colors">
+                    <span className="text-gray-400">{item.icon}</span> {item.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
 
-              {profileDropdownOpen && (
-                <div className="absolute right-0 mt-1.5 w-48 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-800 shadow-xl z-50 text-left">
-                  <div className="p-3 border-b border-gray-100 dark:border-slate-800 text-xs">
-                    <p className="font-bold truncate text-gray-800 dark:text-gray-200">{user.name}</p>
-                    <p className="text-gray-400 truncate mt-0.5">{user.email}</p>
+          <div className="p-5 border-t border-white/10 bg-black/20">
+            {user ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">
+                    {user.name?.charAt(0).toUpperCase() || "U"}
                   </div>
-                  <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="block px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-slate-800 text-xs font-medium text-gray-700 dark:text-gray-300">Dashboard</Link>
-                  <button onClick={handleSignOut} className="w-full text-left px-3 py-2.5 hover:bg-red-50 dark:hover:bg-red-950 text-red-600 text-xs font-bold border-t border-gray-100 dark:border-slate-800 flex items-center gap-2">
-                    <LogOut size={14} /> Log Out
+                  <div className="flex-1 overflow-hidden">
+                    <p className="font-bold truncate">{user.name}</p>
+                    <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <Link href="/profile" onClick={() => setMenuOpen(false)} className="text-center py-2 bg-white/10 hover:bg-white/20 rounded text-sm transition-colors">
+                    Dashboard
+                  </Link>
+                  <button onClick={handleSignOut} className="flex items-center justify-center gap-1.5 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded text-sm transition-colors">
+                    <LogOut size={16} /> Log Out
                   </button>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            ) : (
+              <Link href="/signin" onClick={() => setMenuOpen(false)} className="w-full flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 py-3 rounded text-sm font-bold uppercase transition-colors">
+                <LogIn size={18} /> Sign In
+              </Link>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* TIER 3: PRIMARY NAV (Sticky Row Container) */}
-      <div className={`w-full border-t border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-950 transition-all flex justify-center ${scrolled ? 'sticky top-0 z-50 shadow-sm' : 'relative'}`} ref={megaMenuRef}>
-        <div className="max-w-[1600px] w-full hidden lg:flex items-center justify-between px-4 lg:px-8">
-          
-          <nav className="flex items-center gap-8" aria-label="Main Navigation">
-            {/* Quick Home Access */}
-            <Link href="/" className="py-3 text-[13px] font-black uppercase tracking-wider text-blue-600 hover:text-red-700 transition-colors">
-              HOME
-            </Link>
-
-            {/* Document Converter Trigger */}
-            <button
-              onClick={() => setActiveMegaMenu(activeMegaMenu === "converters" ? null : "converters")}
-              className={`py-3 text-[13px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors ${activeMegaMenu === "converters" ? 'text-red-600' : 'text-gray-900 dark:text-gray-100 hover:text-red-600'}`}
-            >
-              CONVERTERS <ChevronDown size={14} className={`transition-transform ${activeMegaMenu === "converters" ? 'rotate-180' : ''}`} />
-            </button>
-
-            {/* Graphic Management Trigger */}
-            <button
-              onClick={() => setActiveMegaMenu(activeMegaMenu === "editing" ? null : "editing")}
-              className={`py-3 text-[13px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors ${activeMegaMenu === "editing" ? 'text-red-600' : 'text-gray-900 dark:text-gray-100 hover:text-red-600'}`}
-            >
-              RESIZE & EDIT <ChevronDown size={14} className={`transition-transform ${activeMegaMenu === "editing" ? 'rotate-180' : ''}`} />
-            </button>
-
-            {/* Document Generators */}
-            <button
-              onClick={() => setActiveMegaMenu(activeMegaMenu === "creators" ? null : "creators")}
-              className={`py-3 text-[13px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors ${activeMegaMenu === "creators" ? 'text-blue-600' : 'text-gray-900 dark:text-gray-100 hover:text-blue-600'}`}
-            >
-              IDENTITY LABS <ChevronDown size={14} className={`transition-transform ${activeMegaMenu === "creators" ? 'rotate-180' : ''}`} />
-            </button>
-
-            {/* Static Flat Links */}
-            <Link href="/calculators" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
-              CALCULATORS
-            </Link>
-            <Link href="/passport-photo" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
-              PASSPORT PHOTO
-            </Link>
-            <Link href="/scan-document" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
-              SCAN DOCS
-            </Link>
-            <Link href="/id-card-scan" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
-              ID SCAN
-            </Link>
-            <Link href="/image-to-text" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
-              IMG → TEXT
-            </Link>
-            <Link href="/resume-maker" className="py-3 text-[13px] font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
-              RESUME BUILDER
-            </Link>
-          </nav>
-
-          {/* Right Floating Quick Action */}
-          <Link href="/tools" className="text-[11px] font-extrabold text-white bg-blue-600 hover:bg-red-700 px-3 py-1.5 uppercase tracking-widest rounded-sm transition-colors">
-            FREE TOOLS
-          </Link>
-        </div>
-
-        {/* TIER 4: MEGA MENU DROPDOWN PANEL */}
-        {activeMegaMenu && (
-          <div className="hidden lg:block absolute left-0 right-0 top-full bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 shadow-xl z-40 animate-in fade-in duration-150">
-            <div className="max-w-[1600px] mx-auto px-8 py-8 grid grid-cols-4 gap-8">
-              
-              <div className="col-span-3 grid grid-cols-3 gap-6 border-r border-gray-200 dark:border-slate-800 pr-8">
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-widest text-red-600 mb-4 border-b border-gray-100 dark:border-slate-800 pb-2">Document Converters</h4>
-                  <div className="space-y-2">
-                    {sections.converters.map((item, idx) => (
-                      <Link key={idx} href={item.href} onClick={() => setActiveMegaMenu(null)} className="flex items-center gap-2.5 text-[13px] font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 transition-colors py-1">
-                        <span className="text-gray-400">{item.icon}</span> {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-widest text-red-600 mb-4 border-b border-gray-100 dark:border-slate-800 pb-2">Image Processing</h4>
-                  <div className="space-y-2">
-                    {sections.editing.map((item, idx) => (
-                      <Link key={idx} href={item.href} onClick={() => setActiveMegaMenu(null)} className="flex items-center gap-2.5 text-[13px] font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 transition-colors py-1">
-                        <span className="text-gray-400">{item.icon}</span> {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-widest text-red-600 mb-4 border-b border-gray-100 dark:border-slate-800 pb-2">Identity Labs</h4>
-                  <div className="space-y-2">
-                    {sections.creators.map((item, idx) => (
-                      <Link key={idx} href={item.href} onClick={() => setActiveMegaMenu(null)} className="flex items-center gap-2.5 text-[13px] font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 transition-colors py-1">
-                        <span className="text-gray-400">{item.icon}</span> {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Editorial / Promotional Side Panel */}
-              <div className="flex flex-col justify-between bg-gray-50 dark:bg-slate-800 p-5 rounded-lg border border-gray-100 dark:border-slate-700">
-                <div>
-                  <span className="text-[10px] font-black text-white bg-red-600 px-2 py-1 uppercase tracking-widest inline-block mb-3">Editor's Choice</span>
-                  <h5 className="text-[15px] font-bold leading-snug hover:text-red-600 cursor-pointer mb-2 text-gray-900 dark:text-white">Automated Document Pipelines for Remote Workforces</h5>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">Discover optimized practices to instantly generate dynamic passports and formatted business presentations securely online.</p>
-                </div>
-                <Link href="/tools" onClick={() => setActiveMegaMenu(null)} className="text-xs font-bold text-red-600 hover:text-red-700 mt-4 flex items-center gap-1 group">
-                  Browse All Free Utilities <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </Link>
-              </div>
-
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* MOBILE FULL DRAWER NAVIGATION INTERFACE */}
-      {menuOpen && (
-        <div className="lg:hidden w-full bg-white dark:bg-slate-950 border-t border-gray-200 dark:border-slate-800 p-5 max-h-[80vh] overflow-y-auto space-y-6 shadow-inner absolute left-0 right-0 z-40">
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-widest text-red-600 border-b-2 border-gray-100 dark:border-slate-800 pb-2 mb-3">Free Converters</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {sections.converters.map((item, idx) => (
-                <Link key={idx} href={item.href} onClick={() => setMenuOpen(false)} className="text-[13px] font-semibold py-2.5 px-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-100 dark:border-slate-800 text-gray-800 dark:text-gray-200 block truncate hover:border-red-200 hover:bg-red-50 transition-colors">
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xs font-black uppercase tracking-widest text-red-600 border-b-2 border-gray-100 dark:border-slate-800 pb-2 mb-3">Resize & Edit</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {sections.editing.map((item, idx) => (
-                <Link key={idx} href={item.href} onClick={() => setMenuOpen(false)} className="text-[13px] font-semibold py-2.5 px-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-100 dark:border-slate-800 text-gray-800 dark:text-gray-200 block truncate hover:border-red-200 hover:bg-red-50 transition-colors">
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-t-2 border-gray-100 dark:border-slate-800 pt-4 flex flex-col gap-1 font-bold text-sm uppercase tracking-wider">
-            <Link href="/" onClick={() => setMenuOpen(false)} className="py-3 px-2 hover:bg-gray-50 text-red-600 rounded">Home</Link>
-            <Link href="/calculators" onClick={() => setMenuOpen(false)} className="py-3 px-2 hover:bg-gray-50 dark:hover:bg-slate-900 rounded">Calculators</Link>
-            <Link href="/passport-photo" onClick={() => setMenuOpen(false)} className="py-3 px-2 hover:bg-gray-50 dark:hover:bg-slate-900 rounded">Passport Photo</Link>
-            <Link href="/resume-maker" onClick={() => setMenuOpen(false)} className="py-3 px-2 hover:bg-gray-50 dark:hover:bg-slate-900 rounded">Resume Builder</Link>
-            <Link href="/tools" onClick={() => setMenuOpen(false)} className="py-3 px-2 hover:bg-gray-50 dark:hover:bg-slate-900 rounded">All Tools</Link>
-          </div>
-        </div>
-      )}
-    </header>
+    </>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, ArrowRight, TrendingUp, FileText, Crop, Calculator } from "lucide-react";
+import { Search, Newspaper } from "lucide-react";
 
 // Mock database for the search functionality
 const TOOLS_DATABASE = [
@@ -22,55 +22,41 @@ export default function HeroSection() {
   );
 
   return (
-    <section className="relative overflow-hidden bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 pt-16 pb-24 lg:pt-24 lg:pb-32 font-sans">
-      
-      {/* Editorial Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px] opacity-50" />
-
-      {/* Subtle Red/Gray Accents */}
-      <div className="absolute -top-40 right-0 w-[800px] h-[800px] rounded-full bg-red-50 dark:bg-red-900/10 blur-[150px] opacity-70 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] rounded-full bg-gray-100 dark:bg-slate-900 blur-[120px] pointer-events-none" />
-
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+    <section className="bg-gray-50 dark:bg-slate-950 py-10 px-4 sm:px-6 min-h-[70vh] font-sans">
+      <div className="max-w-6xl mx-auto flex flex-col items-center">
         
-       
-
-        {/* Editorial Headline */}
-        <h1 className="font-serif text-5xl sm:text-6xl lg:text-[5rem] font-black tracking-tight text-gray-900 dark:text-white leading-[1.05]">
-          Master Your <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 border-b-4 border-blue-600 pb-2 inline-block mt-2">
-            Document Workflow.
-          </span>
-        </h1>
-
-        {/* Sub-headline */}
-        <p className="mt-8 text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl font-medium leading-relaxed">
-          The ultimate verification engine for government forms, job applications, and personal paperwork. Fast, private, and rigorously formatted.
-        </p>
-
-        {/* Core Quick Links */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="#primary-tools"
-            className="inline-flex items-center gap-2 bg-black dark:bg-white text-white dark:text-black px-6 py-3.5 text-sm font-bold uppercase tracking-wider hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white transition-colors"
-          >
-            Start Processing <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/tools"
-            className="inline-flex items-center gap-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-6 py-3 text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 hover:border-black dark:hover:border-white transition-colors"
-          >
-            Browse Directory
-          </Link>
+        {/* NEW HERO BANNER (Based on image_424645.jpg) */}
+        <div className="w-full bg-gradient-to-r from-[#1c4ed8] to-[#3730a3] rounded-[24px] py-16 px-6 shadow-xl text-center flex flex-col items-center justify-center mb-10">
+          
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-5 tracking-wide">
+            Everything You Need for Your Documents
+          </h1>
+          
+          <div className="text-white text-base sm:text-lg max-w-3xl flex flex-wrap justify-center items-center gap-x-1.5 gap-y-3 font-medium">
+            <span>Create, edit, convert, and manage PDFs, applications,</span>
+            <span className="flex items-center gap-1">
+              government forms,
+            </span>
+            <span className="flex items-center gap-1">
+              resumes, 
+            </span>
+            <span className="flex items-center gap-1">
+              jobs applications,
+            </span>
+            <span>and more.</span>
+            
+            
+          </div>
+          
         </div>
 
-        {/* Search Interface */}
-        <div className="mt-16 w-full max-w-3xl relative z-20">
+        {/* SEARCH BAR & DROPDOWN (Positioned below the banner) */}
+        <div className="w-full max-w-3xl relative z-20">
           <label htmlFor="tool-search" className="sr-only">Search Document Utilities</label>
-          <div className="relative bg-white dark:bg-slate-900 shadow-2xl border border-gray-300 dark:border-slate-700 flex items-center">
+          <div className="relative bg-white dark:bg-slate-900 shadow-xl border border-gray-300 dark:border-slate-700 flex items-center rounded-lg overflow-hidden">
             
             <div className="pl-6 pr-4 bg-gray-50 dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 h-full py-5 flex items-center">
-              <Search className="text-red-600 w-5 h-5" />
+              <Search className="text-blue-600 w-6 h-6" />
             </div>
 
             <input
@@ -78,7 +64,7 @@ export default function HeroSection() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 50+ tools for resumes, passports, PDFs..."
+              placeholder="Search tools, calculators, pdf converters..."
               className="w-full bg-transparent py-5 px-6 text-lg outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-white font-medium"
               aria-controls={searchQuery ? "tool-search-results" : undefined}
               aria-autocomplete="list"
@@ -87,16 +73,16 @@ export default function HeroSection() {
 
           {/* Search Dropdown Results */}
           {searchQuery && (
-            <div id="tool-search-results" className="absolute w-full mt-2 bg-white dark:bg-slate-900 shadow-2xl border border-gray-200 dark:border-slate-700 text-left" role="status" aria-live="polite">
+            <div id="tool-search-results" className="absolute w-full mt-2 bg-white dark:bg-slate-900 shadow-2xl border border-gray-200 dark:border-slate-700 rounded-lg text-left overflow-hidden" role="status" aria-live="polite">
               {filteredTools.length > 0 ? (
                 <ul className="max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-slate-800">
                   {filteredTools.map((tool) => (
                     <li key={tool.name}>
-                      <Link href={tool.link} className="flex justify-between items-center px-6 py-4 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors group">
-                        <span className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-red-600">
+                      <Link href={tool.link} className="flex justify-between items-center px-6 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors group">
+                        <span className="font-bold text-gray-800 dark:text-gray-200 group-hover:text-blue-600">
                           {tool.name}
                         </span>
-                        <span className="bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
+                        <span className="bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm">
                           {tool.category}
                         </span>
                       </Link>
@@ -110,22 +96,6 @@ export default function HeroSection() {
               )}
             </div>
           )}
-        </div>
-
-        {/* Feature Icons Row */}
-        <div className="mt-16 pt-8 border-t border-gray-200 dark:border-slate-800 w-full flex justify-center gap-8 sm:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-          <div className="flex flex-col items-center gap-2">
-            <FileText className="w-6 h-6 text-gray-800 dark:text-gray-300" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">PDF Engines</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <Crop className="w-6 h-6 text-gray-800 dark:text-gray-300" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Image Edit</span>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <Calculator className="w-6 h-6 text-gray-800 dark:text-gray-300" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Calculators</span>
-          </div>
         </div>
 
       </div>

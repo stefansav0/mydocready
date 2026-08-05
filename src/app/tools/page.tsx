@@ -149,15 +149,16 @@ const tools = [
 
 const groupedTools = [
   {
-    title: "Core tools",
-    description: "Popular tools for docs, photos, and daily tasks.",
-    items: tools.filter((tool) => ["Passport Photo Maker", "Resume Builder", "Image Editor", "Insert into Document", "File Converters", "Presentation Maker"].includes(tool.title)),
-  },
-  {
     title: "Utilities",
     description: "Helpful helpers for resizing, signing, and formatting.",
     items: tools.filter((tool) => ["Resize by KB", "Signature Resizer"].includes(tool.title)),
   },
+  {
+    title: "Core tools",
+    description: "Popular tools for docs, photos, and daily tasks.",
+    items: tools.filter((tool) => ["Passport Photo Maker", "Resume Builder", "Image Editor", "Insert into Document", "File Converters", "Presentation Maker"].includes(tool.title)),
+  },
+  
   {
     title: "Calculators",
     description: "Planning tools for money, percentages, and simple math.",
@@ -187,42 +188,38 @@ export default function ToolsPage() {
     <main className="min-h-screen bg-slate-50 text-slate-800">
       <section className="border-b border-slate-200 bg-gradient-to-br from-slate-50 via-white to-indigo-50/40">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-600">
-            <Link href="/" className="rounded-full border border-slate-200 bg-white px-3 py-1.5 transition hover:border-indigo-200 hover:text-indigo-600">
-              Home
-            </Link>
-            <span>/</span>
-            <span className="rounded-full bg-indigo-50 px-3 py-1.5 text-indigo-700">All Tools</span>
-          </div>
+          
 
-          <div className="max-w-3xl space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-700 shadow-sm">
-              <ShieldCheck className="h-4 w-4" />
-              Browse every utility in one place
-            </div>
+          <div className="mx-auto max-w-3xl space-y-5 text-center">
+            
             <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-              Discover the full set of MyDocReady tools
+              All Tools
             </h1>
             <p className="text-lg leading-8 text-slate-600">
-              From document converters and passport photo tools to calculators and presentation helpers, this page brings the most useful utilities together in one simple catalog.
+             Access all MyDocReady tools in one place. Create documents, edit PDFs,
+resize images, generate passport photos, build resumes, and use
+calculators.
             </p>
           </div>
 
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-3 shadow-lg shadow-slate-200/60">
-            <label htmlFor="tools-search" className="sr-only">
-              Search tools
-            </label>
-            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-              <Search className="h-5 w-5 text-indigo-500" />
-              <input
-                id="tools-search"
-                type="text"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search tools by name or category"
-                className="w-full border-none bg-transparent text-base outline-none placeholder:text-slate-400"
-              />
-            </div>
+          <div className="flex justify-center w-full">
+  <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-3 shadow-lg shadow-slate-200/60">
+    <label htmlFor="tools-search" className="sr-only">
+      Search tools
+    </label>
+
+    <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+      <Search className="h-5 w-5 text-indigo-500" />
+      <input
+        id="tools-search"
+        type="text"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Search tools by name or category"
+        className="w-full border-none bg-transparent text-base outline-none placeholder:text-slate-400"
+      />
+    </div>
+  </div>
           </div>
         </div>
       </section>

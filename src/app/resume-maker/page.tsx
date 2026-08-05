@@ -9,6 +9,7 @@ import {
   Layout,
   Zap,
   Shield,
+  ShieldCheck,
   CheckCircle2,
   Star,
   Users,
@@ -263,26 +264,20 @@ export default function LandingPage() {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24">
 
       <div className="bg-white rounded-2xl p-8 shadow text-center">
+  
 
-        <Users className="mx-auto text-blue-600 mb-3" />
+  <h3 className="text-3xl font-bold">
+    Faster
+  </h3>
 
-        <h3 className="text-3xl font-bold">
-
-          100K+
-
-        </h3>
-
-        <p className="text-slate-500">
-
-          Happy Users
-
-        </p>
-
-      </div>
+  <p className="text-slate-500">
+    Workflows
+  </p>
+</div>
 
       <div className="bg-white rounded-2xl p-8 shadow text-center">
 
-        <Layout className="mx-auto text-indigo-600 mb-3" />
+        
 
         <h3 className="text-3xl font-bold">
 
@@ -300,7 +295,7 @@ export default function LandingPage() {
 
       <div className="bg-white rounded-2xl p-8 shadow text-center">
 
-        <Star className="mx-auto text-yellow-500 mb-3" />
+        
 
         <h3 className="text-3xl font-bold">
 
@@ -318,7 +313,7 @@ export default function LandingPage() {
 
       <div className="bg-white rounded-2xl p-8 shadow text-center">
 
-        <Zap className="mx-auto text-green-500 mb-3" />
+        
 
         <h3 className="text-3xl font-bold">
 
@@ -669,94 +664,63 @@ export default function LandingPage() {
 
 </section>
 
-{/* WHY CHOOSE US */}
-
+{/* WHY CHOOSE MYDOCREADY */}
 <section className="py-24 bg-white">
+  <div className="max-w-7xl mx-auto px-6">
+    <div className="text-center mb-20">
+      <span className="text-blue-600 font-bold uppercase tracking-widest">
+        Why Choose MyDocReady
+      </span>
 
-    <div className="max-w-7xl mx-auto px-6">
+      <h2 className="text-5xl font-bold mt-6">
+        Everything You Need to Build an ATS-Friendly Resume
+      </h2>
 
-        <div className="text-center mb-20">
-
-            <span className="text-blue-600 font-bold uppercase tracking-widest">
-
-                Why Choose ResumeBuilder
-
-            </span>
-
-            <h2 className="text-5xl font-bold mt-6">
-
-                Everything Needed to Build a Winning Resume
-
-            </h2>
-
-            <p className="max-w-3xl mx-auto text-slate-500 mt-6 text-lg">
-
-                ResumeBuilder is designed to simplify resume creation
-                while helping candidates present themselves in the best
-                possible way. Whether you're a student, fresher, or
-                experienced professional, our platform provides the
-                tools needed to create polished resumes.
-
-            </p>
-
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-
-            {[
-                {
-                    icon: <Award className="w-10 h-10 text-blue-600"/>,
-                    title:"Professional Templates",
-                    desc:"Beautiful resume templates for every profession."
-                },
-                {
-                    icon:<Clock3 className="w-10 h-10 text-green-600"/>,
-                    title:"Build in Minutes",
-                    desc:"Complete your resume quickly using guided sections."
-                },
-                {
-                    icon:<Lock className="w-10 h-10 text-red-500"/>,
-                    title:"Private & Secure",
-                    desc:"Your personal information stays protected."
-                },
-                {
-                    icon:<FileCheck className="w-10 h-10 text-indigo-600"/>,
-                    title:"Instant PDF",
-                    desc:"Download high-quality resumes ready to apply."
-                }
-            ].map((item,index)=>(
-
-                <div
-                    key={index}
-                    className="rounded-3xl border p-8 hover:shadow-xl hover:-translate-y-2 transition-all"
-                >
-
-                    <div className="mb-6">
-
-                        {item.icon}
-
-                    </div>
-
-                    <h3 className="font-bold text-2xl mb-4">
-
-                        {item.title}
-
-                    </h3>
-
-                    <p className="text-slate-500 leading-8">
-
-                        {item.desc}
-
-                    </p>
-
-                </div>
-
-            ))}
-
-        </div>
-
+      <p className="max-w-3xl mx-auto text-slate-500 mt-6 text-lg leading-8">
+        MyDocReady makes resume creation simple, fast, and effective. Our ATS-friendly templates, intuitive editor, and instant PDF downloads help students, freshers, and professionals create resumes that stand out and get noticed by recruiters.
+      </p>
     </div>
 
+    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      {[
+        {
+          icon: <FileText className="w-10 h-10 text-blue-600" />,
+          title: "Professional Templates",
+          desc: "Modern, recruiter-friendly templates designed for resumes and other professional documents.",
+        },
+        {
+          icon: <Zap className="w-10 h-10 text-amber-500" />,
+          title: "Quick & Easy",
+          desc: "Create polished documents in just a few minutes with guided forms and smart editing.",
+        },
+        {
+          icon: <ShieldCheck className="w-10 h-10 text-emerald-600" />,
+          title: "Secure & Private",
+          desc: "Your information remains protected with secure storage and privacy-focused design.",
+        },
+        {
+          icon: <Download className="w-10 h-10 text-indigo-600" />,
+          title: "Instant Downloads",
+          desc: "Download high-quality PDF documents that are ready to share, print, or submit.",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="rounded-3xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        >
+          <div className="mb-6">{item.icon}</div>
+
+          <h3 className="mb-4 text-2xl font-bold text-slate-900">
+            {item.title}
+          </h3>
+
+          <p className="leading-7 text-slate-600">
+            {item.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
 </section>
 
 {/* ================= RESUME WRITING GUIDE ================= */}
