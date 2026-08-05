@@ -77,17 +77,15 @@ export default function NavBar() {
 
   // Content Data Matrices (Combined into one Tools menu to match image)
   const allTools = [
-    { name: "Resize Photo", href: "/resize", icon: <Crop size={16} /> },
+    { name: "Resize Signature", href: "/resize-signature", icon: <Crop size={16} /> },
     { name: "Passport Photo Maker", href: "/passport-photo", icon: <ImageIcon size={16} /> },
     { name: "Smart Resume Builder", href: "/resume-maker", icon: <FileText size={16} /> },
     { name: "Word to PDF", href: "/converter/word-to-pdf", icon: <FileText size={16} /> },
     { name: "PDF to Word", href: "/converter/pdf-to-word", icon: <FileText size={16} /> },
     { name: "Excel to PDF", href: "/converter/excel-to-pdf", icon: <FileSpreadsheet size={16} /> },
     { name: "PDF to Excel", href: "/converter/pdf-to-excel", icon: <Grid size={16} /> },
+    { name: "Calculator", href: "/calculator", icon: <Presentation size={16} /> },
     { name: "All Tools", href: "/tools", icon: <FilePlus size={16} /> },
-    
-    
-    
   ];
 
   return (
@@ -99,32 +97,21 @@ export default function NavBar() {
       <header className="w-full bg-[#0F52BA] text-white font-sans antialiased relative z-50">
         <div className="w-full max-w-[1600px] mx-auto flex items-center justify-between px-4 lg:px-8 py-3">
           
-          {/* Mobile Trigger */}
-          <div className="lg:hidden flex items-center">
-            <button 
-              onClick={() => setMenuOpen(true)}
-              className="p-1.5 hover:bg-white/10 rounded transition-colors focus:outline-none"
-              aria-label="Open menu"
-            >
-              <Menu size={28} />
-            </button>
-          </div>
-
-          {/* LOGO & NAVIGATION BLOCK (Left-aligned as in the image) */}
-          <div className="flex items-center flex-1 lg:flex-none justify-center lg:justify-start gap-8">
+          {/* LOGO & NAVIGATION BLOCK (Left-aligned) */}
+          <div className="flex items-center gap-8">
             
             {/* Logo Area */}
             <Link href="/" className="flex items-center gap-3">
-  <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
-    <Image
-      src="/logo.png"
-      alt="DocReady Logo"
-      width={48}
-      height={48}
-      className="rounded-full object-cover"
-      priority
-    />
-  </div>
+              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="DocReady Logo"
+                  width={48}
+                  height={48}
+                  className="rounded-full object-cover"
+                  priority
+                />
+              </div>
               <span className="font-sans text-xl sm:text-2xl lg:text-3xl font-normal tracking-wide whitespace-nowrap">
                 Mydocready
               </span>
@@ -173,51 +160,79 @@ export default function NavBar() {
             </nav>
           </div>
 
-          {/* Right Side Actions (Auth) - Retained from your code but styled to fit */}
-          <div className="hidden lg:flex justify-end items-center gap-4">
-            {!user ? (
-              <Link href="/signin" className="flex bg-white/10 hover:bg-white/20 text-white px-4 py-2 text-sm uppercase tracking-wider transition-colors items-center gap-2 rounded-sm">
-                <LogIn size={16} /> SIGN IN
-              </Link>
-            ) : (
-              <div className="relative" ref={profileRef}>
-                <button 
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/10 transition-colors rounded-sm"
-                >
-                  <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                    {user.name?.charAt(0).toUpperCase() || "U"}
-                  </span>
-                  <ChevronDown size={14} />
-                </button>
+          {/* RIGHT SIDE ACTIONS (Auth & Mobile Menu) */}
+          <div className="flex items-center gap-4">
+            {/* Desktop Auth */}
+            <div className="hidden lg:flex justify-end items-center gap-4">
+              {!user ? (
+                <Link href="/signin" className="flex bg-white/10 hover:bg-white/20 text-white px-4 py-2 text-sm uppercase tracking-wider transition-colors items-center gap-2 rounded-sm">
+                  <LogIn size={16} /> SIGN IN
+                </Link>
+              ) : (
+                <div className="relative" ref={profileRef}>
+                  <button 
+                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                    className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/10 transition-colors rounded-sm"
+                  >
+                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                      {user.name?.charAt(0).toUpperCase() || "U"}
+                    </span>
+                    <ChevronDown size={14} />
+                  </button>
 
-                {profileDropdownOpen && (
-                  <div className="absolute right-0 mt-3 w-48 bg-white text-black shadow-xl rounded-sm z-50 text-left overflow-hidden">
-                    <div className="p-3 border-b border-gray-100 text-sm">
-                      <p className="font-bold truncate">{user.name}</p>
-                      <p className="text-gray-500 text-xs truncate mt-0.5">{user.email}</p>
+                  {profileDropdownOpen && (
+                    <div className="absolute right-0 mt-3 w-48 bg-white text-black shadow-xl rounded-sm z-50 text-left overflow-hidden">
+                      <div className="p-3 border-b border-gray-100 text-sm">
+                        <p className="font-bold truncate">{user.name}</p>
+                        <p className="text-gray-500 text-xs truncate mt-0.5">{user.email}</p>
+                      </div>
+                      <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="block px-4 py-2.5 hover:bg-gray-100 text-sm font-medium">Dashboard</Link>
+                      <button onClick={handleSignOut} className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 text-sm font-bold border-t border-gray-100 flex items-center gap-2">
+                        <LogOut size={16} /> Log Out
+                      </button>
                     </div>
-                    <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="block px-4 py-2.5 hover:bg-gray-100 text-sm font-medium">Dashboard</Link>
-                    <button onClick={handleSignOut} className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 text-sm font-bold border-t border-gray-100 flex items-center gap-2">
-                      <LogOut size={16} /> Log Out
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Trigger (Hamburger Menu placed on the right side) */}
+            <div className="lg:hidden flex items-center">
+              <button 
+                onClick={() => setMenuOpen(true)}
+                className="p-1.5 hover:bg-white/10 rounded transition-colors focus:outline-none"
+                aria-label="Open menu"
+              >
+                <Menu size={28} />
+              </button>
+            </div>
           </div>
+
         </div>
       </header>
 
-      {/* MOBILE FULL-SCREEN SLIDE DRAWER (Retained for functionality) */}
+      {/* MOBILE FULL-SCREEN SLIDE DRAWER */}
       <div className={`fixed inset-0 z-[60] lg:hidden transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} aria-hidden="true" />
 
         <div className={`absolute inset-y-0 left-0 w-[85vw] max-w-sm bg-[#2b3947] text-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}>
           <div className="flex items-center justify-between p-5 border-b border-white/10">
-            <span className="font-sans text-xl font-normal tracking-wide">
-              SARKARI RESULT
-            </span>
+            <Link
+              href="/"
+              className="flex items-center gap-3"
+            >
+              <Image
+                src="/logo.png"
+                width={40}
+                height={40}
+                alt="MyDocReady"
+                className="rounded-full bg-white p-1"
+              />
+
+              <span className="text-xl font-semibold">
+                MyDocReady
+              </span>
+            </Link>
             <button 
               onClick={() => setMenuOpen(false)} 
               className="p-2 -mr-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors focus:outline-none"
@@ -231,7 +246,7 @@ export default function NavBar() {
               <Link href="/" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">HOME</Link>
               <Link href="/about" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">ABOUT US</Link>
               <Link href="/contact" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">CONTACT</Link>
-              <Link href="/typing-test" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">TYPING TEST</Link>
+              <Link href="/resize" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">Resize Photo</Link>
             </div>
 
             <div>
