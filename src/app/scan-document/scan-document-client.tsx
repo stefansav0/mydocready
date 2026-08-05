@@ -16,7 +16,14 @@ import {
   Loader2,
   Check,
   Crop,
-  CheckCircle2
+  CheckCircle2,
+  Camera,
+  X,
+  ShieldCheck,
+  UploadCloud,
+  Move,
+  Zap,
+  HelpCircle
 } from "lucide-react";
 
 const pageSizes = [
@@ -25,41 +32,43 @@ const pageSizes = [
 ];
 
 type ScanFilter = "original" | "magic" | "grayscale" | "bw";
-
 type Point = { x: number; y: number };
-
 type ScanItem = {
   id: string;
   file: File;
   originalUrl: string;
   rotation: number;
-  corners: Point[] | null; // Relative coordinates (0.0 to 1.0)
+  corners: Point[] | null;
 };
 
 // --- MANUAL PERSPECTIVE WARP ---
-// Maps a user-defined quadrilateral into a perfect rectangle using bilinear interpolation
 const warpPerspective = async (
   file: File,
   corners: Point[],
   filter: ScanFilter,
-  rotation: number
+  rotation: number,
+  maxSize?: number
 ): Promise<HTMLCanvasElement | null> => {
   const bitmap = await fileToImageBitmap(file);
-  const srcCanvas = document.createElement("canvas");
-  srcCanvas.width = bitmap.width;
-  srcCanvas.height = bitmap.height;
-  const srcCtx = srcCanvas.getContext("2d");
-  if (!srcCtx) return null;
-  srcCtx.drawImage(bitmap, 0, 0);
   
-  const srcImgData = srcCtx.getImageData(0, 0, srcCanvas.width, srcCanvas.height);
-  const w = srcCanvas.width;
-  const h = srcCanvas.height;
+  let scale = 1;
+  if (maxSize) {
+    scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
+  }
 
-  // Calculate actual pixel coordinates of corners
+  const w = Math.round(bitmap.width * scale);
+  const h = Math.round(bitmap.height * scale);
+
+  const srcCanvas = document.createElement("canvas");
+  srcCanvas.width = w;
+  srcCanvas.height = h;
+  const srcCtx = srcCanvas.getContext("2d", { willReadFrequently: true });
+  if (!srcCtx) return null;
+  srcCtx.drawImage(bitmap, 0, 0, w, h);
+  
+  const srcImgData = srcCtx.getImageData(0, 0, w, h);
   const pts = corners.map(c => ({ x: c.x * w, y: c.y * h }));
 
-  // Calculate destination width and height based on the longest edges
   const topW = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
   const botW = Math.hypot(pts[2].x - pts[3].x, pts[2].y - pts[3].y);
   const destW = Math.max(topW, botW);
@@ -78,7 +87,6 @@ const warpPerspective = async (
 
   const destImgData = destCtx.createImageData(destW, destH);
 
-  // Perform inverse bilinear interpolation mapping
   for (let y = 0; y < destH; y++) {
     const ty = y / destH;
     for (let x = 0; x < destW; x++) {
@@ -104,7 +112,6 @@ const warpPerspective = async (
 
   destCtx.putImageData(destImgData, 0, 0);
 
-  // Apply filters and rotation to the newly flattened image
   const finalCanvas = document.createElement("canvas");
   const isRotated = rotation === 90 || rotation === 270;
   finalCanvas.width = isRotated ? destH : destW;
@@ -131,6 +138,90 @@ const warpPerspective = async (
 };
 
 
+// --- DESKTOP/MOBILE CAMERA MODAL ---
+const CameraModal = ({ onCapture, onClose }: { onCapture: (file: File) => void, onClose: () => void }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    let activeStream: MediaStream | null = null;
+    
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(s => {
+        activeStream = s;
+        setStream(s);
+        if (videoRef.current) {
+          videoRef.current.srcObject = s;
+        }
+      })
+      .catch(err => {
+        console.error("Camera error:", err);
+        setError("Could not access camera. Please check your browser permissions.");
+      });
+
+    return () => {
+      if (activeStream) {
+        activeStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  const takePhoto = () => {
+    if (videoRef.current && stream) {
+      const canvas = document.createElement("canvas");
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const ctx = canvas.getContext("2d");
+      
+      if (ctx) {
+        ctx.drawImage(videoRef.current, 0, 0);
+        canvas.toBlob(blob => {
+          if (blob) {
+            const file = new File([blob], `Camera_Scan_${Date.now()}.jpg`, { type: "image/jpeg" });
+            onCapture(file);
+          }
+        }, "image/jpeg", 0.95);
+      }
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex flex-col bg-black">
+      <div className="flex h-16 items-center justify-between px-6 bg-black text-white">
+        <h2 className="font-medium">Scan Document</h2>
+        <Button variant="ghost" onClick={onClose} className="hover:bg-white/10 text-white rounded-full h-10 w-10 p-0">
+          <X className="w-6 h-6" />
+        </Button>
+      </div>
+      
+      <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden">
+        {error ? (
+          <div className="text-red-400 p-6 text-center">{error}</div>
+        ) : (
+          <video 
+            ref={videoRef} 
+            autoPlay 
+            playsInline 
+            className="max-h-full max-w-full object-contain"
+          />
+        )}
+      </div>
+
+      <div className="h-32 bg-black flex items-center justify-center pb-8">
+        <button 
+          onClick={takePhoto}
+          disabled={!stream}
+          className="w-16 h-16 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 flex items-center justify-center transition-colors disabled:opacity-50"
+        >
+          <div className="w-12 h-12 bg-white rounded-full" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
 // --- INTERACTIVE CROPPER COMPONENT ---
 const InteractiveCropper = ({ 
   item, 
@@ -142,19 +233,36 @@ const InteractiveCropper = ({
   onCancel: () => void;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [aspect, setAspect] = useState<number | null>(null);
   const [imgSize, setImgSize] = useState({ w: 0, h: 0 });
   
-  // Default bounds if none exist (10% padding inside image)
   const defaultCorners = [
     { x: 0.1, y: 0.1 }, { x: 0.9, y: 0.1 },
     { x: 0.9, y: 0.9 }, { x: 0.1, y: 0.9 }
   ];
+  
   const [corners, setCorners] = useState<Point[]>(item.corners || defaultCorners);
   const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
 
+  const updateSize = useCallback(() => {
+    if (containerRef.current) {
+      setImgSize({ 
+        w: containerRef.current.clientWidth, 
+        h: containerRef.current.clientHeight 
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [updateSize]);
+
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const { clientWidth, clientHeight } = e.currentTarget;
-    setImgSize({ w: clientWidth, h: clientHeight });
+    const natW = e.currentTarget.naturalWidth;
+    const natH = e.currentTarget.naturalHeight;
+    setAspect(natW / natH);
+    setTimeout(updateSize, 10); 
   };
 
   const handlePointerDown = (idx: number, e: React.PointerEvent) => {
@@ -166,11 +274,9 @@ const InteractiveCropper = ({
     if (draggingIdx === null || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     
-    // Calculate relative mouse position (0.0 to 1.0)
     let x = (e.clientX - rect.left) / rect.width;
     let y = (e.clientY - rect.top) / rect.height;
 
-    // Clamp to boundaries
     x = Math.max(0, Math.min(1, x));
     y = Math.max(0, Math.min(1, y));
 
@@ -209,15 +315,18 @@ const InteractiveCropper = ({
       </div>
       
       <div className="flex-1 overflow-hidden p-6 flex items-center justify-center relative touch-none select-none">
-        <div ref={containerRef} className="relative inline-block" style={{ maxHeight: '100%', maxWidth: '100%' }}>
+        <div 
+          ref={containerRef} 
+          className="relative inline-block max-h-full max-w-full" 
+          style={{ aspectRatio: aspect ? aspect : 'auto', height: aspect ? '100%' : 'auto' }}
+        >
           <img
             src={item.originalUrl}
             alt="Crop original"
             onLoad={handleImageLoad}
-            className="max-h-[80vh] max-w-full object-contain pointer-events-none opacity-80"
+            className="w-full h-full object-fill pointer-events-none opacity-80"
           />
           
-          {/* SVG Overlay for bounding box */}
           {imgSize.w > 0 && (
             <svg 
               className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-md"
@@ -226,25 +335,24 @@ const InteractiveCropper = ({
               <polygon
                 points={corners.map(c => `${c.x * imgSize.w},${c.y * imgSize.h}`).join(" ")}
                 fill="rgba(16, 185, 129, 0.15)"
-                stroke="#10b981" // Emerald green like scanner apps
+                stroke="#10b981" 
                 strokeWidth="2.5"
               />
             </svg>
           )}
 
-          {/* Draggable Corner Handles */}
           {imgSize.w > 0 && corners.map((corner, idx) => (
             <div
               key={idx}
               onPointerDown={(e) => handlePointerDown(idx, e)}
-              className="absolute w-8 h-8 -ml-4 -mt-4 bg-white border-[3px] border-emerald-500 rounded-full cursor-grab active:cursor-grabbing active:scale-125 transition-transform shadow-lg z-10 flex items-center justify-center"
+              className="absolute w-10 h-10 -ml-5 -mt-5 bg-white border-[3px] border-emerald-500 rounded-full cursor-grab active:cursor-grabbing active:scale-110 transition-transform shadow-lg z-10 flex items-center justify-center"
               style={{
                 left: `${corner.x * 100}%`,
                 top: `${corner.y * 100}%`,
                 touchAction: 'none'
               }}
             >
-              <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+              <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />
             </div>
           ))}
         </div>
@@ -273,8 +381,8 @@ const LivePreviewCard = ({
 
     const generatePreview = async () => {
       try {
-        if (!item.corners) return; // Wait for initial bounds
-        const canvas = await warpPerspective(item.file, item.corners, filter, item.rotation);
+        if (!item.corners) return; 
+        const canvas = await warpPerspective(item.file, item.corners, filter, item.rotation, 800);
         if (isMounted && canvas) {
           setPreviewSrc(canvas.toDataURL("image/jpeg", 0.7)); 
         }
@@ -349,6 +457,109 @@ const LivePreviewCard = ({
 };
 
 
+// --- EXPLANATION & FAQ COMPONENT ---
+const DocumentScannerGuide = () => {
+  return (
+    <div className="mt-28 space-y-24 border-t border-slate-200 pt-20">
+      
+      {/* How It Works Section */}
+      <div className="text-center">
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          How the Scanner Works
+        </h2>
+        <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+          Turn your messy, angled photos into professional, flat documents in three simple steps—all directly inside your browser.
+        </p>
+
+        <div className="mt-16 grid gap-10 sm:grid-cols-3">
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 shadow-sm mb-6">
+              <UploadCloud className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900">1. Upload or Snap</h3>
+            <p className="mt-3 text-slate-600 leading-relaxed">
+              Drag and drop an existing photo or use the <strong>Open Camera</strong> button to snap a picture of your document on the fly.
+            </p>
+          </div>
+          
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 shadow-sm mb-6">
+              <Move className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900">2. Adjust the Bounds</h3>
+            <p className="mt-3 text-slate-600 leading-relaxed">
+              Drag the four corner handles to perfectly outline your paper. The app will use <strong>Perspective Warp</strong> to flatten it out.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-sm mb-6">
+              <Zap className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900">3. Filter & Export</h3>
+            <p className="mt-3 text-slate-600 leading-relaxed">
+              Apply the <strong>Magic Color</strong> filter to make text pop, then instantly download a print-ready PDF or individual JPGs.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="rounded-3xl bg-slate-900 p-10 sm:p-16 text-slate-100 shadow-xl">
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold flex items-center gap-3">
+            <HelpCircle className="h-8 w-8 text-emerald-400" /> 
+            Frequently Asked Questions
+          </h2>
+        </div>
+        
+        <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
+          
+          <div>
+            <h4 className="text-lg font-semibold flex items-center gap-2 text-white">
+              <ShieldCheck className="h-5 w-5 text-emerald-400" />
+              Are my documents uploaded to a server?
+            </h4>
+            <p className="mt-3 text-slate-400 leading-relaxed">
+              <strong>Absolutely not.</strong> All cropping, filtering, and PDF generation happens directly inside your web browser. Your sensitive documents never leave your device, ensuring 100% privacy and security.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-lg font-semibold text-white">
+              What does the "Magic Color" filter do?
+            </h4>
+            <p className="mt-3 text-slate-400 leading-relaxed">
+              It acts like a premium scanner app. It intelligently boosts the contrast to make the background paper pure white and the text crisp, while preserving vibrant ink colors like blue signatures or red stamps.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-lg font-semibold text-white">
+              Can I scan multiple pages at once?
+            </h4>
+            <p className="mt-3 text-slate-400 leading-relaxed">
+              Yes! You can upload as many pages as you need. Adjust the crop for each one, and when you click "Export PDF," the app will automatically combine them into a single, multi-page document.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-lg font-semibold text-white">
+              How does the corner cropper work?
+            </h4>
+            <p className="mt-3 text-slate-400 leading-relaxed">
+              It uses a mathematical technique called a <em>Perspective Warp Matrix</em>. Even if you took the photo at a sharp angle, pinning the 4 corners tells the app how to stretch and un-skew the image back into a perfect, flat rectangle.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  );
+};
+
+
 export default function ScanDocumentClient() {
   const [items, setItems] = useState<ScanItem[]>([]);
   const [isBusy, setIsBusy] = useState(false);
@@ -359,12 +570,16 @@ export default function ScanDocumentClient() {
   const [successMessage, setSuccessMessage] = useState<string>("");
   
   const [croppingItem, setCroppingItem] = useState<ScanItem | null>(null);
+  const [showCamera, setShowCamera] = useState(false);
 
+  const itemsRef = useRef(items);
+  useEffect(() => { itemsRef.current = items; }, [items]);
   useEffect(() => {
     return () => {
-      items.forEach((item) => URL.revokeObjectURL(item.originalUrl));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      itemsRef.current.forEach((item) => URL.revokeObjectURL(item.originalUrl));
     };
-  }, [items]);
+  }, []);
 
   const handleFileSelect = useCallback(
     (selectedFiles: FileList | File[] | null) => {
@@ -383,13 +598,11 @@ export default function ScanDocumentClient() {
         file,
         originalUrl: URL.createObjectURL(file),
         rotation: 0,
-        corners: null, // Will be set to default or by user
+        corners: null,
       }));
 
-      // Immediately open cropper for the first uploaded item
       setCroppingItem(newItems[0]); 
       
-      // We'll append the rest to the list, they'll get default crops until user edits them
       const itemsWithDefaults = newItems.map(item => ({
         ...item,
         corners: item.corners || [
@@ -401,6 +614,7 @@ export default function ScanDocumentClient() {
       setItems((prev) => [...prev, ...itemsWithDefaults]);
       setSuccessMessage("");
       setIsDragging(false);
+      setShowCamera(false);
     },
     []
   );
@@ -412,7 +626,7 @@ export default function ScanDocumentClient() {
   const removeItem = useCallback((idToRemove: string) => {
     setItems((prev) => {
       const item = prev.find(i => i.id === idToRemove);
-      if (item) URL.revokeObjectURL(item.originalUrl);
+      if (item) URL.revokeObjectURL(item.originalUrl); 
       return prev.filter((i) => i.id !== idToRemove);
     });
   }, []);
@@ -429,7 +643,7 @@ export default function ScanDocumentClient() {
   };
 
   const clearAll = useCallback(() => {
-    items.forEach((item) => URL.revokeObjectURL(item.originalUrl));
+    items.forEach((item) => URL.revokeObjectURL(item.originalUrl)); 
     setItems([]);
     setSuccessMessage("");
   }, [items]);
@@ -439,29 +653,45 @@ export default function ScanDocumentClient() {
     setIsBusy(true);
     try {
       if (items.length === 1) {
-        if(!items[0].corners) return;
-        const canvas = await warpPerspective(items[0].file, items[0].corners, filter, items[0].rotation);
+        const corners = items[0].corners;
+        if (!corners) return;
+        const canvas = await warpPerspective(items[0].file, corners, filter, items[0].rotation);
         if (!canvas) return;
         const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95));
         if (!blob) throw new Error("Image creation failed");
         downloadBlob(blob, `${items[0].file.name.replace(/\.[^/.]+$/, "")}_scan.jpg`);
       } else {
-        const JSZip = (await import("jszip")).default;
-        const zip = new JSZip();
+        try {
+          const JSZip = (await import("jszip")).default;
+          const zip = new JSZip();
 
-        await Promise.all(
-          items.map(async (item, index) => {
-            if(!item.corners) return;
-            const canvas = await warpPerspective(item.file, item.corners, filter, item.rotation);
-            if (!canvas) return;
+          await Promise.all(
+            items.map(async (item, index) => {
+              const corners = item.corners;
+              if (!corners) return;
+              const canvas = await warpPerspective(item.file, corners, filter, item.rotation);
+              if (!canvas) return;
+              const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95));
+              if (!blob) throw new Error("Image creation failed");
+              zip.file(`Page_${index + 1}_${item.file.name.replace(/\.[^/.]+$/, "")}.jpg`, blob);
+            })
+          );
+
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          downloadBlob(zipBlob, "Scanned_Documents.zip");
+        } catch (e) {
+          console.warn("JSZip missing. Falling back to single downloads.", e);
+          for (let i = 0; i < items.length; i++) {
+            const corners = items[i].corners;
+            if (!corners) continue;
+            const canvas = await warpPerspective(items[i].file, corners, filter, items[i].rotation);
+            if (!canvas) continue;
             const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95));
-            if (!blob) throw new Error("Image creation failed");
-            zip.file(`Page_${index + 1}_${item.file.name.replace(/\.[^/.]+$/, "")}.jpg`, blob);
-          })
-        );
-
-        const zipBlob = await zip.generateAsync({ type: "blob" });
-        downloadBlob(zipBlob, "Scanned_Documents.zip");
+            if (!blob) continue;
+            downloadBlob(blob, `Page_${i + 1}_${items[i].file.name.replace(/\.[^/.]+$/, "")}.jpg`);
+            await new Promise(r => setTimeout(r, 400));
+          }
+        }
       }
       setSuccessMessage("Scanned image(s) downloaded successfully.");
     } catch (error) {
@@ -486,9 +716,9 @@ export default function ScanDocumentClient() {
       const maxHeight = pageHeight - margin * 2;
 
       for (let index = 0; index < items.length; index++) {
-        const item = items[index];
-        if (!item.corners) continue;
-        const canvas = await warpPerspective(item.file, item.corners, filter, item.rotation);
+        const corners = items[index].corners;
+        if (!corners) continue;
+        const canvas = await warpPerspective(items[index].file, corners, filter, items[index].rotation);
         if (!canvas) continue;
 
         const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
@@ -574,9 +804,18 @@ export default function ScanDocumentClient() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 pb-16">
       
+      {/* CAMERA MODAL */}
+      {showCamera && (
+        <CameraModal 
+          onCapture={(file) => handleFileSelect([file])}
+          onClose={() => setShowCamera(false)}
+        />
+      )}
+
       {/* FULLSCREEN CROP MODAL */}
       {croppingItem && (
         <InteractiveCropper 
+          key={croppingItem.id}
           item={croppingItem} 
           onComplete={handleCropComplete} 
           onCancel={() => setCroppingItem(null)} 
@@ -590,9 +829,7 @@ export default function ScanDocumentClient() {
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm shadow-slate-200/50">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
-                    <ScanLine className="h-4 w-4" /> Pro Scanner Tool
-                  </p>
+                  
                   <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
                     Scan, Crop, Export.
                   </h1>
@@ -621,25 +858,40 @@ export default function ScanDocumentClient() {
                     className={`relative rounded-3xl border-2 border-dashed p-8 text-center transition-all duration-200 ${
                       isDragging 
                         ? "border-emerald-500 bg-emerald-50" 
-                        : "border-slate-300 bg-slate-50 hover:border-emerald-400 hover:bg-slate-50/50"
+                        : "border-slate-300 bg-slate-50"
                     }`}
                   >
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                      onChange={(event) => handleFileSelect(event.target.files)}
-                      title="Upload images"
-                    />
                     <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-sm shadow-slate-200 mb-4">
                       <ImageIcon className={`h-8 w-8 ${isDragging ? 'text-emerald-600' : 'text-slate-400'}`} />
                     </div>
                     <p className="text-lg font-semibold text-slate-900">Drop document photos here</p>
-                    <p className="mt-1 text-sm text-slate-500">Supports JPEG, PNG, WEBP</p>
+                    <p className="mt-1 text-sm text-slate-500 mb-6">Supports JPEG, PNG, WEBP</p>
                     
+                    {/* CAMERA & UPLOAD BUTTONS */}
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center relative z-20">
+                      <label className="cursor-pointer bg-slate-900 text-white px-5 py-3 rounded-xl font-medium hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 shadow-sm">
+                        <ImageIcon className="w-4 h-4" />
+                        Select Files
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={(e) => handleFileSelect(e.target.files)}
+                        />
+                      </label>
+                      <button 
+                        type="button"
+                        onClick={() => setShowCamera(true)}
+                        className="bg-emerald-600 text-white px-5 py-3 rounded-xl font-medium hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        <Camera className="w-4 h-4" />
+                        Open Camera
+                      </button>
+                    </div>
+
                     {items.length > 0 && (
-                      <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm z-20 relative">
+                      <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm z-20 relative">
                         <CheckCircle2 className="h-4 w-4 text-emerald-500" /> {selectedFileName}
                       </div>
                     )}
@@ -773,7 +1025,7 @@ export default function ScanDocumentClient() {
                     <ScanLine className="mb-4 h-12 w-12 text-slate-300" />
                     <p className="text-lg font-medium text-slate-900">Awaiting documents</p>
                     <p className="mt-2 text-sm text-slate-500 max-w-[250px]">
-                      Drop your photos here.
+                      Upload files or open your camera to begin scanning.
                     </p>
                   </div>
                 )}
@@ -781,6 +1033,10 @@ export default function ScanDocumentClient() {
             </Card>
           </div>
         </div>
+
+        {/* --- GUIDE & FAQ SECTION --- */}
+        <DocumentScannerGuide />
+
       </section>
     </main>
   );
