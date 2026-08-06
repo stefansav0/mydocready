@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Eye, Download, X, UploadCloud, Plus, Trash2 } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Eye, Download, X, Plus, Trash2, FileText, Edit3, HelpCircle, CheckCircle2 } from "lucide-react";
 
 // ============================================
 // TYPES
@@ -29,26 +29,51 @@ type Education = {
   description: string;
 };
 
+type CustomSection = {
+  id: string;
+  title: string;
+  content: string;
+};
+
 export default function ResumeMakerTypographic() {
   // ============================================
   // STATES PRE-FILLED WITH TYPOGRAPHIC EXAMPLES
   // ============================================
-  const [name, setName] = useState("KABIR MALHOTRA");
+  const [name, setName] = useState("Your Name");
   const [address, setAddress] = useState("704, Windsor Towers, Hiranandani, Powai, Mumbai 400076");
-  const [phone, setPhone] = useState("+91 98111 22233");
-  const [email, setEmail] = useState("kabir.malhotra.data@gmail.com");
+  const [phone, setPhone] = useState("+91 0000000000");
+  const [email, setEmail] = useState("yourgmail@gmail.com");
   const [objective, setObjective] = useState(
     "Senior Business Intelligence Architect and Analytics Director with over 6 years of expertise leading corporate data strategy initiatives. Specialized in cross-functional data pipeline modeling, predictive analytics architectures, and deploying visual reporting governance structures that convert complex enterprise data into clean, actionable revenue streams."
   );
-  const [skills, setSkills] = useState(
-    "• Business Intelligence & Analytics\n• Data Architecture & Modeling\n• Advanced SQL & Python Execution\n• Tableau & Power BI Governance\n• Cross-functional Strategy Sprints\n• Predictive Data Forecasting\n• ETL Pipeline Infrastructures\n• Executive Stakeholder Relations"
-  );
-  const [interests, setInterests] = useState("• Technical Mentorship Systems • Financial Market Analysis • Strategic Chess Formations");
-  const [languages, setLanguages] = useState("• English (Native/Fluent Proficiency)\n• Hindi (Native Speaker)\n• Spanish (Basic Working Framework)");
-  const [certifications, setCertifications] = useState(
-    "• Certified Business Intelligence Professional (CBIP)\n• Snowflake Core Data Engineer Certificate\n• Google Advanced Cloud Data Analytics Badge"
-  );
   const [declaration, setDeclaration] = useState("I hereby declare that all the professional and academic records stated above are authentic and true.");
+
+  // DYNAMIC SIDEBAR SECTIONS (Right Column - 38%)
+  const [sidebarSections, setSidebarSections] = useState<CustomSection[]>([
+    {
+      id: "side-1",
+      title: "Core Competencies",
+      content: "• Business Intelligence & Analytics\n• Data Architecture & Modeling\n• Advanced SQL & Python Execution\n• Tableau & Power BI Governance\n• Cross-functional Strategy Sprints\n• Predictive Data Forecasting\n• ETL Pipeline Infrastructures\n• Executive Stakeholder Relations",
+    },
+    {
+      id: "side-2",
+      title: "Certifications",
+      content: "• Certified Business Intelligence Professional (CBIP)\n• Snowflake Core Data Engineer Certificate\n• Google Advanced Cloud Data Analytics Badge",
+    },
+    {
+      id: "side-3",
+      title: "Languages Spoken",
+      content: "• English (Native/Fluent Proficiency)\n• Hindi (Native Speaker)\n• Spanish (Basic Working Framework)",
+    },
+    {
+      id: "side-4",
+      title: "Interests & Research",
+      content: "• Technical Mentorship Systems • Financial Market Analysis • Strategic Chess Formations",
+    },
+  ]);
+
+  // DYNAMIC MAIN SECTIONS (Left Column - 62%)
+  const [mainSections, setMainSections] = useState<CustomSection[]>([]);
 
   const [educations, setEducations] = useState<Education[]>([
     {
@@ -109,6 +134,8 @@ export default function ResumeMakerTypographic() {
         scale: 2, 
         useCORS: true,
         logging: false,
+        scrollY: 0,
+        backgroundColor: "#ffffff",
       });
 
       const imgData = canvas.toDataURL("image/png");
@@ -124,6 +151,38 @@ export default function ResumeMakerTypographic() {
     } finally {
       setIsDownloading(false);
     }
+  };
+
+  // Sidebar Custom Sections Handlers (Right Column)
+  const handleSidebarSectionChange = (id: string, field: keyof CustomSection, value: string) => {
+    setSidebarSections(
+      sidebarSections.map((sec) => (sec.id === id ? { ...sec, [field]: value } : sec))
+    );
+  };
+  const addSidebarSection = () => {
+    setSidebarSections([
+      ...sidebarSections,
+      { id: Date.now().toString(), title: "NEW SIDEBAR SECTION", content: "" },
+    ]);
+  };
+  const removeSidebarSection = (id: string) => {
+    setSidebarSections(sidebarSections.filter((sec) => sec.id !== id));
+  };
+
+  // Main Custom Sections Handlers (Left Column)
+  const handleMainSectionChange = (id: string, field: keyof CustomSection, value: string) => {
+    setMainSections(
+      mainSections.map((sec) => (sec.id === id ? { ...sec, [field]: value } : sec))
+    );
+  };
+  const addMainSection = () => {
+    setMainSections([
+      ...mainSections,
+      { id: Date.now().toString(), title: "NEW MAIN SECTION", content: "" },
+    ]);
+  };
+  const removeMainSection = (id: string) => {
+    setMainSections(mainSections.filter((sec) => sec.id !== id));
   };
 
   const handleEduChange = (id: string, field: keyof Education, value: any) => {
@@ -144,7 +203,7 @@ export default function ResumeMakerTypographic() {
   const renderResumePreview = (innerRef?: React.RefObject<HTMLDivElement | null>) => (
     <div
       ref={innerRef}
-      className="w-[800px] h-[1131px] bg-[#ffffff] text-[#0f172a] shadow-2xl p-10 flex flex-col overflow-hidden shrink-0 font-serif"
+      className="w-[800px] h-[1131px] bg-[#ffffff] text-[#0f172a] shadow-2xl p-10 flex flex-col overflow-hidden shrink-0 font-serif border border-slate-200"
       style={{ letterSpacing: "normal" }}
     >
       {/* MINIMAL HIGH-END TYPOGRAPHY HEADER */}
@@ -187,7 +246,7 @@ export default function ResumeMakerTypographic() {
             </h2>
             <div className="flex flex-col gap-4.5">
               {experiences.map((exp) => (
-                <div key={exp.id} className="text-[11.5px]">
+                <div key={exp.id} className="text-[11.5px] mb-4">
                   <div className="flex justify-between items-baseline font-bold text-[#0f172a]">
                     <span className="text-[13px] text-[#0f172a] font-bold">{exp.jobTitle || "Job Designation Title"}</span>
                     <span className="text-[10.5px] font-medium text-[#64748b] font-sans">{exp.startDate || "Start"} – {exp.isCurrent ? "Present" : (exp.endDate || "End")}</span>
@@ -204,6 +263,18 @@ export default function ResumeMakerTypographic() {
               ))}
             </div>
           </div>
+
+          {/* DYNAMIC LEFT MAIN SECTIONS */}
+          {mainSections.map((sec) => (
+            <div key={sec.id}>
+              <h2 className="text-[13px] font-bold text-[#4338ca] border-b border-[#cbd5e1] pb-1 uppercase tracking-wider mb-2.5 font-sans">
+                {sec.title}
+              </h2>
+              <p className="text-[#334155] leading-relaxed text-[11.5px] whitespace-pre-wrap">
+                {sec.content}
+              </p>
+            </div>
+          ))}
 
           {/* DECLARATION FIELD PANEL */}
           {declaration && (
@@ -241,41 +312,18 @@ export default function ResumeMakerTypographic() {
             </div>
           </div>
 
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Core Competencies
-            </h2>
-            <p className="text-[#334155] leading-loose text-[11px] font-medium whitespace-pre-wrap">
-              {skills || "Skills mapping specifications items list summary."}
-            </p>
-          </div>
+          {/* DYNAMIC RIGHT SIDEBAR SECTIONS */}
+          {sidebarSections.map((sec) => (
+            <div key={sec.id}>
+              <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
+                {sec.title}
+              </h2>
+              <p className="text-[#334155] leading-loose text-[11px] font-medium whitespace-pre-wrap font-sans">
+                {sec.content}
+              </p>
+            </div>
+          ))}
 
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Certifications
-            </h2>
-            <p className="text-[#334155] leading-relaxed text-[10.5px] whitespace-pre-wrap">
-              {certifications || "Additional training credentials profile blocks."}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Languages Spoken
-            </h2>
-            <p className="text-[#334155] leading-relaxed text-[11px] whitespace-pre-wrap">
-              {languages || "Languages list identifiers inputs."}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-[13px] font-bold text-[#0f172a] border-b-2 border-[#4338ca] pb-0.5 uppercase tracking-wider mb-2.5 font-sans">
-              Interests & Research
-            </h2>
-            <p className="text-[#334155] leading-relaxed text-[11px] whitespace-pre-wrap">
-              {interests || "Additional projects links or personal hobbies elements metrics."}
-            </p>
-          </div>
         </div>
 
       </div>
@@ -283,22 +331,22 @@ export default function ResumeMakerTypographic() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white selection:bg-indigo-500/30 overflow-x-hidden relative">
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-indigo-100 overflow-x-hidden relative font-sans flex flex-col">
       
       {/* HIDDEN PRINT TARGET STORAGE */}
-      <div className="absolute top-[-9999px] left-[-9999px]">
+      <div className="fixed top-0 left-[-9999px] -z-50 pointer-events-none">
         {renderResumePreview(resumeRef)}
       </div>
       
       {/* APPLICATION HEADER */}
-      <header className="sticky top-0 z-10 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-          Typographic Accent Mode
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+          Typographic Editorial
         </h1>
         <button
           onClick={downloadPDF}
           disabled={isDownloading}
-          className="hidden lg:flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+          className="hidden lg:flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-colors disabled:opacity-50 shadow-sm hover:shadow-md"
         >
           {isDownloading ? (
             <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -310,159 +358,344 @@ export default function ResumeMakerTypographic() {
       </header>
 
       {/* DASHBOARD GRID PLACEMENT STAGE */}
-      <div className="max-w-[1600px] mx-auto p-4 lg:p-8 grid lg:grid-cols-12 gap-8 h-[calc(100vh-73px)]">
+      <div className="max-w-[1600px] w-full mx-auto p-4 lg:p-8 grid lg:grid-cols-12 gap-8 lg:h-[85vh]">
         
         {/* LEFT COLUMN FIELDS CONTROLLER EDITOR PANEL */}
-        <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 lg:p-8 overflow-y-auto h-full scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
-          <h2 className="text-2xl font-semibold mb-6">Personal Identifiers</h2>
+        <div className="lg:col-span-5 bg-white border border-slate-200 shadow-sm rounded-3xl p-6 lg:p-8 overflow-y-auto h-[70vh] lg:h-full scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+          <h2 className="text-2xl font-bold mb-6 text-slate-800">Personal Identifiers</h2>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="md:col-span-2">
-                <label className="block mb-1 text-sm text-slate-400">Full Profile Name</label>
-                <input type="text" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none transition-all" value={name} onChange={(e) => setName(e.target.value)} />
+                <label className="block mb-1.5 text-sm font-medium text-slate-600">Full Profile Name</label>
+                <input type="text" className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-900 font-medium" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
               <div className="md:col-span-2">
-                <label className="block mb-1 text-sm text-slate-400">Current Contact Address Line</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-20 resize-none" value={address} onChange={(e) => setAddress(e.target.value)} />
+                <label className="block mb-1.5 text-sm font-medium text-slate-600">Current Contact Address Line</label>
+                <textarea className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-900 h-24 resize-none" value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Mobile Phone Line</label>
-                <input type="text" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <label className="block mb-1.5 text-sm font-medium text-slate-600">Mobile Phone Line</label>
+                <input type="text" className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-900" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Professional Email</label>
-                <input type="email" className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label className="block mb-1.5 text-sm font-medium text-slate-600">Professional Email</label>
+                <input type="email" className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-900" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
 
-            <hr className="border-slate-800 my-8" />
-            <h2 className="text-2xl font-semibold mb-6">Resume Core Category Anchors</h2>
-
+            <hr className="border-slate-200 my-8" />
+            
+            <h2 className="text-2xl font-bold mb-6 text-slate-800">Dynamic Left Sections (Main)</h2>
+            <p className="text-sm text-slate-500 mb-4">Add, rename, or delete sections that appear in the wide left column (e.g. Projects, Profile, Work History).</p>
+            
             <div className="space-y-8">
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Executive Profile Summary</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-24 resize-y" value={objective} onChange={(e) => setObjective(e.target.value)} />
+                <label className="block mb-1.5 text-sm font-medium text-slate-600">Executive Profile Summary</label>
+                <textarea className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-slate-900 h-32 resize-y" value={objective} onChange={(e) => setObjective(e.target.value)} />
               </div>
 
-              {/* DYNAMIC EDUCATION NODE BUILDER COMPONENT */}
-              <div className="p-4 border border-slate-800 bg-slate-900/50 rounded-xl space-y-4">
-                <h3 className="text-lg font-medium text-slate-200">Education Placements Chronology</h3>
-                {educations.map((edu) => (
-                  <div key={edu.id} className="p-4 bg-slate-950 border border-slate-800 rounded-lg relative space-y-4">
-                    <button onClick={() => removeEducation(edu.id)} className="absolute top-4 right-4 text-slate-500 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div className="md:col-span-2">
-                        <label className="block text-xs text-slate-400 mb-1">University / Institute Name</label>
-                        <input type="text" value={edu.schoolName} onChange={(e) => handleEduChange(edu.id, "schoolName", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-slate-400 mb-1">Degree Received</label>
-                        <input type="text" value={edu.degree} onChange={(e) => handleEduChange(edu.id, "degree", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-slate-400 mb-1">Graduation Date/Year info</label>
-                        <input type="text" value={edu.graduationDate} onChange={(e) => handleEduChange(edu.id, "graduationDate", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
-                      </div>
-                      <div className="md:col-span-2">
-                        <label className="block text-xs text-slate-400 mb-1">Coursework Description</label>
-                        <textarea value={edu.description} onChange={(e) => handleEduChange(edu.id, "description", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none h-16 resize-y" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <button onClick={addEducation} className="flex items-center gap-2 text-sm text-indigo-400 font-medium py-1"><Plus className="w-4 h-4" /> Add Academic Node</button>
-              </div>
-
-              {/* DYNAMIC EXPERIENCE TIMELINE COMPONENT PLACEMENT */}
-              <div className="p-4 border border-slate-800 bg-slate-900/50 rounded-xl space-y-4">
-                <h3 className="text-lg font-medium text-slate-200">Work Experience Placements</h3>
+              {/* DYNAMIC EXPERIENCE PROGRESSION CHRONOLOGY CONFIG NODE */}
+              <div className="p-5 border border-slate-200 bg-slate-50/50 rounded-2xl space-y-4">
+                <h3 className="text-lg font-bold text-slate-800">Employment History</h3>
                 {experiences.map((exp) => (
-                  <div key={exp.id} className="p-4 bg-slate-950 border border-slate-800 rounded-lg relative space-y-4">
-                    <button onClick={() => removeExperience(exp.id)} className="absolute top-4 right-4 text-slate-500 hover:text-red-400"><Trash2 className="w-4 h-4" /></button>
+                  <div key={exp.id} className="p-5 bg-white border border-slate-200 shadow-sm rounded-xl relative space-y-4">
+                    <button onClick={() => removeExperience(exp.id)} className="absolute top-4 right-4 p-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Company/Corporate Title</label>
-                        <input type="text" value={exp.employer} onChange={(e) => handleExpChange(exp.id, "employer", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Company/Corporate Identifier</label>
+                        <input type="text" value={exp.employer} onChange={(e) => handleExpChange(exp.id, "employer", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Role Designation Title</label>
-                        <input type="text" value={exp.jobTitle} onChange={(e) => handleExpChange(exp.id, "jobTitle", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Role Designation Title</label>
+                        <input type="text" value={exp.jobTitle} onChange={(e) => handleExpChange(exp.id, "jobTitle", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">Start Date</label>
-                        <input type="text" value={exp.startDate} onChange={(e) => handleExpChange(exp.id, "startDate", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none" />
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">City</label>
+                        <input type="text" value={exp.city} onChange={(e) => handleExpChange(exp.id, "city", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" placeholder="e.g. New York" />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-400 mb-1">End Date</label>
-                        <input type="text" disabled={exp.isCurrent} value={exp.isCurrent ? "Present" : exp.endDate} onChange={(e) => handleExpChange(exp.id, "endDate", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none disabled:opacity-40" />
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Country</label>
+                        <input type="text" value={exp.country} onChange={(e) => handleExpChange(exp.id, "country", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Start Date</label>
+                        <input type="text" value={exp.startDate} onChange={(e) => handleExpChange(exp.id, "startDate", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">End Date</label>
+                        <input type="text" disabled={exp.isCurrent} value={exp.isCurrent ? "Present" : exp.endDate} onChange={(e) => handleExpChange(exp.id, "endDate", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 disabled:opacity-50 disabled:bg-slate-100" />
                       </div>
                       <div className="md:col-span-2 flex items-center gap-2">
-                        <input type="checkbox" id={`current-${exp.id}`} checked={exp.isCurrent} onChange={(e) => handleExpChange(exp.id, "isCurrent", e.target.checked)} className="w-4 h-4 bg-slate-900 accent-indigo-500" />
-                        <label htmlFor={`current-${exp.id}`} className="text-xs text-slate-300 cursor-pointer">Active Ongoing Position</label>
+                        <input type="checkbox" id={`current-${exp.id}`} checked={exp.isCurrent} onChange={(e) => handleExpChange(exp.id, "isCurrent", e.target.checked)} className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                        <label htmlFor={`current-${exp.id}`} className="text-sm font-medium text-slate-600 cursor-pointer">Active Ongoing Position</label>
                       </div>
                       <div className="md:col-span-2">
-                        <label className="block text-xs text-slate-400 mb-1">Responsibilities / Key Items Achieved</label>
-                        <textarea value={exp.description} onChange={(e) => handleExpChange(exp.id, "description", e.target.value)} className="w-full p-2 bg-slate-900 border border-slate-700 rounded outline-none h-24 resize-y" />
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Responsibilities / Key Items Achieved</label>
+                        <textarea value={exp.description} onChange={(e) => handleExpChange(exp.id, "description", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 h-32 resize-y" />
                       </div>
                     </div>
                   </div>
                 ))}
-                <button onClick={addExperience} className="flex items-center gap-2 text-sm text-indigo-400 font-medium py-1"><Plus className="w-4 h-4" /> Add Professional Block</button>
+                <button onClick={addExperience} className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-bold py-2 px-1 transition-colors"><Plus className="w-4 h-4" /> Add Professional Block</button>
+              </div>
+
+              {/* DYNAMIC LEFT MAIN SECTIONS */}
+              <div className="p-5 border border-slate-200 bg-slate-50/50 rounded-2xl space-y-4">
+                {mainSections.map((sec) => (
+                  <div key={sec.id} className="p-5 bg-white border border-slate-200 shadow-sm rounded-xl relative space-y-4">
+                    <button
+                      onClick={() => removeMainSection(sec.id)}
+                      className="absolute top-4 right-4 p-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                      title="Delete Main Section"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Section Title</label>
+                      <input
+                        type="text"
+                        value={sec.title}
+                        onChange={(e) => handleMainSectionChange(sec.id, "title", e.target.value)}
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 uppercase font-semibold text-slate-900"
+                        placeholder="e.g. PUBLICATIONS, AWARDS"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Section Content</label>
+                      <textarea
+                        value={sec.content}
+                        onChange={(e) => handleMainSectionChange(sec.id, "content", e.target.value)}
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 h-28 resize-y text-sm text-slate-900"
+                        placeholder="Enter the section details..."
+                      />
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={addMainSection}
+                  className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-bold py-2 px-1 transition-colors"
+                >
+                  <Plus className="w-4 h-4" /> Add Left Column Section
+                </button>
               </div>
 
               <div>
-                <label className="block mb-1 text-sm text-slate-400">Technical Skillset Matrix</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-24 resize-y" value={skills} onChange={(e) => setSkills(e.target.value)} />
+                <label className="block mb-1 text-sm font-medium text-slate-600">Declaration Statement</label>
+                <textarea className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none h-20 resize-y text-slate-900" value={declaration} onChange={(e) => setDeclaration(e.target.value)} />
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-slate-400">Professional Certifications</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-24 resize-y" value={certifications} onChange={(e) => setCertifications(e.target.value)} />
+            </div>
+
+            <hr className="border-slate-200 my-8" />
+            <h2 className="text-2xl font-bold mb-6 text-slate-800">Dynamic Right Sections (Sidebar)</h2>
+            <p className="text-sm text-slate-500 mb-4">Add, rename, or delete sections that appear in the narrower right column (e.g. Education, Skills, Languages).</p>
+
+            <div className="space-y-8">
+              {/* DYNAMIC EDUCATION NODE BUILDER COMPONENT */}
+              <div className="p-5 border border-slate-200 bg-slate-50/50 rounded-2xl space-y-4">
+                <h3 className="text-lg font-bold text-slate-800">Education Details</h3>
+                {educations.map((edu) => (
+                  <div key={edu.id} className="p-5 bg-white border border-slate-200 shadow-sm rounded-xl relative space-y-4">
+                    <button onClick={() => removeEducation(edu.id)} className="absolute top-4 right-4 p-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">University / Institute Name</label>
+                        <input type="text" value={edu.schoolName} onChange={(e) => handleEduChange(edu.id, "schoolName", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Location</label>
+                        <input type="text" value={edu.schoolLocation} onChange={(e) => handleEduChange(edu.id, "schoolLocation", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Degree Received Title</label>
+                        <input type="text" value={edu.degree} onChange={(e) => handleEduChange(edu.id, "degree", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Graduation Passing Year</label>
+                        <input type="text" value={edu.graduationDate} onChange={(e) => handleEduChange(edu.id, "graduationDate", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-semibold text-slate-500 mb-1.5">Coursework Description</label>
+                        <textarea value={edu.description} onChange={(e) => handleEduChange(edu.id, "description", e.target.value)} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 h-20 resize-y" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button onClick={addEducation} className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-bold py-2 px-1 transition-colors"><Plus className="w-4 h-4" /> Add Academic Node</button>
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-slate-400">Languages</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-16 resize-y" value={languages} onChange={(e) => setLanguages(e.target.value)} />
+
+              {/* DYNAMIC RIGHT SIDEBAR BUILDER */}
+              <div className="p-5 border border-slate-200 bg-slate-50/50 rounded-2xl space-y-4">
+                {sidebarSections.map((sec) => (
+                  <div key={sec.id} className="p-5 bg-white border border-slate-200 shadow-sm rounded-xl relative space-y-4">
+                    <button
+                      onClick={() => removeSidebarSection(sec.id)}
+                      className="absolute top-4 right-4 p-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                      title="Delete Sidebar Section"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Section Title</label>
+                      <input
+                        type="text"
+                        value={sec.title}
+                        onChange={(e) => handleSidebarSectionChange(sec.id, "title", e.target.value)}
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 uppercase font-semibold text-slate-900"
+                        placeholder="e.g. SKILLS, LANGUAGES"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-500 mb-1.5">Section Content</label>
+                      <textarea
+                        value={sec.content}
+                        onChange={(e) => handleSidebarSectionChange(sec.id, "content", e.target.value)}
+                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 h-28 resize-y text-sm text-slate-900"
+                        placeholder="Enter the section details..."
+                      />
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={addSidebarSection}
+                  className="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-bold py-2 px-1 transition-colors"
+                >
+                  <Plus className="w-4 h-4" /> Add Right Column Section
+                </button>
               </div>
-              <div>
-                <label className="block mb-1 text-sm text-slate-400">Projects & Affiliations</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-20 resize-y" value={interests} onChange={(e) => setInterests(e.target.value)} />
-              </div>
-              <div>
-                <label className="block mb-1 text-sm text-slate-400">Declaration Statement</label>
-                <textarea className="w-full p-3 rounded-lg bg-slate-950 border border-slate-800 focus:border-indigo-500 outline-none h-16 resize-y" value={declaration} onChange={(e) => setDeclaration(e.target.value)} />
-              </div>
+
             </div>
             <div className="h-20 lg:hidden"></div>
           </div>
         </div>
 
-        {/* RIGHT DESKTOP DISPLAY CANVAS PANEL VIEW */}
-        <div className="hidden lg:flex lg:col-span-7 bg-slate-800 rounded-2xl overflow-auto border border-slate-700 relative items-start justify-center p-8 custom-scrollbar">
-          <div className="origin-top scale-[0.6] xl:scale-[0.8] 2xl:scale-[0.9] transition-transform duration-300 flex justify-center">
+        {/* RIGHT DESKTOP COMPONENT WORKSPACE CANVAS DISPLAY PANEL */}
+        <div className="hidden lg:flex lg:col-span-7 bg-slate-100 rounded-3xl overflow-auto border border-slate-200 shadow-inner relative items-start justify-center p-8 custom-scrollbar h-[70vh] lg:h-full">
+          <div className="origin-top scale-[0.6] xl:scale-[0.8] 2xl:scale-[0.9] transition-transform duration-300 flex justify-center shadow-2xl">
             {renderResumePreview()}
           </div>
         </div>
       </div>
 
-      {/* MOBILE DISPLAY FOOTER CONTROLS POPUP ACTIVATOR */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent z-20">
-        <button onClick={() => setIsPreviewOpen(true)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl p-4 rounded-xl font-semibold flex items-center justify-center gap-2">
-          <Eye className="w-5 h-5" /> Preview Export Page
+      {/* HOW IT WORKS & FAQ SECTION */}
+      <div className="max-w-[1200px] mx-auto py-16 px-6 lg:px-8 mt-10">
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-4">
+              How it Works
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Build an elegant, typography-focused editorial resume in minutes. No design skills required.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 relative">
+              <div className="absolute -top-5 left-8 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
+                <Edit3 className="w-6 h-6 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mt-4 mb-3">Add Custom Columns</h3>
+              <p className="text-slate-600 leading-relaxed text-sm">
+                Use the left-hand dashboard to enter your info. You can add "Left Sections" for large text areas or "Right Sections" to populate the narrower technical column.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 relative">
+              <div className="absolute -top-5 left-8 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
+                <FileText className="w-6 h-6 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mt-4 mb-3">Live Formatting</h3>
+              <p className="text-slate-600 leading-relaxed text-sm">
+                Watch your resume build itself in real-time. The layout automatically handles spacing, serif typography styling, and clean borders for a premium editorial look.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 relative">
+              <div className="absolute -top-5 left-8 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center border-4 border-white shadow-sm">
+                <Download className="w-6 h-6 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mt-4 mb-3">Download PDF</h3>
+              <p className="text-slate-600 leading-relaxed text-sm">
+                When you're happy with your design, hit the download button to instantly receive your high-quality, print-ready PDF file securely.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-3 mb-8">
+            <HelpCircle className="w-8 h-8 text-indigo-600" />
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-slate-800 mb-2">Can I delete default sections?</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    Yes! You can completely delete default sections like "Languages" or "Certifications" by clicking the red trash can icon inside the editor block.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-slate-800 mb-2">Can I create my own categories?</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    Absolutely. Use the "+ Add Left Column Section" or "+ Add Right Column Section" buttons to create and name completely custom fields tailored to your career.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-slate-800 mb-2">Is the resulting PDF ATS-friendly?</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    Yes. Despite its elegant visual nature, this template uses standard text layout rules and heading tags that modern Applicant Tracking Systems (ATS) can easily parse.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-bold text-slate-800 mb-2">Is my personal data saved on your servers?</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    No. All processing and PDF generation happens locally inside your web browser. We do not store, track, or save your personal resume data on external servers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* MOBILE ACTIONS SELECTION FLOATING TRIGGERS */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white/95 to-transparent z-20">
+        <button onClick={() => setIsPreviewOpen(true)} className="w-full bg-slate-900 hover:bg-slate-800 text-white shadow-xl p-4 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform">
+          <Eye className="w-5 h-5" /> Preview & Download
         </button>
       </div>
 
-      {/* MOBILE FULL MODAL VIEWS PORTS */}
+      {/* MOBILE OVERLAY INTERACTION FULL MODALS */}
       {isPreviewOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col lg:hidden">
-          <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900">
-            <button onClick={() => setIsPreviewOpen(false)} className="p-2 bg-slate-800 rounded-full text-slate-300"><X className="w-5 h-5" /></button>
-            <button onClick={downloadPDF} disabled={isDownloading} className="flex items-center gap-2 bg-indigo-600 px-4 py-2 rounded-lg font-medium">
+        <div className="fixed inset-0 z-50 bg-slate-100 flex flex-col lg:hidden">
+          <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-white shadow-sm">
+            <button onClick={() => setIsPreviewOpen(false)} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 transition-colors"><X className="w-5 h-5" /></button>
+            <button onClick={downloadPDF} disabled={isDownloading} className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm disabled:opacity-50">
               {isDownloading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Download className="w-4 h-4" />}
-              Save Document
+              {isDownloading ? "Saving..." : "Save PDF"}
             </button>
           </div>
-          <div className="flex-1 overflow-auto p-4 flex justify-center bg-slate-800 custom-scrollbar">
-            <div className="origin-top scale-[0.4] sm:scale-[0.6] transition-transform">
+          <div className="flex-1 overflow-auto p-4 flex justify-center bg-slate-100 custom-scrollbar">
+            <div className="origin-top scale-[0.45] sm:scale-[0.6] transition-transform shadow-xl">
               {renderResumePreview()}
             </div>
           </div>
