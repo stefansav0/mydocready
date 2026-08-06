@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Landmark, 
   PiggyBank, 
@@ -20,9 +21,8 @@ export default function CalculatorsLandingPage() {
       description: 'Calculate Equated Monthly Installments for home, car, or personal loans.',
       href: '/calculators/emi',
       icon: Landmark,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100',
-      borderColor: 'hover:border-blue-300'
+      color: 'text-red-500',
+      bgColor: 'bg-red-50',
     },
     {
       id: 'fd',
@@ -30,9 +30,8 @@ export default function CalculatorsLandingPage() {
       description: 'Estimate your returns and maturity amount on Fixed Deposits safely.',
       href: '/calculators/fd',
       icon: PiggyBank,
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-100',
-      borderColor: 'hover:border-emerald-300'
+      color: 'text-orange-500',
+      bgColor: 'bg-orange-50',
     },
     {
       id: 'sip',
@@ -40,9 +39,8 @@ export default function CalculatorsLandingPage() {
       description: 'Plan your mutual fund investments and calculate wealth accumulation.',
       href: '/calculators/sip',
       icon: TrendingUp,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-100',
-      borderColor: 'hover:border-indigo-300'
+      color: 'text-green-500',
+      bgColor: 'bg-green-50',
     },
     {
       id: 'gst',
@@ -50,19 +48,17 @@ export default function CalculatorsLandingPage() {
       description: 'Easily add or remove Goods and Services Tax for your invoices.',
       href: '/calculators/gst',
       icon: Receipt,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-100',
-      borderColor: 'hover:border-orange-300'
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-50',
     },
     {
       id: 'tax',
-      title: 'Income Tax Calculator',
+      title: 'Tax Calculator',
       description: 'Compare Old vs New Tax Regimes (FY 26-27) for planning and comparison.',
       href: '/calculators/tax',
       icon: Scale,
-      color: 'text-teal-600',
-      bgColor: 'bg-teal-100',
-      borderColor: 'hover:border-teal-300'
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-50',
     },
     {
       id: 'split',
@@ -70,59 +66,78 @@ export default function CalculatorsLandingPage() {
       description: 'Divide expenses among friends, calculate tips, and download summaries.',
       href: '/calculators/split',
       icon: Users,
-      color: 'text-cyan-600',
-      bgColor: 'bg-cyan-100',
-      borderColor: 'hover:border-cyan-300'
+      color: 'text-orange-400',
+      bgColor: 'bg-orange-50',
     },
     {
       id: 'goal',
       title: 'Goal Planner',
-      description: 'Estimate monthly savings needed to reach your goals.',
+      description: 'Estimate monthly savings needed to reach your financial goals.',
       href: '/calculators/goal',
       icon: Target,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100',
-      borderColor: 'hover:border-purple-300'
+      color: 'text-indigo-500',
+      bgColor: 'bg-indigo-50',
     },
     {
       id: 'percentage',
-      title: 'Percentage Calculator',
+      title: 'Percentage Calc',
       description: 'Quickly solve percentage changes, retail discounts, and fractions.',
       href: '/calculators/percentage',
       icon: Percent,
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-100',
-      borderColor: 'hover:border-pink-300'
+      color: 'text-pink-500',
+      bgColor: 'bg-pink-50',
     },
     {
       id: 'age',
       title: 'Age Calculator',
-      description: 'Calculate age, years remaining, and more with a simple, easy-to-use tool.',
+      description: 'Calculate age, years remaining, and more with a simple tool.',
       href: '/calculators/age',
       icon: Calendar,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100',
-      borderColor: 'hover:border-green-300'
+      color: 'text-teal-500',
+      bgColor: 'bg-teal-50',
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f4f6fa] font-sans">
       
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-blue-900 to-blue-700 text-white py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl tracking-tight mb-6">
-            Smart Financial & Math Calculators
+{/* Hero Section */}
+      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
+        <div className="w-full md:w-3/5 text-left">
+         
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#111827] tracking-tight mb-6 leading-[1.15]">
+            Simplify Your Finances. <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-indigo-700 border-b-4 border-purple-700 pb-1">
+              Calculate, Plan, Compare
+            </span> <br className="hidden md:block" />
+            in Seconds.
           </h1>
-          <p className="mt-4 text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Find financial and math calculators for investments, taxes, loans, and everyday budgeting. Our browser-based tools are designed to help you estimate outcomes and compare options with clear inputs and straightforward results.
+          <p className="mt-6 text-lg text-gray-500 max-w-xl leading-relaxed">
+            This option highlights the time-saving benefit of using your all-in-one financial tool. Find calculators for investments, taxes, loans, and everyday budgeting.
           </p>
+        </div>
+        
+        {/* Illustration Area */}
+        <div className="flex w-full mt-12 md:mt-0 md:w-2/5 justify-center md:justify-end relative items-center">
+           {/* Subtle background glow behind the image */}
+           <div className="absolute w-56 h-56 md:w-72 md:h-72 bg-gradient-to-tr from-indigo-200 to-purple-200 rounded-full opacity-40 blur-3xl -z-10"></div>
+           
+           {/* Calculator Image */}
+           <Image 
+             src="/calc.png" 
+             alt="Calculator Illustration" 
+             width={500} 
+             height={500} 
+             className="object-contain w-64 sm:w-80 md:w-full drop-shadow-xl z-10 hover:scale-105 transition-transform duration-500"
+             priority
+           />
         </div>
       </section>
 
       {/* Main Grid Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10 pb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <h2 className="text-2xl font-bold text-[#111827] mb-8">Financial Tools</h2>
+        
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {calculators.map((calc) => {
             const Icon = calc.icon;
@@ -130,30 +145,27 @@ export default function CalculatorsLandingPage() {
               <Link 
                 key={calc.id} 
                 href={calc.href}
-                className={`group bg-white rounded-2xl shadow-md border-2 border-transparent p-6 hover:shadow-xl ${calc.borderColor} transition-all duration-300 transform hover:-translate-y-1`}
+                className="group bg-white rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col"
               >
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className={`p-4 rounded-xl ${calc.bgColor} ${calc.color} group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="w-7 h-7" />
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-gray-700 transition-colors">
-                    {calc.title}
-                  </h3>
+                {/* Icon Box */}
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${calc.bgColor} ${calc.color}`}>
+                  <Icon className="w-7 h-7" strokeWidth={2} />
                 </div>
-                <p className="text-gray-600 leading-relaxed min-h-[3rem] text-sm sm:text-base">
+                
+                {/* Text Content */}
+                <h3 className="text-xl font-bold text-[#111827] mb-2 group-hover:text-purple-700 transition-colors">
+                  {calc.title}
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed pr-2">
                   {calc.description}
                 </p>
-                <div className={`mt-6 flex items-center font-bold text-sm ${calc.color}`}>
-                  Open Tool 
-                  <span className="ml-2 group-hover:translate-x-2 transition-transform duration-300">
-                    →
-                  </span>
-                </div>
               </Link>
             );
           })}
         </div>
       </section>
+
+    
 
       {/* SEO / AdSense Content Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

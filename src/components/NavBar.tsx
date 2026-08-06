@@ -79,11 +79,11 @@ export default function NavBar() {
   const allTools = [
     { name: "Resize Signature", href: "/resize-signature", icon: <Crop size={16} /> },
     { name: "Passport Photo Maker", href: "/passport-photo", icon: <ImageIcon size={16} /> },
-    { name: "Smart Resume Builder", href: "/resume-maker", icon: <FileText size={16} /> },
-    { name: "Word to PDF", href: "/converter/word-to-pdf", icon: <FileText size={16} /> },
-    { name: "PDF to Word", href: "/converter/pdf-to-word", icon: <FileText size={16} /> },
-    { name: "Excel to PDF", href: "/converter/excel-to-pdf", icon: <FileSpreadsheet size={16} /> },
-    { name: "PDF to Excel", href: "/converter/pdf-to-excel", icon: <Grid size={16} /> },
+    { name: "Resume Maker", href: "/resume-maker", icon: <FileText size={16} /> },
+    { name: "File Converter", href: "/converter", icon: <FileText size={16} /> },
+    { name: "ID Card Scanner", href: "/id-card-scan", icon: <FileText size={16} /> },
+    { name: "Document Scanner", href: "/scan-document", icon: <FileSpreadsheet size={16} /> },
+    { name: "Image To Text", href: "/image-to-text", icon: <Grid size={16} /> },
     { name: "Calculator", href: "/calculators", icon: <Presentation size={16} /> },
     { name: "All Tools", href: "/tools", icon: <FilePlus size={16} /> },
   ];
@@ -123,7 +123,7 @@ export default function NavBar() {
                 HOME
               </Link>
               <Link href="/resize" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
-                Resize Photo
+                Resize Image
               </Link>
               <Link href="/blog" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
                 Blog
@@ -246,7 +246,7 @@ export default function NavBar() {
               <Link href="/" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">HOME</Link>
               <Link href="/about" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">ABOUT US</Link>
               <Link href="/blog" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">BLOGS</Link>
-              <Link href="/resize" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">Resize Photo</Link>
+              <Link href="/resize" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">Resize Image</Link>
             </div>
 
             <div>
