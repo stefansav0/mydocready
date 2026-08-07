@@ -6,7 +6,8 @@ import { Rnd } from 'react-rnd';
 import { 
   Plus, Download, Type, Image as ImageIcon, 
   Palette, Trash2, Layout, X, Move, Pencil,
-  LayoutTemplate, Edit3, HelpCircle, CheckCircle2
+  LayoutTemplate, Edit3, HelpCircle, CheckCircle2,
+  ChevronDown, FileText
 } from 'lucide-react';
 
 interface CanvasElement {
@@ -34,7 +35,7 @@ export default function PresentationMakerPro() {
       id: '1', bgColor: '#ffffff',
       elements: [
         { id: 'el-1', type: 'text', x: 80, y: 80, w: 800, h: 80, content: 'Tap to Edit Title', fontSize: 48, color: '#1e293b' },
-        { id: 'el-2', type: 'text', x: 80, y: 200, w: 600, h: 200, content: '• Drag elements with your finger or mouse\n• Resize using the corner handles\n• Tap the Pencil icon to edit text', fontSize: 24, color: '#475569' }
+        { id: 'el-2', type: 'text', x: 80, y: 200, w: 700, h: 200, content: '• Drag elements with your finger or mouse\n• Resize using the corner handles\n• Tap the Pencil icon to edit text\n• Use Arrow Keys to nudge elements (Shift to move faster)\n• Press Delete to remove an element', fontSize: 24, color: '#475569' }
       ]
     }
   ]);
@@ -43,27 +44,72 @@ export default function PresentationMakerPro() {
   const [activeTab, setActiveTab] = useState<'design' | 'text' | 'uploads' | 'none'>('none');
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  
   const [scale, setScale] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const activeSlide = slides.find(s => s.id === activeSlideId) || slides[0];
   const selectedElement = activeSlide.elements.find(e => e.id === selectedElementId);
 
-  // Responsive Canvas Scaling
+  // --- Keyboard Shortcuts (Arrow Keys & Delete) ---
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (!selectedElementId) return;
+
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault();
+        setSlides(prev => prev.map(s => s.id === activeSlideId ? {
+          ...s, elements: s.elements.filter(el => el.id !== selectedElementId)
+        } : s));
+        setSelectedElementId(null);
+        setActiveTab('none');
+        return;
+      }
+
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault(); 
+        const step = e.shiftKey ? 10 : 1; 
+        
+        setSlides(prev => prev.map(slide => {
+          if (slide.id !== activeSlideId) return slide;
+          return {
+            ...slide,
+            elements: slide.elements.map(el => {
+              if (el.id !== selectedElementId) return el;
+              let newX = el.x;
+              let newY = el.y;
+              if (e.key === 'ArrowUp') newY -= step;
+              if (e.key === 'ArrowDown') newY += step;
+              if (e.key === 'ArrowLeft') newX -= step;
+              if (e.key === 'ArrowRight') newX += step;
+              return { ...el, x: newX, y: newY };
+            })
+          };
+        }));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedElementId, activeSlideId]);
+
+  // --- Responsive Canvas Scaling ---
   useEffect(() => {
     if (!containerRef.current) return;
     
     const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
-        const padding = 32; // Safe area padding
+        const padding = 32; 
         const availableW = width - padding;
         const availableH = height - padding;
         
         const scaleW = availableW / CANVAS_W;
         const scaleH = availableH / CANVAS_H;
         
-        // Ensure scale adapts perfectly on small screens
         setScale(Math.max(0.15, Math.min(scaleW, scaleH, 1)));
       }
     });
@@ -75,7 +121,7 @@ export default function PresentationMakerPro() {
   // --- Core Handlers ---
   const addSlide = () => {
     const newId = Date.now().toString();
-    setSlides([...slides, { id: newId, bgColor: '#ffffff', elements: [] }]);
+    setSlides(prev => [...prev, { id: newId, bgColor: '#ffffff', elements: [] }]);
     setActiveSlideId(newId);
     setSelectedElementId(null);
   };
@@ -88,7 +134,7 @@ export default function PresentationMakerPro() {
   };
 
   const updateSlideBg = (color: string) => {
-    setSlides(slides.map(s => s.id === activeSlideId ? { ...s, bgColor: color } : s));
+    setSlides(prev => prev.map(s => s.id === activeSlideId ? { ...s, bgColor: color } : s));
   };
 
   const addTextElement = () => {
@@ -97,7 +143,7 @@ export default function PresentationMakerPro() {
       x: CANVAS_W / 2 - 200, y: CANVAS_H / 2 - 40, w: 400, h: 80, 
       content: 'New Text Box', fontSize: 32, color: '#1e293b'
     };
-    setSlides(slides.map(s => s.id === activeSlideId ? { ...s, elements: [...s.elements, newEl] } : s));
+    setSlides(prev => prev.map(s => s.id === activeSlideId ? { ...s, elements: [...s.elements, newEl] } : s));
     setSelectedElementId(newEl.id);
     setActiveTab('text');
   };
@@ -111,7 +157,7 @@ export default function PresentationMakerPro() {
           id: Date.now().toString(), type: 'image',
           x: CANVAS_W / 2 - 150, y: CANVAS_H / 2 - 150, w: 300, h: 300, data: reader.result as string
         };
-        setSlides(slides.map(s => s.id === activeSlideId ? { ...s, elements: [...s.elements, newEl] } : s));
+        setSlides(prev => prev.map(s => s.id === activeSlideId ? { ...s, elements: [...s.elements, newEl] } : s));
         setSelectedElementId(newEl.id);
         setActiveTab('none');
       };
@@ -121,77 +167,179 @@ export default function PresentationMakerPro() {
 
   const updateSelectedElement = (updates: Partial<CanvasElement>) => {
     if (!selectedElementId) return;
-    setSlides(slides.map(s => s.id === activeSlideId ? {
+    setSlides(prev => prev.map(s => s.id === activeSlideId ? {
       ...s, elements: s.elements.map(el => el.id === selectedElementId ? { ...el, ...updates } : el)
     } : s));
   };
 
   const deleteSelectedElement = () => {
     if (!selectedElementId) return;
-    setSlides(slides.map(s => s.id === activeSlideId ? {
+    setSlides(prev => prev.map(s => s.id === activeSlideId ? {
       ...s, elements: s.elements.filter(el => el.id !== selectedElementId)
     } : s));
     setSelectedElementId(null);
     setActiveTab('none');
   };
 
-  // --- Perfect 1:1 PPTX Export Engine ---
+  // ============================================
+  // UNIVERSAL MULTI-FORMAT EXPORT ENGINE
+  // ============================================
   const pxToInches = (px: number, isWidth: boolean) => (px / (isWidth ? CANVAS_W : CANVAS_H)) * (isWidth ? 10 : 5.625);
 
-  const exportPPT = () => {
-    const pres = new pptxgen();
-    pres.layout = "LAYOUT_16x9"; // Exact 10 x 5.625 inches mapping
+  const exportPPT = async () => {
+    setIsDownloading(true);
+    setShowExportMenu(false);
+    try {
+      const pres = new pptxgen();
+      pres.layout = "LAYOUT_16x9"; 
 
-    slides.forEach(s => {
-      const slide = pres.addSlide();
-      slide.background = { color: s.bgColor.replace('#', '') };
-      
-      s.elements.forEach(el => {
-        if (el.type === 'text' && el.content) {
-          // Convert pixel font size to exact PPTX points (1px = 0.75pt)
-          const ptSize = Math.round((el.fontSize || 32) * 0.75);
-          
-          slide.addText(el.content, { 
-            x: pxToInches(el.x, true), 
-            y: pxToInches(el.y, false), 
-            w: pxToInches(el.w, true), 
-            h: pxToInches(el.h, false), 
-            fontSize: ptSize, 
-            color: (el.color || '#000000').replace('#', ''), 
-            valign: 'top', 
-            breakLine: true,
-            margin: 0
-          });
-        } else if (el.type === 'image' && el.data) {
-          slide.addImage({ 
-            data: el.data, 
-            x: pxToInches(el.x, true), 
-            y: pxToInches(el.y, false), 
-            w: pxToInches(el.w, true), 
-            h: pxToInches(el.h, false),
-            sizing: { type: "contain", w: pxToInches(el.w, true), h: pxToInches(el.h, false) }
-          });
+      const getImageDimensions = (src: string): Promise<{ w: number, h: number }> => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+          img.onerror = () => resolve({ w: 100, h: 100 });
+          img.src = src;
+        });
+      };
+
+      for (const s of slides) {
+        const slide = pres.addSlide();
+        slide.background = { color: s.bgColor.replace('#', '') };
+        
+        for (const el of s.elements) {
+          if (el.type === 'text' && el.content) {
+            const ptSize = Math.round((el.fontSize || 32) * 0.75);
+            slide.addText(el.content, { 
+              x: pxToInches(el.x, true), y: pxToInches(el.y, false), 
+              w: pxToInches(el.w, true), h: pxToInches(el.h, false), 
+              fontSize: ptSize, color: (el.color || '#000000').replace('#', ''), 
+              valign: 'top', breakLine: true, margin: 0
+            });
+          } else if (el.type === 'image' && el.data) {
+            const dims = await getImageDimensions(el.data);
+            const imgAspect = dims.w / dims.h;
+            const boxAspect = el.w / el.h;
+            
+            let finalW, finalH, finalX, finalY;
+            if (imgAspect > boxAspect) {
+              finalW = el.w; finalH = el.w / imgAspect;
+              finalX = el.x; finalY = el.y + (el.h - finalH) / 2;
+            } else {
+              finalH = el.h; finalW = el.h * imgAspect;
+              finalY = el.y; finalX = el.x + (el.w - finalW) / 2; 
+            }
+
+            slide.addImage({ 
+              data: el.data, 
+              x: pxToInches(finalX, true), y: pxToInches(finalY, false), 
+              w: pxToInches(finalW, true), h: pxToInches(finalH, false)
+            });
+          }
         }
-      });
-    });
+      }
 
-    pres.writeFile({ fileName: "My_Presentation.pptx" });
+      await pres.writeFile({ fileName: "My_Presentation.pptx" });
+    } catch (error) {
+      console.error("Error creating PPT:", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const exportPDF = async () => {
+    setIsDownloading(true);
+    setShowExportMenu(false);
+    try {
+      const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+        import("jspdf"),
+        import("html2canvas-pro"),
+      ]);
+      
+      const pdf = new jsPDF("l", "px", [CANVAS_W, CANVAS_H]);
+      
+      for (let i = 0; i < slides.length; i++) {
+        const slideNode = document.getElementById(`export-slide-${slides[i].id}`);
+        if (!slideNode) continue;
+        
+        const canvas = await html2canvas(slideNode, { scale: 2, useCORS: true, logging: false });
+        const imgData = canvas.toDataURL("image/jpeg", 1.0);
+        
+        if (i > 0) pdf.addPage([CANVAS_W, CANVAS_H], "l");
+        pdf.addImage(imgData, "JPEG", 0, 0, CANVAS_W, CANVAS_H);
+      }
+      
+      pdf.save("My_Presentation.pdf");
+    } catch (e) {
+      console.error("PDF Export Error:", e);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const exportImage = async (format: 'png' | 'jpeg') => {
+    setIsDownloading(true);
+    setShowExportMenu(false);
+    try {
+      const { default: html2canvas } = await import("html2canvas-pro");
+      const slideNode = document.getElementById(`export-slide-${activeSlideId}`);
+      if (!slideNode) return;
+
+      const canvas = await html2canvas(slideNode, { scale: 2, useCORS: true, logging: false });
+      const imgData = canvas.toDataURL(`image/${format}`, 1.0);
+      
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = `Slide_${activeSlideId}.${format}`;
+      link.click();
+    } catch(e) {
+       console.error("Image Export Error:", e);
+    } finally {
+       setIsDownloading(false);
+    }
   };
 
   // Global click to deselect
-  const handleBackgroundClick = () => {
+  const handleGlobalClick = () => {
     setSelectedElementId(null);
     setActiveTab('none');
+    setShowExportMenu(false);
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f6fa] font-sans text-slate-900 flex flex-col" onClick={handleBackgroundClick}>
+    <div className="min-h-screen bg-[#f4f6fa] font-sans text-slate-900 flex flex-col" onClick={handleGlobalClick}>
       
       {/* Hide scrollbars for toolbars */}
       <style dangerouslySetInnerHTML={{__html: `
         .custom-scrollbar::-webkit-scrollbar { display: none; }
         .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
+
+      {/* HIDDEN RENDER ENGINE FOR PERFECT EXPORTS */}
+      <div className="fixed top-[9999px] left-[9999px] pointer-events-none z-[-50] opacity-0">
+        <div className="flex flex-col gap-4">
+          {slides.map(slide => (
+            <div 
+              key={slide.id} 
+              id={`export-slide-${slide.id}`} 
+              style={{ width: CANVAS_W, height: CANVAS_H, backgroundColor: slide.bgColor, position: 'relative', overflow: 'hidden' }}
+            >
+              {slide.elements.map(el => (
+                <div key={el.id} style={{ position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h }}>
+                  {el.type === 'text' ? (
+                    <div style={{ fontSize: `${el.fontSize}px`, color: el.color, width: '100%', height: '100%' }}>
+                      {el.content?.split('\n').map((line, i) => (
+                        <div key={i} style={{ minHeight: '1.2em', whiteSpace: 'pre-wrap', lineHeight: 1.25 }}>{line}</div>
+                      ))}
+                    </div>
+                  ) : (
+                    <img src={el.data} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ========================================================================= */}
       {/* APP WORKSPACE CONTAINER */}
@@ -209,9 +357,21 @@ export default function PresentationMakerPro() {
             <div className="font-black text-lg text-indigo-600 flex items-center gap-2">
               <Layout size={20} /> SlideMaker
             </div>
-            <button onClick={exportPPT} className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-sm font-bold shadow-md active:scale-95 transition-transform">
-              Export
-            </button>
+            
+            <div className="relative">
+              <button onClick={() => setShowExportMenu(!showExportMenu)} disabled={isDownloading} className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-sm font-bold shadow-md active:scale-95 transition-transform flex items-center gap-2">
+                {isDownloading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> : 'Export'}
+              </button>
+              
+              {showExportMenu && (
+                <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden z-50 flex flex-col animate-in slide-in-from-top-2">
+                  <button onClick={exportPPT} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3 border-b border-slate-100"><Layout size={18}/> PowerPoint (.pptx)</button>
+                  <button onClick={exportPDF} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3 border-b border-slate-100"><FileText size={18}/> PDF Document</button>
+                  <button onClick={() => exportImage('png')} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3 border-b border-slate-100"><ImageIcon size={18}/> Current Slide (PNG)</button>
+                  <button onClick={() => exportImage('jpeg')} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3"><ImageIcon size={18}/> Current Slide (JPG)</button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* SIDEBAR NAVIGATION (Left on Desktop, Bottom on Mobile) */}
@@ -333,13 +493,27 @@ export default function PresentationMakerPro() {
             {/* DESKTOP HEADER BAR */}
             <div className="hidden md:flex h-16 bg-white border-b border-gray-200 items-center justify-between px-8 z-10 shadow-sm flex-shrink-0" onClick={e => e.stopPropagation()}>
               <div className="text-sm font-bold text-slate-600 bg-slate-50 px-4 py-2 rounded-lg border border-slate-200">Untitled Presentation</div>
-              <button 
-                onClick={exportPPT}
-                className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-indigo-600/20 transition-all active:scale-95"
-              >
-                <Download size={18} />
-                <span>Export to PPTX</span>
-              </button>
+              
+              <div className="relative">
+                <button 
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  disabled={isDownloading}
+                  className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-indigo-600/20 transition-all active:scale-95 disabled:opacity-50"
+                >
+                  {isDownloading ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> : <Download size={18} />}
+                  <span>{isDownloading ? 'Generating...' : 'Export File'}</span>
+                  <ChevronDown size={16} />
+                </button>
+
+                {showExportMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden z-50 flex flex-col animate-in slide-in-from-top-2">
+                    <button onClick={exportPPT} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3 border-b border-slate-100"><Layout size={18}/> PowerPoint (.pptx)</button>
+                    <button onClick={exportPDF} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3 border-b border-slate-100"><FileText size={18}/> PDF Document</button>
+                    <button onClick={() => exportImage('png')} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3 border-b border-slate-100"><ImageIcon size={18}/> Current Slide (PNG)</button>
+                    <button onClick={() => exportImage('jpeg')} className="px-4 py-3.5 text-sm text-left font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-3"><ImageIcon size={18}/> Current Slide (JPG)</button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* INTERACTIVE CANVAS AREA */}
@@ -425,8 +599,7 @@ export default function PresentationMakerPro() {
                         </div>
                       )}
 
-                      {/* THE FIX: e.stopPropagation() added to click & pointer events inside Rnd */}
-                      {/* This stops the click from bubbling up to the background and deselecting instantly */}
+                      {/* Element Content & Selection Handlers */}
                       <div 
                         className="w-full h-full p-2 cursor-move flex flex-col justify-start touch-none" 
                         onClick={(e) => {
@@ -497,7 +670,7 @@ export default function PresentationMakerPro() {
       {/* ========================================================================= */}
       {/* HOW IT WORKS & FAQ SECTION */}
       {/* ========================================================================= */}
-      <div className="w-full bg-white border-t border-gray-200 mt-auto">
+      <div className="w-full bg-white border-t border-slate-200 mt-auto">
         <div className="max-w-[1200px] mx-auto py-16 px-6 lg:px-8">
           
           <div className="mb-20">
@@ -506,7 +679,7 @@ export default function PresentationMakerPro() {
                 How it Works
               </h2>
               <p className="text-gray-500 max-w-2xl mx-auto">
-                Create stunning presentations right in your browser and export them as native PowerPoint (PPTX) files instantly.
+                Create stunning presentations right in your browser and export them as native PowerPoint, PDF, or Image files.
               </p>
             </div>
 

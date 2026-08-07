@@ -5,6 +5,26 @@ const nextConfig: NextConfig = {
   experimental: {
     useTypeScriptCli: true,
   },
+
+  // Enable Cross-Origin Isolation for WebAssembly multi-threading (AI Model)
+  async headers() {
+    return [
+      {
+        // Only apply these headers to the background remover route
+        source: '/bg-remover',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+        ],
+      },
+    ];
+  },
   
   // Universal fallback overrides for client-side compilation engines
   webpack: (config, { isServer, webpack }) => {

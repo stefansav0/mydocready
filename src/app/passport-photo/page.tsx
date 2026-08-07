@@ -175,16 +175,10 @@ export default function PassportPhotoPage() {
       <div className="bg-white border-b border-gray-200 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-6">
-            Create Professional <span className="text-blue-600">Passport Photos</span> Instantly
+            Create Professional <span className="text-blue-600">Passport Size Photos</span> Instantly
           </h1>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto mb-8">
-            Stop paying for photo booths. Upload a selfie, let our AI remove the background, and download a print-ready 35×45mm photo for free.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-gray-600">
-            <span className="flex items-center gap-1.5"><ShieldCheck size={18} className="text-green-500"/> 100% Private (Runs Locally)</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 size={18} className="text-blue-500"/> AI Auto-Erase</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 size={18} className="text-purple-500"/> Free Forever</span>
-          </div>
+          
+         
         </div>
       </div>
 
