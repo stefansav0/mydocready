@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   manifest: "/manifest.json",
   metadataBase: new URL(SITE.url),
+
   keywords: [
     "PDF converter",
     "passport photo maker",
@@ -25,10 +26,12 @@ export const metadata: Metadata = {
     "online calculators",
     "free document tools",
   ],
+
   authors: [{ name: SITE.name }],
   creator: SITE.name,
   publisher: SITE.name,
   category: "Productivity",
+
   robots: {
     index: true,
     follow: true,
@@ -40,22 +43,44 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+
   icons: {
     icon: [
-      { url: "/logo.png", type: "image/png", sizes: "32x32" },
-      { url: "/logo.png", type: "image/png", sizes: "192x192" },
+      {
+        url: "/logo.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/logo.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
     ],
-    apple: [{ url: "/logo.png" }],
+    apple: [
+      {
+        url: "/logo.png",
+      },
+    ],
   },
+
   openGraph: {
     title: "MyDocReady | Free tools for documents, photos and calculations",
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
     locale: SITE.locale,
-    images: [{ url: "/logo.png", width: 512, height: 512, alt: "MyDocReady logo" }],
     type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "MyDocReady Logo",
+      },
+    ],
   },
+
   twitter: {
     card: "summary",
     title: "MyDocReady | Free document and photo tools",
@@ -66,46 +91,79 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#ffffff",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#020617",
+    },
   ],
   colorScheme: "light dark",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className="antialiased">
-        <ViewTracker />
-        {/* Defer non-essential third parties so initial content can render first. */}
-        <Script
-          strategy="lazyOnload"
-          src="https://www.googletagmanager.com/gtag/js?id=G-T2SK91EF1Y"
-        />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-T2SK91EF1Y');`}
-        </Script>
-        <Script
-          id="adsense-script"
+    <html lang="en">
+
+      <head>
+
+        {/* Google AdSense */}
+        <script
           async
-          strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
           crossOrigin="anonymous"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
         />
 
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      </head>
+
+      <body>
+
+        {/* Google Analytics */}
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-T2SK91EF1Y"
+        />
+
+        <Script
+          id="google-analytics-config"
+          strategy="afterInteractive"
+        >
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T2SK91EF1Y');
+          `}
+        </Script>
+
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ViewTracker />
+
           <a href="#main-content" className="skip-link">
             Skip to main content
           </a>
+
           <NavBar />
+
           <main id="main-content" tabIndex={-1}>
             {children}
           </main>
+
           <Footer />
         </ThemeProvider>
+
       </body>
     </html>
   );

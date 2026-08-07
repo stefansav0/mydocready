@@ -8,8 +8,24 @@ const nextConfig: NextConfig = {
 
   async headers() {
     return [
+      // Passport Photo AI Page
       {
-        source: "/:path*",
+        source: "/passport-photo",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Embedder-Policy",
+            value: "require-corp",
+          },
+        ],
+      },
+
+      // Background Remover AI Page
+      {
+        source: "/bg-remover",
         headers: [
           {
             key: "Cross-Origin-Opener-Policy",
@@ -40,9 +56,12 @@ const nextConfig: NextConfig = {
       };
 
       config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: any) => {
-          resource.request = resource.request.replace(/^node:/, "");
-        })
+        new webpack.NormalModuleReplacementPlugin(
+          /^node:/,
+          (resource: any) => {
+            resource.request = resource.request.replace(/^node:/, "");
+          }
+        )
       );
     }
 
