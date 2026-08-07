@@ -75,12 +75,27 @@ export default function HomePage() {
       <CreativeSuite />
       
       {/* --- Background Remover Highlight Section --- */}
-      <section className="py-16 sm:py-24 overflow-hidden relative">
+      <section className="py-12 sm:py-24 overflow-hidden relative">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-16 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-center">
+          {/* Reduced gap-y-16 to gap-y-8 for mobile to keep them together */}
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-16 gap-y-8 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-center">
             
-            {/* Text Content */}
-            <div className="lg:pr-8">
+            {/* Image Presentation (Order 1 on mobile, Order 2 on desktop) */}
+            <div className="relative order-1 lg:order-2">
+              <div className="absolute -inset-y-16 -inset-x-8 -z-10 bg-slate-100/50 rounded-[3rem] transform rotate-3 sm:rotate-6 sm:scale-105" />
+              
+              {/* Image is now clickable and navigates to the tool */}
+              <a href="/bg-remover" className="block relative group cursor-pointer">
+                <img
+                  src="/bg.png"
+                  alt="Background Remover Before and After"
+                  className="relative rounded-2xl shadow-2xl ring-1 ring-slate-900/10 object-cover w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </a>
+            </div>
+
+            {/* Text Content (Order 2 on mobile, Order 1 on desktop) */}
+            <div className="lg:pr-8 order-2 lg:order-1">
               <div className="lg:max-w-lg">
                 <span className="text-sm font-semibold leading-7 text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
                   New Feature
@@ -102,40 +117,31 @@ export default function HomePage() {
               </div>
             </div>
             
-            {/* Image Presentation */}
-            <div className="relative">
-              {/* Decorative background blob/shape */}
-              <div className="absolute -inset-y-16 -inset-x-8 -z-10 bg-slate-100/50 rounded-[3rem] transform rotate-3 sm:rotate-6 sm:scale-105" />
-              
-              <img
-                src="/bg.png"
-                alt="Background Remover Before and After"
-                className="relative rounded-2xl shadow-2xl ring-1 ring-slate-900/10 object-cover w-full transition-transform duration-500 hover:scale-[1.02]"
-              />
-            </div>
-            
           </div>
         </div>
       </section>
 
       {/* --- Typing Test Highlight Section --- */}
-      <section className="py-16 sm:py-24 overflow-hidden relative bg-white">
+      <section className="py-12 sm:py-24 overflow-hidden relative bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-16 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-center">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-16 gap-y-8 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-center">
             
-            {/* Image Presentation (Reversed order on large screens for alternating layout) */}
-            <div className="relative lg:order-first">
+            {/* Image Presentation (Order 1 on both mobile and desktop) */}
+            <div className="relative order-1">
               <div className="absolute -inset-y-16 -inset-x-8 -z-10 bg-slate-50 rounded-[3rem] transform -rotate-3 sm:-rotate-6 sm:scale-105" />
               
-              <img
-                src="/typ.png"
-                alt="Typing Speed Test Interface"
-                className="relative rounded-2xl shadow-2xl ring-1 ring-slate-900/10 object-cover w-full transition-transform duration-500 hover:scale-[1.02]"
-              />
+              {/* Image is now clickable and navigates to the tool */}
+              <a href="/typing-test" className="block relative group cursor-pointer">
+                <img
+                  src="/typ.png"
+                  alt="Typing Speed Test Interface"
+                  className="relative rounded-2xl shadow-2xl ring-1 ring-slate-900/10 object-cover w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </a>
             </div>
 
-            {/* Text Content */}
-            <div className="lg:pl-8">
+            {/* Text Content (Order 2 on both mobile and desktop) */}
+            <div className="lg:pl-8 order-2">
               <div className="lg:max-w-lg">
                 <span className="text-sm font-semibold leading-7 text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
                   Skill Builder

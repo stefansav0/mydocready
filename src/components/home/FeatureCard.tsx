@@ -30,20 +30,21 @@ export default function FeatureCard({
   color,
 }: FeatureCardProps) {
   const colors = {
-    indigo: "bg-indigo-50 border-indigo-100",
-    violet: "bg-violet-50 border-violet-100",
-    blue: "bg-blue-50 border-blue-100",
-    emerald: "bg-emerald-50 border-emerald-100",
-    amber: "bg-amber-50 border-amber-100",
-    rose: "bg-rose-50 border-rose-100",
-    teal: "bg-teal-50 border-teal-100",
-    fuchsia: "bg-fuchsia-50 border-fuchsia-100",
+    indigo: "bg-indigo-50 border-indigo-100 text-indigo-600",
+    violet: "bg-violet-50 border-violet-100 text-violet-600",
+    blue: "bg-blue-50 border-blue-100 text-blue-600",
+    emerald: "bg-emerald-50 border-emerald-100 text-emerald-600",
+    amber: "bg-amber-50 border-amber-100 text-amber-600",
+    rose: "bg-rose-50 border-rose-100 text-rose-600",
+    teal: "bg-teal-50 border-teal-100 text-teal-600",
+    fuchsia: "bg-fuchsia-50 border-fuchsia-100 text-fuchsia-600",
   };
 
   return (
+    // Restored larger padding (p-10) and softer corner radius (rounded-[32px])
     <div className="group flex flex-col rounded-[32px] border border-slate-200 bg-white p-10 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
 
-      {/* Icon/Image */}
+      {/* Icon/Image Wrapper - Restored to h-28 w-28 with rounded-[26px] */}
       <div
         className={`flex h-28 w-28 items-center justify-center rounded-[26px] border ${colors[color]}`}
       >
@@ -51,27 +52,30 @@ export default function FeatureCard({
           <Image
             src={image}
             alt={title}
-            width={104}
-            height={104}
-            className="h-[104px] w-[104px] object-cover"
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain transition-transform duration-300 group-hover:scale-110"
             priority
           />
         ) : (
-          Icon && <Icon className="h-12 w-12" />
+          Icon && <Icon className="h-12 w-12 transition-transform duration-300 group-hover:scale-110" />
         )}
       </div>
 
-      <h3 className="mt-8 text-[42px] font-bold leading-tight text-slate-900">
+      {/* Restored larger title (text-[32px] or 4xl) */}
+      <h3 className="mt-8 text-3xl md:text-[34px] font-bold leading-tight text-slate-900">
         {title}
       </h3>
 
-      <p className="mt-5 flex-1 text-[20px] leading-9 text-slate-600">
+      {/* Restored larger description text (text-lg) */}
+      <p className="mt-5 flex-1 text-lg leading-relaxed text-slate-500">
         {description}
       </p>
 
+      {/* Restored softer, taller button */}
       <Link
         href={link}
-        className="mt-10 flex h-16 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-xl font-semibold text-slate-900 transition-all hover:bg-slate-100"
+        className="mt-8 flex h-14 w-full items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-base font-semibold text-slate-900 transition-all hover:bg-slate-100 hover:border-slate-300"
       >
         {buttonText}
       </Link>
