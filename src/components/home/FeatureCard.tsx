@@ -41,41 +41,42 @@ export default function FeatureCard({
   };
 
   return (
-    // Restored larger padding (p-10) and softer corner radius (rounded-[32px])
-    <div className="group flex flex-col rounded-[32px] border border-slate-200 bg-white p-10 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+    // Drastically reduced padding: p-5 on phones, p-6 on desktop. 
+    // Reduced border radius to keep it looking sharp at a smaller scale.
+    <div className="group flex flex-col rounded-xl sm:rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
 
-      {/* Icon/Image Wrapper - Restored to h-28 w-28 with rounded-[26px] */}
+      {/* Icon/Image Wrapper - Scaled down to h-12 w-12 (phone) and h-14 w-14 (desktop) */}
       <div
-        className={`flex h-28 w-28 items-center justify-center rounded-[26px] border ${colors[color]}`}
+        className={`flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-lg sm:rounded-xl border ${colors[color]}`}
       >
         {image ? (
           <Image
             src={image}
             alt={title}
-            width={64}
-            height={64}
-            className="h-16 w-16 object-contain transition-transform duration-300 group-hover:scale-110"
+            width={32}
+            height={32}
+            className="h-6 w-6 sm:h-7 sm:w-7 object-contain transition-transform duration-300 group-hover:scale-110"
             priority
           />
         ) : (
-          Icon && <Icon className="h-12 w-12 transition-transform duration-300 group-hover:scale-110" />
+          Icon && <Icon className="h-6 w-6 sm:h-7 sm:w-7 transition-transform duration-300 group-hover:scale-110" />
         )}
       </div>
 
-      {/* Restored larger title (text-[32px] or 4xl) */}
-      <h3 className="mt-8 text-3xl md:text-[34px] font-bold leading-tight text-slate-900">
+      {/* Title - Brought down from massive 34px to text-lg (phone) and text-xl (desktop) */}
+      <h3 className="mt-4 sm:mt-5 text-lg sm:text-xl font-bold leading-tight text-slate-900">
         {title}
       </h3>
 
-      {/* Restored larger description text (text-lg) */}
-      <p className="mt-5 flex-1 text-lg leading-relaxed text-slate-500">
+      {/* Description - Standardized to text-sm on phones, text-[15px] on desktop */}
+      <p className="mt-2 sm:mt-3 flex-1 text-sm sm:text-[15px] leading-relaxed text-slate-500">
         {description}
       </p>
 
-      {/* Restored softer, taller button */}
+      {/* Button - Reduced height and text size so it doesn't overpower the card */}
       <Link
         href={link}
-        className="mt-8 flex h-14 w-full items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-base font-semibold text-slate-900 transition-all hover:bg-slate-100 hover:border-slate-300"
+        className="mt-5 sm:mt-6 flex h-10 sm:h-11 w-full items-center justify-center rounded-lg sm:rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300"
       >
         {buttonText}
       </Link>

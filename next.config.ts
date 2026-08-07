@@ -1,32 +1,29 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Required to support TypeScript 7.x in Next.js 16
+  // Required for TypeScript 7.x in Next.js 16
   experimental: {
     useTypeScriptCli: true,
   },
 
-  // Enable Cross-Origin Isolation for WebAssembly multi-threading (AI Model)
   async headers() {
     return [
       {
-        // Only apply these headers to the background remover route
-        source: '/bg-remover',
+        source: "/:path*",
         headers: [
           {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
           },
           {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp',
+            key: "Cross-Origin-Embedder-Policy",
+            value: "require-corp",
           },
         ],
       },
     ];
   },
-  
-  // Universal fallback overrides for client-side compilation engines
+
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -43,14 +40,12 @@ const nextConfig: NextConfig = {
       };
 
       config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(
-          /^node:/,
-          (resource: any) => {
-            resource.request = resource.request.replace(/^node:/, "");
-          }
-        )
+        new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: any) => {
+          resource.request = resource.request.replace(/^node:/, "");
+        })
       );
     }
+
     return config;
   },
 };

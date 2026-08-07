@@ -89,9 +89,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             gtag('config', 'G-T2SK91EF1Y');`}
         </Script>
         <Script
-          id="google-adsense"
+          id="adsense-script"
           async
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
           crossOrigin="anonymous"
         />
