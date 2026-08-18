@@ -1,6 +1,14 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /secret
+Disallow: /profile
+Disallow: /signin
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
 
 # Host
 Host: https://www.mydocready.com

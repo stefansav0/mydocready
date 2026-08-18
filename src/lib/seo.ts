@@ -4,12 +4,17 @@ export const SITE = {
   name: "MyDocReady",
   url: "https://www.mydocready.com",
   description:
-    "Free, privacy-focused tools to create resumes, prepare passport photos, resize images, convert documents, and calculate everyday finances.",
+    "Free, privacy-focused online tools to create resumes, prepare passport photos, resize images, convert documents, and calculate everyday finances.",
   locale: "en_IN",
 } as const;
 
-export function absoluteUrl(path = "/") {
-  return new URL(path, SITE.url).toString();
+/**
+ * Convert a relative path into an absolute URL.
+ */
+export function absoluteUrl(path = "/"): string {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  return new URL(normalizedPath, SITE.url).toString();
 }
 
 type PageMetadataOptions = {
@@ -19,6 +24,9 @@ type PageMetadataOptions = {
   noIndex?: boolean;
 };
 
+/**
+ * Reusable metadata generator for all MyDocReady pages.
+ */
 export function createPageMetadata({
   title,
   description,
@@ -28,12 +36,38 @@ export function createPageMetadata({
   const url = absoluteUrl(path);
 
   return {
-    title,
+    metadataBase: new URL(SITE.url),
+
+    title: {
+      default: title,
+      template: `%s | ${SITE.name}`,
+    },
+
     description,
-    alternates: { canonical: path },
+
+    applicationName: SITE.name,
+
+    authors: [
+      {
+        name: SITE.name,
+        url: SITE.url,
+      },
+    ],
+
+    creator: SITE.name,
+
+    publisher: SITE.name,
+
+    category: "technology",
+
+    alternates: {
+      canonical: url,
+    },
+
     robots: {
       index: !noIndex,
       follow: !noIndex,
+
       googleBot: {
         index: !noIndex,
         follow: !noIndex,
@@ -42,13 +76,15 @@ export function createPageMetadata({
         "max-video-preview": -1,
       },
     },
+
     openGraph: {
-      title: `${title} | ${SITE.name}`,
+      title,
       description,
       url,
       siteName: SITE.name,
       locale: SITE.locale,
       type: "website",
+
       images: [
         {
           url: absoluteUrl("/logo.png"),
@@ -58,9 +94,10 @@ export function createPageMetadata({
         },
       ],
     },
+
     twitter: {
-      card: "summary",
-      title: `${title} | ${SITE.name}`,
+      card: "summary_large_image",
+      title,
       description,
       images: [absoluteUrl("/logo.png")],
     },

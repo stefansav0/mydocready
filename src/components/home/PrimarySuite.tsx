@@ -1,51 +1,91 @@
 import FeatureCard from "./FeatureCard";
 
+type CardColor =
+  | "indigo"
+  | "violet"
+  | "blue"
+  | "emerald"
+  | "teal"
+  | "amber"
+  | "rose"
+  | "fuchsia";
+
+interface PrimaryTool {
+  image: string;
+  title: string;
+  description: string;
+  link: string;
+  buttonText: string;
+  color: CardColor;
+}
+
+const PRIMARY_TOOLS: PrimaryTool[] = [
+  {
+    image: "/resume.png",
+    title: "Resume Builder",
+    description:
+      "Create a professional resume with structured sections, clean layouts, and downloadable PDF output.",
+    link: "/resume-maker",
+    buttonText: "Create Resume",
+    color: "emerald",
+  },
+  {
+    image: "/pass.png",
+    title: "Passport Photo Maker",
+    description:
+      "Create passport, visa, and ID-style photos using customizable dimensions for printing or online applications.",
+    link: "/passport-photo",
+    buttonText: "Create Photo",
+    color: "violet",
+  },
+  {
+    image: "/resize.png",
+    title: "Image Resizer",
+    description:
+      "Resize and compress images to suitable dimensions or file sizes for forms, applications, and online uploads.",
+    link: "/resize",
+    buttonText: "Resize Image",
+    color: "indigo",
+  },
+];
+
 export default function PrimarySuite() {
   return (
-    <section className="py-20">
+    <section
+      className="py-16 sm:py-20"
+      aria-labelledby="primary-tools-heading"
+    >
       <div className="mx-auto max-w-7xl px-6">
+        <div className="max-w-3xl mb-12">
+          <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
+            Popular tools
+          </p>
 
-        <div className="max-w-3xl mb-14">
-          <h2 className="text-4xl font-bold text-slate-900">
+          <h2
+            id="primary-tools-heading"
+            className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900"
+          >
             Popular Document Tools
           </h2>
 
-          <p className="mt-4 text-lg text-slate-600">
-            Prepare professional documents, create passport photos, and optimize
-            images with simple online tools designed for students,
-            professionals, and everyday document needs.
+          <p className="mt-4 text-lg leading-8 text-slate-600">
+            Create resumes, prepare photos, and optimize images with simple
+            online tools designed for everyday document and application needs.
           </p>
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-
-          <FeatureCard
-            image="/resume.png"
-            title="Resume Builder"
-            description="Create professional resumes with clean layouts and export them as print-ready PDF documents."
-            link="/resume-maker"
-            buttonText="Create Resume"
-            color="emerald"
-          />
-
-          <FeatureCard
-            image="/pass.png"
-            title="Passport Photo Maker"
-            description="Generate passport, visa, and ID photos in standard sizes suitable for printing or online use."
-            link="/passport-photo"
-            buttonText="Create Photo"
-            color="violet"
-          />
-
-          <FeatureCard
-            image="/resize.png"
-            title="Image Resizer"
-            description="Resize, compress, and optimize images to meet upload size requirements while maintaining quality."
-            link="/resize"
-            buttonText="Resize Image"
-            color="indigo"
-          />
-
+          {PRIMARY_TOOLS.map((tool) => (
+            <FeatureCard
+              key={tool.link}
+              image={tool.image}
+              title={tool.title}
+              description={tool.description}
+              link={tool.link}
+              buttonText={tool.buttonText}
+              color={tool.color}
+            />
+          ))}
         </div>
       </div>
     </section>

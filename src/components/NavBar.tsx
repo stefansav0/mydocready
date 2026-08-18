@@ -1,13 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { 
-  Menu, X, ChevronDown, FileText, Image as ImageIcon, 
-  Grid, Presentation, FileSpreadsheet, LogIn, LogOut, 
-  Crop, PenTool, FilePlus
-} from "lucide-react";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  FileText,
+  Image as ImageIcon,
+  Grid3X3,
+  Calculator,
+  ScanLine,
+  FileSpreadsheet,
+  LogIn,
+  LogOut,
+  Crop,
+  Presentation,
+  FilePlus,
+  WandSparkles,
+  FileImage,
+  Keyboard,
+  PenTool,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface UserProfile {
   name?: string;
@@ -15,180 +31,493 @@ interface UserProfile {
   avatarUrl?: string;
 }
 
+interface ToolItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+const ALL_TOOLS: ToolItem[] = [
+  {
+    name: "Passport Photo Maker",
+    href: "/passport-photo",
+    icon: ImageIcon,
+  },
+  {
+    name: "Resize Image",
+    href: "/resize",
+    icon: Crop,
+  },
+  {
+    name: "Resize Signature",
+    href: "/resize-signature",
+    icon: PenTool,
+  },
+  {
+    name: "Resume Maker",
+    href: "/resume-maker",
+    icon: FileText,
+  },
+  {
+    name: "File Converter",
+    href: "/converter",
+    icon: FileSpreadsheet,
+  },
+  {
+    name: "Document Scanner",
+    href: "/scan-document",
+    icon: ScanLine,
+  },
+  {
+    name: "ID Card Scanner",
+    href: "/id-card-scan",
+    icon: FileImage,
+  },
+  {
+    name: "Image to Text",
+    href: "/image-to-text",
+    icon: Grid3X3,
+  },
+  {
+    name: "Background Remover",
+    href: "/bg-remover",
+    icon: WandSparkles,
+  },
+  {
+    name: "Image Editor",
+    href: "/image-edit",
+    icon: ImageIcon,
+  },
+  {
+    name: "Presentation Maker",
+    href: "/presentation-maker",
+    icon: Presentation,
+  },
+  {
+    name: "Typing Test",
+    href: "/typing-test",
+    icon: Keyboard,
+  },
+  {
+    name: "Calculators",
+    href: "/calculators",
+    icon: Calculator,
+  },
+  {
+    name: "All Tools",
+    href: "/tools",
+    icon: FilePlus,
+  },
+];
+
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  
-  // Dropdown state for "TOOLS"
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
   const toolsRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  // Safely extracts logged in profile sessions
+  /*
+   * Load the current user session.
+   */
   useEffect(() => {
-    const storedUser = localStorage.getItem("user_session");
-    if (storedUser) {
-      try {
-        const storedProfile = JSON.parse(storedUser) as UserProfile;
-        queueMicrotask(() => setUser(storedProfile));
-      } catch {
-        localStorage.removeItem("user_session");
+    try {
+      const storedUser = localStorage.getItem("user_session");
+
+      if (!storedUser) {
+        return;
       }
+
+      const parsedUser = JSON.parse(storedUser) as UserProfile;
+
+      if (parsedUser && parsedUser.email) {
+        setUser(parsedUser);
+      }
+    } catch {
+      localStorage.removeItem("user_session");
+      setUser(null);
     }
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  /*
+   * Lock body scrolling while mobile navigation is open.
+   */
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     }
+
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     };
   }, [menuOpen]);
 
-  // Global Outside Event Listeners for Panel Dismissals
+  /*
+   * Close dropdowns when clicking outside.
+   */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (toolsRef.current && !toolsRef.current.contains(target)) {
+
+      if (
+        toolsRef.current &&
+        !toolsRef.current.contains(target)
+      ) {
         setToolsDropdownOpen(false);
       }
-      if (profileRef.current && !profileRef.current.contains(target)) {
+
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(target)
+      ) {
         setProfileDropdownOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  const handleSignOut = async () => {
-    await fetch("/api/signout", { method: "POST" }).catch(() => undefined);
-    localStorage.removeItem("user_session");
-    setUser(null);
-    setProfileDropdownOpen(false);
+  /*
+   * Close menus with Escape.
+   */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      setToolsDropdownOpen(false);
+      setProfileDropdownOpen(false);
+
+      if (menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
+
+  /*
+   * Close mobile navigation.
+   */
+  const closeMobileMenu = () => {
     setMenuOpen(false);
-    window.location.href = "/";
   };
 
-  // Content Data Matrices (Combined into one Tools menu to match image)
-  const allTools = [
-    { name: "Resize Signature", href: "/resize-signature", icon: <Crop size={16} /> },
-    { name: "Passport Photo Maker", href: "/passport-photo", icon: <ImageIcon size={16} /> },
-    { name: "Resume Maker", href: "/resume-maker", icon: <FileText size={16} /> },
-    { name: "File Converter", href: "/converter", icon: <FileText size={16} /> },
-    { name: "ID Card Scanner", href: "/id-card-scan", icon: <FileText size={16} /> },
-    { name: "Document Scanner", href: "/scan-document", icon: <FileSpreadsheet size={16} /> },
-    { name: "Image To Text", href: "/image-to-text", icon: <Grid size={16} /> },
-    { name: "Calculator", href: "/calculators", icon: <Presentation size={16} /> },
-    { name: "All Tools", href: "/tools", icon: <FilePlus size={16} /> },
-  ];
+  /*
+   * Close all dropdowns.
+   */
+  const closeDropdowns = () => {
+    setToolsDropdownOpen(false);
+    setProfileDropdownOpen(false);
+  };
+
+  /*
+   * Sign out.
+   */
+  const handleSignOut = async () => {
+    if (isSigningOut) {
+      return;
+    }
+
+    setIsSigningOut(true);
+
+    try {
+      await fetch("/api/signout", {
+        method: "POST",
+      });
+    } catch {
+      // Even if the API request fails,
+      // clear the local session below.
+    } finally {
+      localStorage.removeItem("user_session");
+
+      setUser(null);
+      setProfileDropdownOpen(false);
+      setToolsDropdownOpen(false);
+      setMenuOpen(false);
+      setIsSigningOut(false);
+
+      window.location.href = "/";
+    }
+  };
+
+  const getInitial = () => {
+    if (!user) {
+      return "U";
+    }
+
+    const name = user.name?.trim();
+
+    if (name) {
+      return name.charAt(0).toUpperCase();
+    }
+
+    return user.email.charAt(0).toUpperCase();
+  };
 
   return (
     <>
-      {/* 
-        MAIN HEADER 
-        Matches the dark slate/blue background and single-row layout of the image 
-      */}
-      <header className="w-full bg-[#0F52BA] text-white font-sans antialiased relative z-50">
-        <div className="w-full max-w-[1600px] mx-auto flex items-center justify-between px-4 lg:px-8 py-3">
-          
-          {/* LOGO & NAVIGATION BLOCK (Left-aligned) */}
-          <div className="flex items-center gap-8">
-            
-            {/* Logo Area */}
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0">
+      {/* =========================================================
+          DESKTOP / MAIN HEADER
+      ========================================================== */}
+
+      <header className="relative z-50 w-full bg-[#0F52BA] font-sans text-white">
+        <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          {/* =====================================================
+              LOGO + DESKTOP NAVIGATION
+          ====================================================== */}
+
+          <div className="flex min-w-0 items-center gap-6 lg:gap-8">
+            {/* Logo */}
+            <Link
+              href="/"
+              className="flex shrink-0 items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F52BA]"
+              aria-label="MyDocReady home"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white sm:h-12 sm:w-12">
                 <Image
                   src="/logo.png"
-                  alt="DocReady Logo"
+                  alt="MyDocReady"
                   width={48}
                   height={48}
-                  className="rounded-full object-cover"
                   priority
+                  className="h-full w-full rounded-full object-cover"
                 />
               </div>
-              <span className="font-sans text-xl sm:text-2xl lg:text-3xl font-normal tracking-wide whitespace-nowrap">
-                Mydocready
+
+              <span className="whitespace-nowrap text-xl font-semibold tracking-wide sm:text-2xl lg:text-3xl">
+                MyDocReady
               </span>
             </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-6 mt-1" aria-label="Main Navigation">
-              <Link href="/" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
-                HOME
+            {/* Desktop Navigation */}
+            <nav
+              className="hidden items-center gap-5 lg:flex xl:gap-7"
+              aria-label="Main navigation"
+            >
+              <Link
+                href="/"
+                className="rounded px-1 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:text-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                Home
               </Link>
-              <Link href="/resize" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+
+              <Link
+                href="/resize"
+                className="rounded px-1 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:text-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
                 Resize Image
               </Link>
-              <Link href="/blog" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+
+              <Link
+                href="/blog"
+                className="rounded px-1 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:text-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
                 Blog
               </Link>
-              <Link href="/resume-maker" className="text-[15px] hover:text-gray-300 transition-colors uppercase">
+
+              <Link
+                href="/resume-maker"
+                className="rounded px-1 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:text-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
                 Resume
               </Link>
 
-              {/* Tools Dropdown matching the image */}
-              <div className="relative" ref={toolsRef}>
+              {/* Tools Dropdown */}
+              <div
+                ref={toolsRef}
+                className="relative"
+              >
                 <button
-                  onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
-                  className="text-[15px] hover:text-gray-300 transition-colors uppercase flex items-center gap-1"
+                  type="button"
+                  onClick={() => {
+                    setToolsDropdownOpen((previous) => !previous);
+                    setProfileDropdownOpen(false);
+                  }}
+                  aria-haspopup="menu"
+                  aria-expanded={toolsDropdownOpen}
+                  className="flex items-center gap-1 rounded px-1 py-2 text-sm font-medium uppercase tracking-wide transition-colors hover:text-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
-                  TOOLS <ChevronDown size={16} className={`transition-transform duration-200 ${toolsDropdownOpen ? 'rotate-180' : ''}`} />
+                  Tools
+
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform duration-200 ${
+                      toolsDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                  />
                 </button>
 
-                {/* Dropdown Menu */}
                 {toolsDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-4 w-64 bg-white text-black shadow-xl rounded-sm py-2 animate-in fade-in slide-in-from-top-2">
-                    {allTools.map((tool, idx) => (
-                      <Link 
-                        key={idx} 
-                        href={tool.href} 
-                        onClick={() => setToolsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
-                      >
-                        <span className="text-gray-500">{tool.icon}</span> {tool.name}
-                      </Link>
-                    ))}
+                  <div
+                    className="absolute left-0 top-full mt-3 w-72 overflow-hidden rounded-xl border border-slate-200 bg-white py-2 text-slate-800 shadow-2xl"
+                    role="menu"
+                  >
+                    <div className="border-b border-slate-100 px-4 py-2">
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Popular Tools
+                      </p>
+                    </div>
+
+                    <div className="max-h-[70vh] overflow-y-auto">
+                      {ALL_TOOLS.map((tool) => {
+                        const Icon = tool.icon;
+
+                        return (
+                          <Link
+                            key={tool.href}
+                            href={tool.href}
+                            role="menuitem"
+                            onClick={closeDropdowns}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-blue-50 hover:text-blue-700 focus-visible:bg-blue-50 focus-visible:outline-none"
+                          >
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+                              <Icon
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
+                            </span>
+
+                            <span>{tool.name}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
             </nav>
           </div>
 
-          {/* RIGHT SIDE ACTIONS (Auth & Mobile Menu) */}
-          <div className="flex items-center gap-4">
-            {/* Desktop Auth */}
-            <div className="hidden lg:flex justify-end items-center gap-4">
+          {/* =====================================================
+              RIGHT SIDE
+          ====================================================== */}
+
+          <div className="flex shrink-0 items-center gap-3">
+            {/* Desktop Authentication */}
+            <div className="hidden items-center lg:flex">
               {!user ? (
-                <Link href="/signin" className="flex bg-white/10 hover:bg-white/20 text-white px-4 py-2 text-sm uppercase tracking-wider transition-colors items-center gap-2 rounded-sm">
-                  <LogIn size={16} /> SIGN IN
+                <Link
+                  href="/signin"
+                  className="flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2.5 text-sm font-semibold uppercase tracking-wide transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                >
+                  <LogIn
+                    className="h-4 w-4"
+                    aria-hidden="true"
+                  />
+
+                  Sign In
                 </Link>
               ) : (
-                <div className="relative" ref={profileRef}>
-                  <button 
-                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/10 transition-colors rounded-sm"
+                <div
+                  ref={profileRef}
+                  className="relative"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileDropdownOpen(
+                        (previous) => !previous
+                      );
+                      setToolsDropdownOpen(false);
+                    }}
+                    aria-haspopup="menu"
+                    aria-expanded={profileDropdownOpen}
+                    aria-label="Open account menu"
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                   >
-                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                      {user.name?.charAt(0).toUpperCase() || "U"}
-                    </span>
-                    <ChevronDown size={14} />
+                    {user.avatarUrl ? (
+                      <Image
+                        src={user.avatarUrl}
+                        alt={user.name || "User profile"}
+                        width={34}
+                        height={34}
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-bold text-[#0F52BA]">
+                        {getInitial()}
+                      </span>
+                    )}
+
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        profileDropdownOpen ? "rotate-180" : ""
+                      }`}
+                      aria-hidden="true"
+                    />
                   </button>
 
                   {profileDropdownOpen && (
-                    <div className="absolute right-0 mt-3 w-48 bg-white text-black shadow-xl rounded-sm z-50 text-left overflow-hidden">
-                      <div className="p-3 border-b border-gray-100 text-sm">
-                        <p className="font-bold truncate">{user.name}</p>
-                        <p className="text-gray-500 text-xs truncate mt-0.5">{user.email}</p>
+                    <div
+                      className="absolute right-0 top-full mt-3 w-64 overflow-hidden rounded-xl border border-slate-200 bg-white text-left text-slate-900 shadow-2xl"
+                      role="menu"
+                    >
+                      {/* User Information */}
+                      <div className="border-b border-slate-100 p-4">
+                        <div className="flex items-center gap-3">
+                          {user.avatarUrl ? (
+                            <Image
+                              src={user.avatarUrl}
+                              alt={user.name || "User profile"}
+                              width={40}
+                              height={40}
+                              className="h-10 w-10 rounded-full object-cover"
+                            />
+                          ) : (
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700">
+                              {getInitial()}
+                            </span>
+                          )}
+
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-bold">
+                              {user.name || "My Account"}
+                            </p>
+
+                            <p className="mt-0.5 truncate text-xs text-slate-500">
+                              {user.email}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <Link href="/profile" onClick={() => setProfileDropdownOpen(false)} className="block px-4 py-2.5 hover:bg-gray-100 text-sm font-medium">Dashboard</Link>
-                      <button onClick={handleSignOut} className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 text-sm font-bold border-t border-gray-100 flex items-center gap-2">
-                        <LogOut size={16} /> Log Out
+
+                      <Link
+                        href="/profile"
+                        role="menuitem"
+                        onClick={closeDropdowns}
+                        className="block px-4 py-3 text-sm font-medium transition-colors hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none"
+                      >
+                        Dashboard
+                      </Link>
+
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={handleSignOut}
+                        disabled={isSigningOut}
+                        className="flex w-full items-center gap-2 border-t border-slate-100 px-4 py-3 text-left text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <LogOut
+                          className="h-4 w-4"
+                          aria-hidden="true"
+                        />
+
+                        {isSigningOut ? "Signing Out..." : "Log Out"}
                       </button>
                     </div>
                   )}
@@ -196,35 +525,71 @@ export default function NavBar() {
               )}
             </div>
 
-            {/* Mobile Trigger (Hamburger Menu placed on the right side) */}
-            <div className="lg:hidden flex items-center">
-              <button 
-                onClick={() => setMenuOpen(true)}
-                className="p-1.5 hover:bg-white/10 rounded transition-colors focus:outline-none"
-                aria-label="Open menu"
-              >
-                <Menu size={28} />
-              </button>
-            </div>
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(true);
+                setToolsDropdownOpen(false);
+                setProfileDropdownOpen(false);
+              }}
+              className="rounded-lg p-2 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white lg:hidden"
+              aria-label="Open navigation menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <Menu
+                className="h-7 w-7"
+                aria-hidden="true"
+              />
+            </button>
           </div>
-
         </div>
       </header>
 
-      {/* MOBILE FULL-SCREEN SLIDE DRAWER */}
-      <div className={`fixed inset-0 z-[60] lg:hidden transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+      {/* =========================================================
+          MOBILE NAVIGATION
+      ========================================================== */}
 
-        <div className={`absolute inset-y-0 left-0 w-[85vw] max-w-sm bg-[#2b3947] text-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-          <div className="flex items-center justify-between p-5 border-b border-white/10">
+      <div
+        className={`fixed inset-0 z-[60] lg:hidden ${
+          menuOpen
+            ? "pointer-events-auto"
+            : "pointer-events-none"
+        }`}
+        aria-hidden={!menuOpen}
+      >
+        {/* Overlay */}
+        <button
+          type="button"
+          aria-label="Close navigation menu"
+          onClick={closeMobileMenu}
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+            menuOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Drawer */}
+        <aside
+          id="mobile-navigation"
+          className={`absolute inset-y-0 left-0 flex w-[88vw] max-w-sm flex-col bg-[#263746] text-white shadow-2xl transition-transform duration-300 ease-in-out ${
+            menuOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }`}
+          aria-label="Mobile navigation"
+        >
+          {/* Drawer Header */}
+          <div className="flex shrink-0 items-center justify-between border-b border-white/10 p-5">
             <Link
               href="/"
-              className="flex items-center gap-3"
+              onClick={closeMobileMenu}
+              className="flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <Image
                 src="/logo.png"
-                width={40}
-                height={40}
+                width={42}
+                height={42}
                 alt="MyDocReady"
                 className="rounded-full bg-white p-1"
               />
@@ -233,62 +598,174 @@ export default function NavBar() {
                 MyDocReady
               </span>
             </Link>
-            <button 
-              onClick={() => setMenuOpen(false)} 
-              className="p-2 -mr-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors focus:outline-none"
+
+            <button
+              type="button"
+              onClick={closeMobileMenu}
+              className="rounded-full bg-white/10 p-2 transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              aria-label="Close navigation menu"
             >
-              <X size={20} />
+              <X
+                className="h-5 w-5"
+                aria-hidden="true"
+              />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-5 space-y-6">
-            <div className="flex flex-col gap-2">
-              <Link href="/" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">HOME</Link>
-              <Link href="/about" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">ABOUT US</Link>
-              <Link href="/blog" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">BLOGS</Link>
-              <Link href="/resize" onClick={() => setMenuOpen(false)} className="py-3 px-3 -mx-3 hover:bg-white/5 rounded-lg text-lg uppercase">Resize Image</Link>
+          {/* Drawer Content */}
+          <nav
+            className="flex-1 overflow-y-auto p-5"
+            aria-label="Mobile navigation links"
+          >
+            {/* Main Links */}
+            <div className="flex flex-col gap-1">
+              <Link
+                href="/"
+                onClick={closeMobileMenu}
+                className="rounded-lg px-3 py-3 text-base font-medium uppercase transition-colors hover:bg-white/5 focus-visible:bg-white/10 focus-visible:outline-none"
+              >
+                Home
+              </Link>
+
+              <Link
+                href="/about"
+                onClick={closeMobileMenu}
+                className="rounded-lg px-3 py-3 text-base font-medium uppercase transition-colors hover:bg-white/5 focus-visible:bg-white/10 focus-visible:outline-none"
+              >
+                About Us
+              </Link>
+
+              <Link
+                href="/blog"
+                onClick={closeMobileMenu}
+                className="rounded-lg px-3 py-3 text-base font-medium uppercase transition-colors hover:bg-white/5 focus-visible:bg-white/10 focus-visible:outline-none"
+              >
+                Blog
+              </Link>
+
+              <Link
+                href="/resize"
+                onClick={closeMobileMenu}
+                className="rounded-lg px-3 py-3 text-base font-medium transition-colors hover:bg-white/5 focus-visible:bg-white/10 focus-visible:outline-none"
+              >
+                Resize Image
+              </Link>
+
+              <Link
+                href="/resume-maker"
+                onClick={closeMobileMenu}
+                className="rounded-lg px-3 py-3 text-base font-medium transition-colors hover:bg-white/5 focus-visible:bg-white/10 focus-visible:outline-none"
+              >
+                Resume Maker
+              </Link>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold uppercase text-gray-400 mb-3 border-b border-white/10 pb-2">Tools</h3>
+            {/* Tools */}
+            <div className="mt-7">
+              <div className="mb-3 border-b border-white/10 px-3 pb-2">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Tools
+                </h2>
+              </div>
+
               <div className="flex flex-col gap-1">
-                {allTools.map((item, idx) => (
-                  <Link key={idx} href={item.href} onClick={() => setMenuOpen(false)} className="flex items-center gap-3 py-2.5 px-3 -mx-3 text-[15px] hover:bg-white/5 rounded-lg transition-colors">
-                    <span className="text-gray-400">{item.icon}</span> {item.name}
-                  </Link>
-                ))}
+                {ALL_TOOLS.map((tool) => {
+                  const Icon = tool.icon;
+
+                  return (
+                    <Link
+                      key={tool.href}
+                      href={tool.href}
+                      onClick={closeMobileMenu}
+                      className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-white/5 focus-visible:bg-white/10 focus-visible:outline-none"
+                    >
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-slate-300">
+                        <Icon
+                          className="h-4 w-4"
+                          aria-hidden="true"
+                        />
+                      </span>
+
+                      <span>{tool.name}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          </div>
+          </nav>
 
-          <div className="p-5 border-t border-white/10 bg-black/20">
+          {/* Mobile Account Area */}
+          <div className="shrink-0 border-t border-white/10 bg-black/20 p-5">
             {user ? (
               <div className="flex flex-col gap-4">
+                {/* User */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">
-                    {user.name?.charAt(0).toUpperCase() || "U"}
-                  </div>
-                  <div className="flex-1 overflow-hidden">
-                    <p className="font-bold truncate">{user.name}</p>
-                    <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  {user.avatarUrl ? (
+                    <Image
+                      src={user.avatarUrl}
+                      alt={user.name || "User profile"}
+                      width={42}
+                      height={42}
+                      className="h-10 w-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
+                      {getInitial()}
+                    </div>
+                  )}
+
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-bold">
+                      {user.name || "My Account"}
+                    </p>
+
+                    <p className="truncate text-xs text-slate-400">
+                      {user.email}
+                    </p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <Link href="/profile" onClick={() => setMenuOpen(false)} className="text-center py-2 bg-white/10 hover:bg-white/20 rounded text-sm transition-colors">
+
+                {/* Account Actions */}
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/profile"
+                    onClick={closeMobileMenu}
+                    className="rounded-lg bg-white/10 px-3 py-2.5 text-center text-sm font-medium transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  >
                     Dashboard
                   </Link>
-                  <button onClick={handleSignOut} className="flex items-center justify-center gap-1.5 py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded text-sm transition-colors">
-                    <LogOut size={16} /> Log Out
+
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    disabled={isSigningOut}
+                    className="flex items-center justify-center gap-1.5 rounded-lg bg-red-500/20 px-3 py-2.5 text-sm font-semibold text-red-300 transition-colors hover:bg-red-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <LogOut
+                      className="h-4 w-4"
+                      aria-hidden="true"
+                    />
+
+                    {isSigningOut ? "Signing Out..." : "Log Out"}
                   </button>
                 </div>
               </div>
             ) : (
-              <Link href="/signin" onClick={() => setMenuOpen(false)} className="w-full flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 py-3 rounded text-sm font-bold uppercase transition-colors">
-                <LogIn size={18} /> Sign In
+              <Link
+                href="/signin"
+                onClick={closeMobileMenu}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-bold uppercase text-slate-900 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <LogIn
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                />
+
+                Sign In
               </Link>
             )}
           </div>
-        </div>
+        </aside>
       </div>
     </>
   );

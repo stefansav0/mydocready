@@ -13,14 +13,21 @@ import {
   Sparkles,
   Wrench,
   ArrowRight,
-  LucideIcon
+  LucideIcon,
 } from "lucide-react";
+
 import FeatureCard from "./FeatureCard";
 
-// Explicitly define the allowed colors from your FeatureCard component
-type CardColor = "indigo" | "violet" | "blue" | "emerald" | "teal" | "amber" | "rose" | "fuchsia";
+type CardColor =
+  | "indigo"
+  | "violet"
+  | "blue"
+  | "emerald"
+  | "teal"
+  | "amber"
+  | "rose"
+  | "fuchsia";
 
-// Define the interface for your tools to enforce strict typing
 interface ToolItem {
   Icon: LucideIcon;
   title: string;
@@ -30,105 +37,112 @@ interface ToolItem {
   color: CardColor;
 }
 
-// Complete list of all tools in your suite with corrected strict colors
 const TOOLS: ToolItem[] = [
   {
     Icon: FileText,
     title: "Resume Builder",
-    description: "Build polished, structured resumes with clear sections and ATS-friendly editable templates.",
+    description:
+      "Create a professional resume with structured sections, clean layouts, and downloadable PDF output.",
     link: "/resume-maker",
     buttonText: "Build Resume",
-    color: "indigo"
+    color: "indigo",
   },
   {
     Icon: Palette,
-    title: "Studio Pro Editor",
-    description: "Transform your images with neural BG removal, local spot healing, color correction, and text layers.",
+    title: "Image Editor",
+    description:
+      "Edit images with tools for background removal, adjustments, and other common image editing tasks.",
     link: "/image-edit",
     buttonText: "Edit Image",
-    color: "fuchsia" // Changed from purple
+    color: "fuchsia",
   },
   {
     Icon: Layout,
     title: "Presentation Maker",
-    description: "Create stunning presentations and export them as native PowerPoint (PPTX) files instantly.",
+    description:
+      "Create presentations with editable slides and export them for projects, school, work, or presentations.",
     link: "/presentation-maker",
     buttonText: "Create Slides",
-    color: "violet"
+    color: "violet",
   },
   {
     Icon: FileImage,
     title: "Passport Photo Maker",
-    description: "Create passport, visa, and ID photos with standard sizes ready for printing or online applications.",
+    description:
+      "Create passport, visa, and ID-style photos using customizable image dimensions.",
     link: "/passport-photo",
     buttonText: "Create Photo",
-    color: "blue"
+    color: "blue",
   },
   {
     Icon: RefreshCcw,
     title: "File Converters",
-    description: "Convert PDF, Word, Excel, PowerPoint, and image files into the format you need securely.",
+    description:
+      "Convert supported documents and images into commonly used file formats.",
     link: "/converter",
     buttonText: "Convert Files",
-    color: "emerald"
+    color: "emerald",
   },
   {
     Icon: Calculator,
     title: "Financial Calculators",
-    description: "Use smart financial and math calculators for investments, taxes, loans, and everyday budgeting.",
+    description:
+      "Calculate loans, investments, taxes, and other everyday financial values.",
     link: "/calculators",
     buttonText: "Calculate",
-    color: "teal"
+    color: "teal",
   },
   {
     Icon: ScanLine,
     title: "Document Scanner",
-    description: "Scan receipts, forms, and papers with automatic cleanup and high-quality PDF export.",
+    description:
+      "Turn documents and receipts into clean digital files for everyday use.",
     link: "/scan-document",
-    buttonText: "Scan Now",
-    color: "amber"
+    buttonText: "Scan Document",
+    color: "amber",
   },
   {
     Icon: Wrench,
     title: "Resize by KB",
-    description: "Easily compress and resize images to a target file size for forms or online uploads.",
+    description:
+      "Resize and compress images to a target file size for online uploads and forms.",
     link: "/resize",
     buttonText: "Resize Image",
-    color: "rose" // Changed from orange
+    color: "rose",
   },
   {
     Icon: Sparkles,
     title: "Signature Resizer",
-    description: "Prepare and extract clean signatures for forms, job portals, and official documents.",
+    description:
+      "Resize and prepare signature images for forms, applications, and documents.",
     link: "/resize-signature",
     buttonText: "Edit Signature",
-    color: "rose" // Changed from pink
-  }
+    color: "rose",
+  },
 ];
 
 export default function CreativeSuite() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // We duplicate the array multiple times so the manual scrolling and auto-looping feels infinite
-  const scrollItems = [...TOOLS, ...TOOLS, ...TOOLS];
-
-  // Smart Auto-Scroll Engine
   useEffect(() => {
     let animationFrameId: number;
     const container = scrollContainerRef.current;
 
     const scroll = () => {
       if (container && !isPaused) {
-        container.scrollLeft += 1; // Adjust this number to change auto-scroll speed
+        const maxScroll =
+          container.scrollWidth - container.clientWidth;
 
-        // Seamless infinite loop magic:
-        // If we've scrolled past one full set of the original items, snap back seamlessly
-        const singleSetWidth = container.scrollWidth / 3;
-        if (container.scrollLeft >= singleSetWidth) {
-          container.scrollLeft -= singleSetWidth;
+        if (maxScroll > 0) {
+          container.scrollLeft += 0.5;
+
+          if (container.scrollLeft >= maxScroll) {
+            container.scrollLeft = 0;
+          }
         }
       }
+
       animationFrameId = requestAnimationFrame(scroll);
     };
 
@@ -141,30 +155,45 @@ export default function CreativeSuite() {
 
   return (
     <section
-      id="document-tools"
-      className="w-full py-24 bg-white overflow-hidden scroll-mt-10"
+      id="more-tools"
+      className="w-full py-16 sm:py-24 bg-white overflow-hidden scroll-mt-10"
+      aria-labelledby="more-tools-heading"
     >
-      <div className="max-w-4xl mx-auto mb-14 text-center px-4">
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
-          All the Tools You Need
+      <div className="max-w-4xl mx-auto mb-12 sm:mb-14 text-center px-4">
+        <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
+          More tools
+        </p>
+
+        <h2
+          id="more-tools-heading"
+          className="mt-2 text-3xl md:text-5xl font-black text-slate-900 mb-5 tracking-tight"
+        >
+          Explore More Tools
         </h2>
+
         <p className="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-          Prepare documents, edit photos, build resumes, convert files, and calculate finances with our powerful, completely free suite of browser-based tools.
+          Explore additional tools for documents, images, PDFs,
+          signatures, presentations, and everyday tasks.
         </p>
       </div>
 
-      {/* Hide Scrollbar via CSS */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .hide-scrollbar::-webkit-scrollbar { display: none; }
-          .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        `
-      }} />
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .hide-scrollbar::-webkit-scrollbar {
+              display: none;
+            }
 
-      {/* Auto-Sliding & Swipeable Container */}
+            .hide-scrollbar {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `,
+        }}
+      />
+
       <div className="relative w-full pb-8">
-        
-        <div 
+        <div
           ref={scrollContainerRef}
           className="flex gap-6 overflow-x-auto hide-scrollbar px-6 items-stretch w-full cursor-grab active:cursor-grabbing"
           onMouseEnter={() => setIsPaused(true)}
@@ -172,8 +201,11 @@ export default function CreativeSuite() {
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
         >
-          {scrollItems.map((tool, index) => (
-            <div key={index} className="w-[300px] sm:w-[350px] shrink-0 h-full py-2">
+          {TOOLS.map((tool) => (
+            <div
+              key={tool.link}
+              className="w-[300px] sm:w-[350px] shrink-0 h-full py-2"
+            >
               <div className="h-full transform transition-transform duration-300 hover:-translate-y-2">
                 <FeatureCard
                   Icon={tool.Icon}
@@ -187,19 +219,25 @@ export default function CreativeSuite() {
             </div>
           ))}
         </div>
-        
-        {/* Left & Right fade gradients for a smooth visual edge */}
-        <div className="absolute top-0 bottom-0 left-0 w-12 md:w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
-        <div className="absolute top-0 bottom-0 right-0 w-12 md:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
+
+        <div
+          className="absolute top-0 bottom-0 left-0 w-12 md:w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"
+          aria-hidden="true"
+        />
+
+        <div
+          className="absolute top-0 bottom-0 right-0 w-12 md:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"
+          aria-hidden="true"
+        />
       </div>
 
-      {/* View All Button */}
       <div className="mt-8 text-center px-4">
-        <Link 
-          href="/tools" 
+        <Link
+          href="/tools"
           className="inline-flex items-center gap-2 px-8 py-3.5 bg-slate-900 hover:bg-indigo-600 text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 group"
         >
-          View All Tools 
+          View All Tools
+
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
