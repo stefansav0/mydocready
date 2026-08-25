@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
   if (!(slug in blogContent)) {
-    return { title: "Article Not Found | MydocReady" };
+    return {
+      title: "Article Not Found | MydocReady",
+    };
   }
 
   const blog = blogContent[slug as keyof typeof blogContent];
@@ -27,6 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${blog.title} | MydocReady`,
     description: blog.description,
+    alternates: {
+      canonical: `https://www.mydocready.com/blog/${slug}`,
+    },
   };
 }
 

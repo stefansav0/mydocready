@@ -276,11 +276,12 @@ export default function InsertDocPage() {
                     {/* Simulated A4 Document / Grid look */}
                     <div className={`border-2 border-dashed border-indigo-200 p-1 mb-4 ${isMultiple ? 'grid grid-cols-2 gap-2' : ''}`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img 
-                        src={preview} 
-                        alt="Passport Preview" 
-                        className="w-[105px] h-[135px] object-cover bg-slate-100" // 35x45 scaled ratio
-                      />
+                      {/* 35x45 scaled ratio */}
+<img
+  src={preview}
+  alt="Passport Preview"
+  className="w-[105px] h-[135px] object-cover bg-slate-100"
+/>
                       {isMultiple && (
                         <>
                           <div className="w-[105px] h-[135px] bg-slate-100 border border-slate-200 opacity-50"></div>

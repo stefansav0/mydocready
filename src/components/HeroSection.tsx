@@ -39,6 +39,15 @@ const TOOLS_DATABASE: ToolItem[] = [
     keywords: ["pdf", "excel", "xlsx", "spreadsheet", "convert"],
     Icon: RefreshCcw,
   },
+
+  {
+    name: "Converter",
+    link: "/converter",
+    category: "Converter",
+    keywords: ["pdf", "excel", "xlsx", "spreadsheet", "convert"],
+    Icon: RefreshCcw,
+  },
+  
   {
     name: "Passport Photo Maker",
     link: "/passport-photo",
