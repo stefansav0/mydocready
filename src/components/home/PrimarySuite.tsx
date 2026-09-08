@@ -24,7 +24,7 @@ const PRIMARY_TOOLS: PrimaryTool[] = [
     image: "/resume.png",
     title: "Resume Builder",
     description:
-      "Create a professional resume with structured sections, clean layouts, and downloadable PDF output.",
+      "Build a professional resume with structured sections, clean layouts, and a downloadable PDF suitable for job applications.",
     link: "/resume-maker",
     buttonText: "Create Resume",
     color: "emerald",
@@ -33,7 +33,7 @@ const PRIMARY_TOOLS: PrimaryTool[] = [
     image: "/pass.png",
     title: "Passport Photo Maker",
     description:
-      "Create passport, visa, and ID-style photos using customizable dimensions for printing or online applications.",
+      "Prepare passport, visa, and ID-style photos with customizable dimensions for online applications and printing.",
     link: "/passport-photo",
     buttonText: "Create Photo",
     color: "violet",
@@ -42,7 +42,7 @@ const PRIMARY_TOOLS: PrimaryTool[] = [
     image: "/resize.png",
     title: "Image Resizer",
     description:
-      "Resize and compress images to suitable dimensions or file sizes for forms, applications, and online uploads.",
+      "Resize and compress images to meet the dimension and file-size requirements of forms, applications, and online uploads.",
     link: "/resize",
     buttonText: "Resize Image",
     color: "indigo",
@@ -58,20 +58,20 @@ export default function PrimarySuite() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-3xl mb-12">
           <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
-            Popular tools
-          </p>
+  Featured tools
+</p>
 
-          <h2
-            id="primary-tools-heading"
-            className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900"
-          >
-            Popular Document Tools
-          </h2>
+<h2
+  id="primary-tools-heading"
+  className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900"
+>
+  Tools for Everyday Applications
+</h2>
 
-          <p className="mt-4 text-lg leading-8 text-slate-600">
-            Create resumes, prepare photos, and optimize images with simple
-            online tools designed for everyday document and application needs.
-          </p>
+<p className="mt-4 text-lg leading-8 text-slate-600">
+  Prepare resumes, photos, and images for applications, forms, and
+  everyday document needs with simple browser-based tools.
+</p>
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

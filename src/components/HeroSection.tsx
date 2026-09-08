@@ -2,15 +2,14 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import {
   Search,
   ArrowRight,
   FileText,
   ImageIcon,
-  Calculator,
   ScanLine,
   FileImage,
-  RefreshCcw,
   PenTool,
   Presentation,
   Sparkles,
@@ -21,79 +20,77 @@ interface ToolItem {
   link: string;
   category: string;
   keywords: string[];
-  Icon: typeof Search;
+  Icon: LucideIcon;
 }
 
 const TOOLS_DATABASE: ToolItem[] = [
   {
     name: "Word to PDF Converter",
     link: "/converter/word-to-pdf",
-    category: "Converter",
+    category: "PDF & Files",
     keywords: ["word", "doc", "document", "pdf", "convert"],
     Icon: FileText,
   },
   {
     name: "PDF to Excel",
     link: "/converter/pdf-to-excel",
-    category: "Converter",
+    category: "PDF & Files",
     keywords: ["pdf", "excel", "xlsx", "spreadsheet", "convert"],
-    Icon: RefreshCcw,
+    Icon: FileText,
   },
-
   {
-    name: "Converter",
+    name: "File Converter",
     link: "/converter",
-    category: "Converter",
-    keywords: ["pdf", "excel", "xlsx", "spreadsheet", "convert"],
-    Icon: RefreshCcw,
+    category: "PDF & Files",
+    keywords: ["pdf", "excel", "xlsx", "word", "convert", "file"],
+    Icon: FileText,
   },
-  
   {
     name: "Passport Photo Maker",
     link: "/passport-photo",
-    category: "Photo",
+    category: "Photos",
     keywords: ["passport", "visa", "id", "photo", "picture"],
     Icon: FileImage,
   },
   {
     name: "Smart Resume Builder",
     link: "/resume-maker",
-    category: "Career",
+    category: "Applications",
     keywords: ["resume", "cv", "career", "job", "ats"],
     Icon: FileText,
   },
   {
     name: "Image Resizer",
     link: "/resize",
-    category: "Image",
+    category: "Photos",
     keywords: ["resize", "image", "photo", "compress", "kb", "size"],
     Icon: ImageIcon,
   },
   {
     name: "Resize Signature",
     link: "/resize-signature",
-    category: "Image",
+    category: "Applications",
     keywords: ["signature", "sign", "resize", "photo", "document"],
     Icon: PenTool,
   },
   {
     name: "Background Remover",
     link: "/bg-remover",
-    category: "Image",
+    category: "Photos",
     keywords: ["background", "remove", "image", "photo", "transparent"],
     Icon: Sparkles,
   },
   {
     name: "Image Editor",
     link: "/image-edit",
-    category: "Image",
+    category: "Photos",
     keywords: ["edit", "image", "photo", "editor", "design"],
     Icon: ImageIcon,
   },
   {
     name: "Image to Text",
     link: "/image-to-text",
-    category: "OCR",
+    category: "Documents",
     keywords: ["image", "text", "ocr", "extract", "scan"],
     Icon: FileText,
   },
@@ -117,48 +114,6 @@ const TOOLS_DATABASE: ToolItem[] = [
     category: "Productivity",
     keywords: ["presentation", "ppt", "pptx", "slides", "powerpoint"],
     Icon: Presentation,
-  },
-  {
-    name: "EMI Calculator",
-    link: "/calculators/emi",
-    category: "Finance",
-    keywords: ["emi", "loan", "interest", "finance", "calculator"],
-    Icon: Calculator,
-  },
-  {
-    name: "SIP Calculator",
-    link: "/calculators/sip",
-    category: "Finance",
-    keywords: ["sip", "investment", "mutual fund", "finance", "calculator"],
-    Icon: Calculator,
-  },
-  {
-    name: "Age Calculator",
-    link: "/calculators/age",
-    category: "Calculator",
-    keywords: ["age", "date", "birthday", "calculator"],
-    Icon: Calculator,
-  },
-  {
-    name: "Bill Splitter",
-    link: "/calculators/split",
-    category: "Calculator",
-    keywords: ["bill", "split", "expense", "people", "calculator"],
-    Icon: Calculator,
-  },
-  {
-    name: "GST Calculator",
-    link: "/calculators/gst",
-    category: "Finance",
-    keywords: ["gst", "tax", "invoice", "finance", "calculator"],
-    Icon: Calculator,
-  },
-  {
-    name: "Typing Test",
-    link: "/typing-test",
-    category: "Productivity",
-    keywords: ["typing", "speed", "wpm", "accuracy", "test"],
-    Icon: PenTool,
   },
 ];
 
@@ -193,33 +148,39 @@ export default function HeroSection() {
       aria-labelledby="hero-heading"
     >
       <div className="mx-auto flex max-w-7xl flex-col items-center">
-        {/* HERO BANNER */}
+
+        {/* HERO */}
         <div className="w-full overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-800 px-6 py-14 text-center shadow-xl sm:px-10 sm:py-16 lg:px-16 lg:py-20">
           <div className="mx-auto max-w-4xl">
+
+            {/* Eyebrow */}
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-blue-100">
-              Simple tools for everyday tasks
+              Document & Application Tools
             </p>
 
+            {/* Main Heading */}
             <h1
               id="hero-heading"
               className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl"
             >
-              Everything You Need for Your Documents
+              Prepare Documents & Applications Easily
             </h1>
 
+            {/* Description */}
             <p className="mx-auto mt-6 max-w-3xl text-base leading-7 text-blue-50 sm:text-lg sm:leading-8">
-              Create, edit, convert, and manage documents, PDFs, images,
-              resumes, photos, and everyday digital files with simple online
-              tools.
+              Prepare resumes, application photos, PDFs, images, and other
+              files with simple online tools designed for everyday document
+              tasks.
             </p>
 
-            {/* Quick CTA */}
+            {/* CTA Buttons */}
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href="/tools"
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-indigo-700 shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-700"
               >
                 Explore All Tools
+
                 <ArrowRight
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -227,10 +188,10 @@ export default function HeroSection() {
               </Link>
 
               <Link
-                href="/calculators"
+                href="/resume-maker"
                 className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-700"
               >
-                Browse Calculators
+                Create a Resume
               </Link>
             </div>
           </div>
@@ -246,6 +207,8 @@ export default function HeroSection() {
           </label>
 
           <div className="flex overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl transition-shadow focus-within:shadow-2xl">
+
+            {/* Search Icon */}
             <div
               className="flex shrink-0 items-center border-r border-slate-200 bg-slate-50 px-4 sm:px-5"
               aria-hidden="true"
@@ -253,12 +216,13 @@ export default function HeroSection() {
               <Search className="h-5 w-5 text-indigo-600 sm:h-6 sm:w-6" />
             </div>
 
+            {/* Search Input */}
             <input
               id="tool-search"
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search tools, calculators, converters..."
+              placeholder="Search document, photo, PDF, or application tools..."
               autoComplete="off"
               spellCheck={false}
               role="combobox"
@@ -270,6 +234,7 @@ export default function HeroSection() {
               className="min-w-0 flex-1 bg-transparent px-4 py-4 text-base font-medium text-slate-900 outline-none placeholder:text-slate-400 sm:px-5 sm:py-5 sm:text-lg"
             />
 
+            {/* Clear Button */}
             {searchQuery && (
               <button
                 type="button"
@@ -305,6 +270,7 @@ export default function HeroSection() {
                           onClick={() => setSearchQuery("")}
                           className="group flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-indigo-50 focus-visible:bg-indigo-50 focus-visible:outline-none sm:px-5"
                         >
+                          {/* Icon */}
                           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 transition-colors group-hover:bg-indigo-100">
                             <Icon
                               className="h-5 w-5"
@@ -312,6 +278,7 @@ export default function HeroSection() {
                             />
                           </div>
 
+                          {/* Tool Info */}
                           <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-bold text-slate-800 group-hover:text-indigo-700">
                               {tool.name}
@@ -347,8 +314,8 @@ export default function HeroSection() {
                   </p>
 
                   <p className="mt-1 text-sm text-slate-500">
-                    Try searching for a PDF, image, resume, calculator, or
-                    document tool.
+                    Try searching for a document, PDF, photo, resume, or
+                    application tool.
                   </p>
 
                   <Link
@@ -357,6 +324,7 @@ export default function HeroSection() {
                     className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
                   >
                     Browse all tools
+
                     <ArrowRight
                       className="h-4 w-4"
                       aria-hidden="true"
@@ -368,7 +336,7 @@ export default function HeroSection() {
           )}
         </div>
 
-        {/* SMALL SUPPORTING TEXT */}
+        {/* SUPPORTING TEXT */}
         <p className="mt-5 text-center text-xs text-slate-500 sm:text-sm">
           Search by tool name, category, or task
         </p>

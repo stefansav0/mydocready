@@ -3,12 +3,10 @@
 import { useState } from "react";
 import {
   ChevronDown,
-  CheckCircle2,
   FileText,
   Smartphone,
   ImageIcon,
   FileCheck2,
-  Sparkles,
   ShieldCheck,
 } from "lucide-react";
 
@@ -19,16 +17,12 @@ interface FAQ {
 
 const BENEFITS = [
   {
-    label: "Easy-to-use document tools",
+    label: "Document and PDF tools",
     icon: FileText,
   },
   {
-    label: "PDF and file utilities",
+    label: "Resume and application tools",
     icon: FileCheck2,
-  },
-  {
-    label: "Professional resume creation",
-    icon: FileText,
   },
   {
     label: "Passport and ID photo tools",
@@ -36,10 +30,10 @@ const BENEFITS = [
   },
   {
     label: "Image resizing and compression",
-    icon: Sparkles,
+    icon: ImageIcon,
   },
   {
-    label: "Works across desktop and mobile",
+    label: "Works on desktop and mobile",
     icon: Smartphone,
   },
 ];
@@ -48,22 +42,22 @@ const FAQS: FAQ[] = [
   {
     question: "What is MyDocReady?",
     answer:
-      "MyDocReady is an online platform offering practical tools for everyday document and image tasks. The platform includes tools for resumes, passport photos, image resizing, document scanning, file conversion, calculators, and other common digital tasks.",
+      "MyDocReady is an independent online platform that provides practical tools for preparing documents, images, resumes, application files, and other everyday digital materials.",
   },
   {
     question: "Is MyDocReady free to use?",
     answer:
-      "Many MyDocReady tools are available to use free of charge. Availability and features can vary between individual tools, so check the relevant tool page for the latest details.",
+      "Many MyDocReady tools are available free of charge. Features and usage options can vary between tools, so check the individual tool page for the current details.",
   },
   {
-    question: "Can I use MyDocReady on mobile?",
+    question: "Can I use MyDocReady on my phone?",
     answer:
-      "Yes. MyDocReady is designed to work across modern desktop, tablet, and mobile browsers, so you can use supported tools from the device that is most convenient for you.",
+      "Yes. MyDocReady is designed to work in modern desktop, tablet, and mobile browsers. Supported tools can be accessed directly from your browser without installing desktop software.",
   },
   {
     question: "Is MyDocReady a government website?",
     answer:
-      "No. MyDocReady is an independent online platform and is not affiliated with, operated by, or endorsed by any government organization or authority.",
+      "No. MyDocReady is an independent online service and is not affiliated with, operated by, or endorsed by any government organization or authority.",
   },
 ];
 
@@ -77,76 +71,60 @@ export default function TrustImpact() {
   return (
     <section
       className="bg-white py-16 sm:py-20 lg:py-24"
-      aria-labelledby="about-my-doc-ready"
+      aria-labelledby="why-mydocready-heading"
     >
       <div className="mx-auto max-w-7xl px-6">
-        {/* ABOUT */}
-        <div className="rounded-3xl border border-slate-200 bg-slate-50 px-6 py-12 text-center shadow-sm sm:px-10 sm:py-16 md:px-20">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600">
-            <ShieldCheck
-              className="h-7 w-7"
-              aria-hidden="true"
-            />
-          </div>
 
-          <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-indigo-600">
-            About us
-          </p>
-
-          <h2
-            id="about-my-doc-ready"
-            className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl"
-          >
-            About MyDocReady
-          </h2>
-
-          <p className="mx-auto mt-6 max-w-4xl text-base leading-8 text-slate-600 sm:text-lg sm:leading-9">
-            MyDocReady brings together practical tools for document
-            preparation, image editing, resumes, passport photos, file
-            conversion, and everyday digital tasks. Our goal is to make common
-            document workflows easier by putting useful tools in one
-            convenient place.
-          </p>
-        </div>
-
-        {/* WHY CHOOSE MYDOCREADY */}
-        <div className="mt-16 overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-700 p-6 text-white shadow-xl sm:mt-20 sm:p-10 lg:p-12">
+        {/* WHY MYDOCREADY */}
+        <div className="overflow-hidden rounded-3xl border border-indigo-100 bg-indigo-50 p-6 sm:p-10 lg:p-12">
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            {/* Text */}
+
+            {/* Content */}
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-blue-100">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-indigo-600 shadow-sm">
+                <ShieldCheck
+                  className="h-6 w-6"
+                  aria-hidden="true"
+                />
+              </div>
+
+              <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-indigo-600">
                 Why MyDocReady
               </p>
 
-              <h3 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-                Simple tools for everyday tasks
-              </h3>
+              <h2
+                id="why-mydocready-heading"
+                className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
+              >
+                Practical tools for everyday document tasks
+              </h2>
 
-              <p className="mt-5 max-w-xl text-base leading-8 text-blue-100 sm:text-lg">
-                From preparing application documents to resizing images and
-                creating resumes, MyDocReady brings commonly needed tools
-                together in a simple and accessible experience.
+              <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
+                MyDocReady brings commonly needed document, image, and
+                application tools together in one place. Use the tools
+                directly in your browser to prepare files for work,
+                applications, forms, and everyday digital tasks.
               </p>
             </div>
 
             {/* Benefits */}
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               {BENEFITS.map((benefit) => {
                 const Icon = benefit.icon;
 
                 return (
                   <div
                     key={benefit.label}
-                    className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm"
+                    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
                       <Icon
-                        className="h-5 w-5 text-green-300"
+                        className="h-5 w-5"
                         aria-hidden="true"
                       />
                     </div>
 
-                    <span className="text-sm font-medium leading-6 text-white">
+                    <span className="text-sm font-medium leading-6 text-slate-700">
                       {benefit.label}
                     </span>
                   </div>
@@ -161,26 +139,23 @@ export default function TrustImpact() {
           className="mt-16 sm:mt-20 lg:mt-24"
           aria-labelledby="faq-heading"
         >
-          {/* FAQ Heading */}
           <div className="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
             <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
-              FAQ
+              Frequently Asked Questions
             </p>
 
             <h2
               id="faq-heading"
-              className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl"
+              className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
             >
-              Frequently Asked Questions
+              Questions About MyDocReady
             </h2>
 
             <p className="mt-5 text-base leading-7 text-slate-600 sm:text-lg">
-              Find quick answers to common questions about MyDocReady and its
-              tools.
+              Learn more about the platform and how its online tools work.
             </p>
           </div>
 
-          {/* FAQ List */}
           <div className="mx-auto max-w-4xl space-y-4">
             {FAQS.map((faq, index) => {
               const isOpen = openFAQ === index;
@@ -190,7 +165,7 @@ export default function TrustImpact() {
               return (
                 <div
                   key={faq.question}
-                  className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md"
+                  className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
                 >
                   <button
                     id={buttonId}

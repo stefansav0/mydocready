@@ -146,19 +146,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-IN" suppressHydrationWarning>
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+      <head>
         {/* =========================================================
-            Google AdSense
+            Monetag Website Verification
         ========================================================= */}
-
-        <Script
-          id="google-adsense"
-          strategy="afterInteractive"
-          async
-          crossOrigin="anonymous"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
+        <meta
+          name="monetag"
+          content="043343751b6ec9e53be9a8e3e6f6d15b"
         />
+      </head>
 
+      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
         {/* =========================================================
             Google Analytics
         ========================================================= */}
