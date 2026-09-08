@@ -36,6 +36,16 @@ export const metadata: Metadata = {
 
   category: "Productivity",
 
+  /*
+   * IMPORTANT:
+   * Do NOT define a global canonical here.
+   *
+   * Each page should define its own canonical URL.
+   *
+   * Example:
+   * /               → https://www.mydocready.com/
+   * /insert-doc     → https://www.mydocready.com/insert-doc
+   */
   robots: {
     index: true,
     follow: true,
@@ -72,6 +82,12 @@ export const metadata: Metadata = {
     ],
   },
 
+  /*
+   * Keep the general Open Graph information here.
+   *
+   * Individual pages should override `url`, `title`,
+   * `description`, and images when appropriate.
+   */
   openGraph: {
     title: "MyDocReady | Free Document, Photo, PDF and Calculator Tools",
 
@@ -130,33 +146,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-IN" suppressHydrationWarning>
-      <head>
-        {/* =========================================================
-            Monetag Website Verification
-        ========================================================= */}
-        <meta
-          name="monetag"
-          content="043343751b6ec9e53be9a8e3e6f6d15b"
-        />
-      </head>
-
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+        {/* =========================================================
+            Google AdSense
+        ========================================================= */}
 
         <Script
-  id="monetag-in-page-push"
-  strategy="afterInteractive"
-  dangerouslySetInnerHTML={{
-    __html: `
-      (function(s){
-        s.dataset.zone='11754407';
-        s.src='https://nap5k.com/tag.min.js';
-      })([document.documentElement, document.body]
-        .filter(Boolean)
-        .pop()
-        .appendChild(document.createElement('script')));
-    `,
-  }}
-/>
+          id="google-adsense"
+          strategy="afterInteractive"
+          async
+          crossOrigin="anonymous"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9348579900264611"
+        />
+
         {/* =========================================================
             Google Analytics
         ========================================================= */}
