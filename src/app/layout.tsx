@@ -142,16 +142,20 @@ export default function RootLayout({
 
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
 
-        {/* =========================================================
-    Monetag Multitag
-    Zone: 11754333
-========================================================= */}
-<Script
-  id="monetag-multitag"
+        <Script
+  id="monetag-in-page-push"
   strategy="afterInteractive"
-  src="https://5gvci.com/act/files/tag.min.js?z=11754333"
-  data-cfasync="false"
-  async
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function(s){
+        s.dataset.zone='11754407';
+        s.src='https://nap5k.com/tag.min.js';
+      })([document.documentElement, document.body]
+        .filter(Boolean)
+        .pop()
+        .appendChild(document.createElement('script')));
+    `,
+  }}
 />
         {/* =========================================================
             Google Analytics
