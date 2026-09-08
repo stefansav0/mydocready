@@ -143,26 +143,16 @@ export default function RootLayout({
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
 
         {/* =========================================================
-            Monetag Vignette
-            Zone: 11754215
-        ========================================================= */}
-        <Script
-          id="monetag-vignette"
-          strategy="afterInteractive"
-        >
-          {`
-            (function(s) {
-              s.dataset.zone = '11754215';
-              s.src = 'https://n6wxm.com/vignette.min.js';
-            })(
-              [document.documentElement, document.body]
-                .filter(Boolean)
-                .pop()
-                .appendChild(document.createElement('script'))
-            );
-          `}
-        </Script>
-
+    Monetag Multitag
+    Zone: 11754333
+========================================================= */}
+<Script
+  id="monetag-multitag"
+  strategy="afterInteractive"
+  src="https://5gvci.com/act/files/tag.min.js?z=11754333"
+  data-cfasync="false"
+  async
+/>
         {/* =========================================================
             Google Analytics
         ========================================================= */}
