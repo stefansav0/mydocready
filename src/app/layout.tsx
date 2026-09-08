@@ -36,16 +36,6 @@ export const metadata: Metadata = {
 
   category: "Productivity",
 
-  /*
-   * IMPORTANT:
-   * Do NOT define a global canonical here.
-   *
-   * Each page should define its own canonical URL.
-   *
-   * Example:
-   * /               → https://www.mydocready.com/
-   * /insert-doc     → https://www.mydocready.com/insert-doc
-   */
   robots: {
     index: true,
     follow: true,
@@ -82,12 +72,6 @@ export const metadata: Metadata = {
     ],
   },
 
-  /*
-   * Keep the general Open Graph information here.
-   *
-   * Individual pages should override `url`, `title`,
-   * `description`, and images when appropriate.
-   */
   openGraph: {
     title: "MyDocReady | Free Document, Photo, PDF and Calculator Tools",
 
@@ -157,6 +141,28 @@ export default function RootLayout({
       </head>
 
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+
+        {/* =========================================================
+            Monetag Vignette
+            Zone: 11754215
+        ========================================================= */}
+        <Script
+          id="monetag-vignette"
+          strategy="afterInteractive"
+        >
+          {`
+            (function(s) {
+              s.dataset.zone = '11754215';
+              s.src = 'https://n6wxm.com/vignette.min.js';
+            })(
+              [document.documentElement, document.body]
+                .filter(Boolean)
+                .pop()
+                .appendChild(document.createElement('script'))
+            );
+          `}
+        </Script>
+
         {/* =========================================================
             Google Analytics
         ========================================================= */}
